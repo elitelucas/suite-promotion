@@ -12,6 +12,7 @@ $spin_limit = 3;
 @$info = (array)$data['info'];
 @$backgroundImage = $info['background_image'];
 @$pluginTitle = $info['title'];
+@$pluginCaption = $info['caption'];
 @$description = $info['description'];
 @$promotioncontent = $info['promotioncontent'];
 @$totalpoints = (int)$info['totalpoints'];
@@ -557,6 +558,13 @@ label{
 									   placeholder="enter title">
 								<small id="helpIdTitle" class="form-text text-muted">Title of your widget</small>
 							</div>
+							<div class="form-group">
+								<label for="caption">Caption</label>
+								<input type="text"
+									   class="form-control" name="caption" id="caption"
+									   aria-describedby="helpIdTitle"
+									   placeholder="enter caption">
+							</div>
 
 							<div class="form-group">
 								<label for="description">Description</label>
@@ -983,7 +991,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 <?php } ?>
 
 <div class="login-logo"><b><?php echo $pluginTitle?></b></div>
-<p class="login-box-msg">Caption here</p>
+<p class="login-box-msg"><?php echo $pluginCaption?></p>
 <!-- /.login-logo -->
 
 <div style="padding-left: 20px;padding-right: 20px;">
@@ -1246,7 +1254,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 
 				<div class="alert alert-danger alert-dismissible">
-					<h5>7 Ways to Enter</h5>
+					<h5><?=count($data['data'])?> Ways to Enter</h5>
 				</div>
 
 				<!---------------------------------------------------- ACTION ---------------------------------------------------->
