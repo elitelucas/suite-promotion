@@ -1,0 +1,288 @@
+<!DOCTYPE  html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        Millery - Multi Purpose Miller Columns jQuery Plugin
+    </title>
+    <link href="includes/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/shades-of-purple.min.css">
+    <link href="includes/toc.css" rel="stylesheet" />
+    <link href="includes/pace.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto|PT+Sans|Source+Sans+Pro:300,400,400i,500,600,700" rel="stylesheet" />
+    <link href="../build/css/millery.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        window.paceOptions = {
+            ajax: false,
+			eventLag: false,
+			elements: false,
+			document: true,
+			restartOnPushState: false,
+            restartOnRequestAfter: false,
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+    <script src="../build/vendor/jquery.min.js"></script>
+    <script src="../build/js/millery.min.js"></script>
+</head>
+
+<body>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2381659-8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-2381659-8');
+    </script>
+
+    <div class="all-container">
+        <nav class="navbar navbar-default navbar-dark fixed-top navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="javascript:void(0);">
+                    <i class="fa fa-indent"></i>&nbsp;Millery
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="navbar-nav navbar-right ml-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#how-to-use-it">How to use</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#properties">Properties</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#configuration">Configuration</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#available-events">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#methods">Methods</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#examples">Examples</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#changelog">Changelog</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="jumbotron">
+            <div class="container">
+                <div class='row'>
+                    <div class='col-md-5'>
+                        <h1>Columnize everything!</h1>
+                        <p>
+                            <b>Millery</b> is a multi-purpose Miller Columns plugin, built using jQuery library. Supports HTML Lists, JSON static files, JSON API results, and will support more. Uses SCSS files for templating. Grunt for automation.
+                        </p>
+                        <p class="lead buynow">
+                            <a class="btn btn-buynow btn-lg" href="https://codecanyon.net/item/millery-miller-columns-plugin/24593505?ref=tpaksu" target="_blank" role="button">Get it from CodeCanyon</a>
+                        </p>
+                    </div>
+                    <div class='col-md-7'>
+                        <div id="millery-header" class="millery millery-theme-1"></div>
+                        <script type="text/javascript">$("#millery-header").millery({
+                            panelType: "modal",
+                            keepState: false,
+                            visibleColumns: 3,
+                            columnSearch: true,
+                            showHeaders: true,
+                            onnodeclick: function(instance, node, data){
+                                instance.setPanelData(JSON.stringify(data));
+                                return true;
+                            },
+                            columns: [{
+                                    header: "First Column",
+                                    sourceType: "json",
+                                    source: "https://rettica.com/millery/docs/millery-data-1.json",
+                                    idField: "id",
+                                    parentIdField: null,
+                                    labelField: "label",
+                                    searchParam: "query",
+                                    childrenCountField: "children",
+                                    format: function (value, obj) {
+                                        return value;
+                                    }
+                                },
+                                {
+                                    header: "Second Column",
+                                    sourceType: "json",
+                                    source: "https://rettica.com/millery/docs/millery-data-2.json",
+                                    idField: "id",
+                                    parentIdField: "parent",
+                                    childrenCountField: "children",
+                                    labelField: "label",
+                                    searchParam: "query",
+                                    format: function (value, obj) {
+                                        return value;
+                                    }
+                                },
+                                {
+                                    header: "Third Column",
+                                    sourceType: "json",
+                                    source: "https://rettica.com/millery/docs/millery-data-3.json",
+                                    idField: "id",
+                                    parentIdField: "parent",
+                                    childrenCountField: "children",
+                                    labelField: "label",
+                                    searchParam: "query",
+                                    format: function (value, obj) {
+                                        return value;
+                                    }
+                                }]
+                        });</script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 d-none d-lg-block toc-container" id="scrollspy"></div>
+                <div class="col-lg-9 offset-lg-3 contents" id="contents">
+                    <%=content%>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="container-fluid text-center">Taha Paksu © <span class='cpyear'></span>, All Rights Reserved</footer>
+        <button class="scroll-to-top">
+            <i class="fa fa-arrow-up"></i>
+        </button>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+    <script src="includes/pace.js"></script>
+    <script src="includes/toc.min.js"></script>
+    <script type="text/javascript">
+hljs.initHighlightingOnLoad();
+        /**
+         * Detect the current active responsive breakpoint in Bootstrap
+         * @returns {string}
+         * @author farside {@link https://stackoverflow.com/users/4354249/farside}
+         */
+        function getResponsiveBreakpoint() {
+            var envs = {xs:"d-none", sm:"d-sm-none", md:"d-md-none", lg:"d-lg-none", xl:"d-xl-none"};
+            var env = "";
+
+            var $el = $("<div>");
+            $el.appendTo($("body"));
+
+            for (var i = Object.keys(envs).length - 1; i >= 0; i--) {
+                env = Object.keys(envs)[i];
+                $el.addClass(envs[env]);
+                if ($el.is(":hidden")) {
+                    break; // env detected
+                }
+            }
+            $el.remove();
+            return env;
+        };
+
+        $(".cpyear").text((new Date()).getFullYear());
+
+        var breakpoint = getResponsiveBreakpoint();
+
+        if (breakpoint == "sm" || breakpoint == "xs") {
+            $("img").addClass("img-responsive");
+            $(".nav-link").on("click", function(){ $(".navbar-collapse").removeClass("show");});
+        }
+
+        tocbot.init({
+            tocSelector: '#scrollspy',
+            contentSelector: '#contents',
+            headingSelector: 'h2',
+            collapseDepth: 0,
+            fixedSidebarOffset: $(".navbar").outerHeight() + $(".all-container .jumbotron").outerHeight() + 94,
+            positionFixedSelector: "#scrollspy",
+            scrollEndCallback: function (e) {
+                var current = $(".is-active-link").attr("href");
+                var target = $("#navbar .nav-link[data-href='" + current + "']");
+                if(target.length > 0){
+                    $("#navbar .nav-link").removeClass("active");
+                    target.addClass("active");
+                }
+            },
+        });
+
+        $("#navbar .nav-link").each(function () {
+            var $this = $(this);
+            $this.attr("data-href", $this.attr("href")).attr("href", "javascript:void(0);");
+        });
+
+        $("#navbar .nav-link").on("click", function () {
+            $(".toc-link[href='" + $(this).attr("data-href") + "']")[0].click();
+        });
+
+        $(".doc-feature").wrapInner("<div class='doc-feature-box'></div>");
+
+        $(window).on("scroll", function () {
+            if ($(window).scrollTop() < 10) {
+                $(".navbar-default").addClass("isontop");
+                $(".scroll-to-top").addClass("hidden");
+            } else {
+                $(".navbar-default").removeClass("isontop");
+                $(".scroll-to-top").removeClass("hidden");
+            }
+        });
+
+        $(this).trigger("scroll");
+
+        /**
+         * Examples section
+         */
+
+        $("#examples").nextUntil("h2").wrapAll("<div id='examples-container'></div>");
+
+        $("#examples-container").find("h3[id]").each(function () {
+            $("#examples-toc").append("<a href='#" + $(this).attr("id") + "'>" + $(this).text() + "</a>");
+        });
+
+        $(".scroll-to-top").click(function () {
+            $("html, body").animate({scrollTop: 0}, "slow", "swing");
+        });
+
+        $("#examples-toc a[href^='#']").click(function (e) {
+            var hash = $(this).attr("href");
+            if (window.location.hash != hash) {
+                $("html, body").animate({ scrollTop: $(hash).offset().top + $("#navbar").outerHeight() - 75 }, 'fast', 'swing', function () {
+                    window.location.hash = hash;
+                });
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+
+</html>

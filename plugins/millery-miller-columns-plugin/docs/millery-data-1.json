@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "label": "Test Data 1",
+        "children": 4,
+        "parent": null
+    },
+    {
+        "id": 2,
+        "label": "Test Data 2",
+        "children": 2,
+        "parent": null
+    },
+    {
+        "id": 3,
+        "label": "Test Data 3",
+        "children": 1,
+        "parent": null
+    },
+    {
+        "id": 4,
+        "label": "Test Data 4",
+        "children": 0,
+        "parent": null
+    },
+    {
+        "id": 5,
+        "label": "Test Data 5",
+        "children": 0,
+        "parent": null
+    },
+    {
+        "id": 6,
+        "label": "Test Data 6",
+        "children": 0,
+        "parent": null
+    },
+    {
+        "id": 7,
+        "label": "Test Data 7",
+        "children": 0,
+        "parent": null
+    }
+]

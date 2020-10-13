@@ -1,0 +1,126 @@
+.card {
+  box-shadow: 0 0 0px rgba(0,0,0,.125), 0 0px 0px rgba(0,0,0,.2);
+  margin-bottom: 0.5rem;
+  border: 1px solid #ddd;
+}
+.clear{clear:both;}
+
+a {
+    color: #666;
+}
+
+.login-card-body, .register-card-body {
+    padding: 0px;
+}
+
+.login-box, .register-box {
+    width: 590px;
+}
+
+.login-page, .register-page {
+    height: auto;
+    background: #fff;
+    /*background: #e9ecef;*/
+
+    /*background-image:url();*/
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    background-position:center top;
+    background-size: cover;
+    -moz-background-size: cover;
+}
+
+@media screen and (max-width: 400px) {
+    .login-box, .register-box {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 401px) and (max-width: 720px) {
+    .login-box, .register-box {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 1281px) and (max-width: 1440px) {
+    .login-box, .register-box {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 1441px) and (max-width: 1920px) {
+    .login-box, .register-box {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 1921px) {
+    .login-box, .register-box {
+        width: 50%;
+    }
+}
+
+.card {
+    box-shadow: 0 0 0px rgba(0,0,0,.125), 0 0px 0px rgba(0,0,0,.2);
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+}
+
+.info-box {
+    box-shadow: 0px 0 0px rgba(0,0,0,.125), 0 0px 0px rgba(0,0,0,.1);
+    margin-bottom: 0rem;
+    min-height: auto;
+    height: 50px;
+    padding: 0px;
+}
+
+.info-box .info-box-text, .info-box .progress-description {
+    overflow: visible;
+    font-size: 18px;
+}
+
+.badge {
+    font-size: 25px;
+    line-height: inherit;
+}
+
+.login-box {
+    box-shadow: 0 0 2px rgba(0,0,0,0.3), 0 3px 5px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.nav-tabs .nav-link.active {
+    font-weight:bold;
+    background-color: transparent;
+    border-bottom:3px solid #dc3545;
+    border-right: none;
+    border-left: none;
+    border-top: none;
+}
+
+.nav-tabs.flex-column .nav-item.show .nav-link, .nav-tabs.flex-column .nav-link.active {
+    border-color: #dc3545 transparent #dc3545 #dc3545;
+}
+
+.alert {
+    text-align: center;
+    padding-top: 6px;
+    padding-bottom: 0px;
+    padding-left: 50px;
+    padding-right: auto;
+}
+
+.our-custom-modal {
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image: url(../images/loadingAnimation.gif);
+    background-position: center;
+    background-repeat:no-repeat;
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+    pointer-events: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10000;
+}

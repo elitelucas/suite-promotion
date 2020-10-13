@@ -1,0 +1,26 @@
+CACHE MANIFEST 
+#15-11-2019 00:00:00:v2 
+#http://www.convertcsv.com/url-extractor.htm / https://urlextractor.net/
+
+# Explicitly cached 'master entries'.
+CACHE:
+
+https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js
+https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js
+https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js
+https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js
+https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css
+https://cdnjs.cloudflare.com/ajax/libs/weather-icons/1.3.2/css/weather-icons.css
+https://code.jquery.com/jquery-3.4.1.min.js
+https://s3-us-west-2.amazonaws.com/s.cdpn.io/102308/ScrollToPlugin.js
+https://suite.social/src/font-awesome/css/all.css
+https://suite.social/personal/portal/img/background_home.jpg
+https://suite.social/personal/portal/img/todo.jpg
+https://suite.social/personal/portal/img/calendar.jpg
+
+# Resources that require the user to be online'.
+NETWORK:
+./cache.appcache
+
+FALLBACK:
+./offline.htm

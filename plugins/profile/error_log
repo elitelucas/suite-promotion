@@ -1,0 +1,6 @@
+[10-Jul-2020 10:35:02 America/Chicago] PHP Warning:  file_get_contents(https://twitter.com/Ajey Nagar): failed to open stream: HTTP request failed! HTTP/1.0 400 Bad Request
+ in /home3/sylvangr/public_html/suite.social/coder/chatbot/profile/simple_html_dom.php on line 82
+[10-Jul-2020 10:35:02 America/Chicago] PHP Fatal error:  Uncaught Error: Call to a member function find() on boolean in /home3/sylvangr/public_html/suite.social/coder/chatbot/profile/ajax.php:67
+Stack trace:
+#0 {main}
+  thrown in /home3/sylvangr/public_html/suite.social/coder/chatbot/profile/ajax.php on line 67

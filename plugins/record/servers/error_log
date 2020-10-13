@@ -1,0 +1,2 @@
+[07-Sep-2020 01:24:19 America/Chicago] PHP Warning:  move_uploaded_file(): The second argument to copy() function cannot be a directory in /home3/sylvangr/public_html/suite.social/coder/promo/allentang/mockup/plugins/record/servers/upload-video.php on line 28
+[07-Sep-2020 01:24:19 America/Chicago] PHP Warning:  move_uploaded_file(): Unable to move '/tmp/php9UN3O4' to './' in /home3/sylvangr/public_html/suite.social/coder/promo/allentang/mockup/plugins/record/servers/upload-video.php on line 28
