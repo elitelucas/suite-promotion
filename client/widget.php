@@ -29,6 +29,8 @@ $datediff = $your_date - $now;
 
 $currentDay = round($datediff / (60 * 60 * 24));
 
+$social = new Social();
+$allPlugins = $social->loadAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -480,11 +482,10 @@ label{
 		</div>
 		<div class="clear">
 		<!---======================================================== FIX ========================================================-->
-			<?php
-			$data = $allPlugins;
+			<?php			
 			//Set networks
 			$networks = [];
-			foreach ($data as $obj)
+			foreach ($allPlugins as $obj)
 				array_push($networks, $obj['network']);
 			$networks = array_unique($networks);
 			?>
@@ -655,8 +656,8 @@ label{
 								<select class="form-control" name="action" id="action" required>
 									<option value="">----- Please choose -----</option>
 									<?php
-									if ($data && count($data)>0) {
-										foreach($data as $idx => $plugin):
+									if ($allPlugins && count($allPlugins)>0) {
+										foreach($allPlugins as $idx => $plugin):
 											?>
 											<option value="<?php echo $plugin['filename'];?>"><?php echo $plugin['actionName'];?></option>
 										<?php
@@ -665,8 +666,8 @@ label{
 									?>
 								</select>
 								<?php
-								if ($data && count($data)>0) {
-									foreach($data as $idx => $plugin):
+								if ($allPlugins && count($allPlugins)>0) {
+									foreach($allPlugins as $idx => $plugin):
 
 										?>
 									<input type="hidden" id="plugin-<?php echo $plugin['filename']; ?>" name="plugin-<?php echo $plugin['filename']; ?>" value="<?php echo $plugin['type']; ?>" />
@@ -678,8 +679,8 @@ label{
 
 							<div class="d-none" id="gameContainer">
 								<?php
-								if ($data && count($data)>0) {
-								foreach($data as $idx => $plugin):
+								if ($allPlugins && count($allPlugins)>0) {
+								foreach($allPlugins as $idx => $plugin):
 									if($plugin['type'] == 'play-then-share') {?>
 										<div class="choose--game d-none" style="margin-bottom: 10px; margin-top: 10px;" id="choose_game_<?php echo $plugin['filename'];?>">
 											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_<?php echo $plugin['filename'];?>">
@@ -1881,7 +1882,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						</script>
 
 					<?php } else if($type == 'share-and-refer' && $network == 'facebook') {
-					$visitors = $plugin->getVisitors($socialKey);
+					// $visitors = $plugin->getVisitors($socialKey);
 					?>
 						<!----------------------------------------------------- ACTION share-and-refer ----------------------------------->
 						<div class="card card-default">
@@ -1943,7 +1944,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						<?php if($referralId == $uniqueId) {?>
 						<script type="text/javascript">
 							$(document).ready(function() {
-								var url = 'client/client_add_visitor.php';
+								var url = 'client_add_visitor.php';
 								var fd = new FormData();
 								var postData = {
 									referralId: <?php echo $referralId;?>,
@@ -1996,7 +1997,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 										if(fraudCheck == 'no') {
 											clearInterval(popupCheck)
 
-											var url = 'client/client_add_visitor.php';
+											var url = 'client_add_visitor.php';
 											var fd = new FormData();
 											var postData = {
 												referralId: <?php echo $referralId;?>,
@@ -2703,7 +2704,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 												// Execute the ajax request, in this case we have a very simple PHP script
 												// that accepts and save the uploaded "video" file
 												if(recordType == 'audio' || recordType == 'video') {
-													xhr('plugins/record/servers/upload-video.php', formData, function (fName) {
+													xhr('../plugins/record/servers/upload-video.php', formData, function (fName) {
 														console.log(recordType + " succesfully uploaded !",fName);
 													});
 												}
@@ -3325,7 +3326,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
     }
     //when select network
     $("select#network").change(function() {
-            var selectedNetwork = $("select#network").val();    
+            var selectedNetwork = $("select#network").val();			
             $("select#action").html('');
             for (var x in actions) {
                 if (actions[x]['network'] == selectedNetwork) {
@@ -3337,7 +3338,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
             $('select#action').select2({});
 
         });
-    var actions = <?php echo json_encode($data) ?>;
+    var actions = <?php echo json_encode($allPlugins) ?>;
 </script>
 
 <!--==================================================================== WIDGET CODE ====================================================================-->
@@ -3438,7 +3439,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
     }
 
     async function setFraudData(flag, cheatCount) {
-        var url = 'client/visitor_set_fraud.php';
+        var url = 'visitor_set_fraud.php';
         var fd = new FormData();
         fd.append('flag', flag)
         fd.append('cheat', cheatCount)
@@ -3460,7 +3461,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
     function getCheatData() {
         return new Promise(resolve => {
-            var url = 'client/visitor_set_fraud.php';
+            var url = 'visitor_set_fraud.php';
             var fd = new FormData();
             fd.append('flag', 'get')
 
