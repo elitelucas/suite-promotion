@@ -25,7 +25,7 @@
 
     <link rel="stylesheet" href="<?php echo ASSET_ROOT ?>/css/adminlte.css">
     <link rel="stylesheet" href="<?php echo ASSET_ROOT ?>/css/style.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .entry:not(:first-of-type)
         {
@@ -186,6 +186,7 @@
 <!--    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">-->
 <!--    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>-->
 <!--    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -200,6 +201,11 @@
             <div class="clear">
                 <?php
                 $data = $allPlugins;
+                //Set networks
+                $networks = [];
+                foreach ($data as $obj)
+                    array_push($networks, $obj['network']);
+                $networks = array_unique($networks);
                 ?>
                 <form action="client_add_func.php" method="post" id="create-client-plugin" enctype="multipart/form-data">
 
@@ -345,35 +351,28 @@
 
                                 <div class="form-group">
                                     <label for="network">Choose Network</label>
-                                    <select class="form-control" name="network" id="network" required>
-                                        <option value="">----- Please choose -----</option>
-                                        <option value="facebook">Facebook</option>
-                                    </select>
+                                    <select class="form-control myselect2" name="network" id="network" required>
+                                            <option value="">----- Please choose -----</option>
+                                            <?php
+                                            foreach ($networks as $network) :
+                                            ?>
+                                                <option value="<?= $network ?>"><?= $network ?></option>
+                                            <?php
+                                            endforeach;
+                                            ?>
+                                        </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="action">Choose Action</label>
-                                    <select class="form-control" name="action" id="action" required>
-                                        <option value="">----- Please choose -----</option>
-                                        <?php
-                                        if ($data && count($data)>0) {
-                                            foreach($data as $idx => $plugin):
-                                                ?>
-                                                <option value="<?php echo $plugin->getFilename();?>"><?php echo $plugin->getActionName();?></option>
-                                            <?php
-                                            endforeach;
-                                        }
-                                        ?>
+                                    <select class="form-control myselect2" name="action" id="action" required>                                           
                                     </select>
                                     <?php
                                     if ($data && count($data)>0) {
                                         foreach($data as $idx => $plugin):
 
                                             ?>
-                                            <input type="hidden"
-                                                   id="plugin-<?php echo $plugin->getFilename(); ?>"
-                                                   name="plugin-<?php echo $plugin->getFilename(); ?>"
-                                                   value="<?php echo $plugin->getType();?>" />
+                                        <input type="hidden" id="plugin-<?php echo $plugin['filename']; ?>" name="plugin-<?php echo $plugin['filename']; ?>" value="<?php echo $plugin['type']; ?>" />
                                         <?php
                                         endforeach;
                                     }
@@ -384,9 +383,9 @@
                                     <?php
                                     if ($data && count($data)>0) {
                                     foreach($data as $idx => $plugin):
-                                        if($plugin->getType() == 'play-then-share') {?>
-                                            <div class="choose--game d-none" style="margin-bottom: 10px; margin-top: 10px;" id="choose_game_<?php echo $plugin->getFilename();?>">
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_<?php echo $plugin->getFilename();?>">
+                                        if($plugin['type'] == 'play-then-share') {?>
+                                            <div class="choose--game d-none" style="margin-bottom: 10px; margin-top: 10px;" id="choose_game_<?php echo $plugin['filename'];?>">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_<?php echo $plugin['filename'];?>">
                                                     Choose Game
                                                 </button>
                                             </div>
@@ -596,11 +595,11 @@
     <?php
     if ($data && count($data)>0) {
         foreach($data as $idx => $plugin):
-            if($plugin->getType() == 'play-then-share') {
-                $game = $plugin->getGame();
+            if($plugin['type'] == 'play-then-share') {
+                $game = $plugin['game'];
                 ?>
                 <!-- The Modal -->
-                <div class="modal fade" id="myModal_<?php echo $plugin->getFilename();?>">
+                <div class="modal fade" id="myModal_<?php echo $plugin['filename'];?>">
                     <div class="modal-dialog modal-lg">
 
                         <!-- Modal content-->
@@ -621,7 +620,7 @@
                                                     <div class="gallery-card-body">
                                                         <label class="block-check">
                                                             <img src="<?php echo $item['preview'];?>" class="img-responsive" />
-                                                            <input type="checkbox" class="selected--game" id="selected_game_<?php echo $plugin->getFilename();?>_<?php echo $game_idx;?>"
+                                                            <input type="checkbox" class="selected--game" id="selected_game_<?php echo $plugin['filename'];?>_<?php echo $game_idx;?>"
                                                                    onchange="onSelectGame('<?php echo $item['name'];?>', '<?php echo $item['iframe'];?>', '<?php echo $item['preview'];?>', '<?php echo $game_idx;?>')">
                                                             <span class="checkmark"></span>
                                                         </label>
@@ -879,6 +878,8 @@
             $('#descriptionContainer').addClass('d-none')
             $('#recordContainer').addClass('d-none')
         }
+        //select2
+        $('.myselect2').select2({});
     });
 
     $(document).on('click', '.btn-add', function(e)
@@ -952,5 +953,20 @@
             $('#game_preview_image').prop('src', preview)
         }
     }
+    //when select network
+    $("select#network").change(function() {
+            var selectedNetwork = $("select#network").val();    
+            $("select#action").html('');
+            for (var x in actions) {
+                if (actions[x]['network'] == selectedNetwork) {
+                    console.log(actions[x]['network']);
+                    var newOption = new Option(actions[x]['actionName'], actions[x]['filename'], false, false);
+                    $('select#action').append(newOption)
+                }
+            }
+            $('select#action').select2({});
+
+        });
+    var actions = <?php echo json_encode($data) ?>;
 </script></body>
 </html>

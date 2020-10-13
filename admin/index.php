@@ -21,6 +21,10 @@
     <![endif]-->
     <!-- jQuery -->
     <script src="<?php echo PATH_ROOT ?>/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Boostrap -->
+    <script src="<?php echo PATH_ROOT ?>/plugins/bootstrap/js/bootstrap.bundle.js"></script>
+
 </head>
 <body>
 <div class="container">
@@ -116,20 +120,9 @@
                     </div>
                     <div class="form-group">
                         <label for="network">Choose Network</label>
-                        <select class="form-control" name="network" id="network" required>
-                            <option value="">----- Please choose -----</option>
-                            <option value="facebook">Facebook</option>
-                        </select>
-						
-						<br>
-						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">
-                        Create Network
-                       </button>
-
-						<button type="button" class="btn btn-default">
-                        Delete Selected Network
-                       </button>					   						
-						
+                        <input type="text" class="form-control" required name="network" id="network">
+				
+                                            						
                     </div>
                     <div class="form-group has-success">
                         <label class="form-control-label" for="id">ID</label>

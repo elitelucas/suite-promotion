@@ -68,24 +68,26 @@
                 <?php
 //                print_r($allData);
                 if ($allData && count($allData)>0) {
-                    foreach($allData as $key => $data):
+                    foreach ($allData as $key => $data) {
                     ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($data->getFilename());?>.php</td>
-                            <td><?php echo htmlspecialchars($data->getType());?></td>
-                            <td><?php echo htmlspecialchars($data->getNetwork());?></td>
-                            <td><?php echo htmlspecialchars($data->getID());?></td>
-                            <td><?php echo htmlspecialchars($data->getTitle());?></td>
-                            <td><?php echo htmlspecialchars($data->getVisitLink());?></td>
-                            <td><?php echo htmlspecialchars($data->getShareLink());?></td>
-                            <td><?php echo htmlspecialchars($data->getDelayTime());?></td>
+                            <td><?php echo htmlspecialchars($data['filename']); ?>.php</td>
+                            <td><?php echo htmlspecialchars($data['type']); ?></td>
+                            <td><?php echo htmlspecialchars($data['network']); ?></td>
+                            <td><?php echo htmlspecialchars($data['id']); ?></td>
+                            <td><?php echo htmlspecialchars($data['title']); ?></td>
+                            <td><?php echo htmlspecialchars($data['visitLink']); ?></td>
+                            <td><?php echo htmlspecialchars($data['shareLink']); ?></td>
+                            <td><?php echo htmlspecialchars($data['delayTime']); ?></td>
                             <td>
-                                <a href="edit.php?file=<?php echo $data->getFilename();?>" class="btn btn-success">Edit</a>
-                                <a href="admin_delete_func.php?file=<?php echo $data->getFilename();?>&t=<?php echo time()?>" ref="<?php echo htmlentities($data->getFilename());?>.php" class="btn btn-danger deleteplugin">Delete</a>
+                                <a href="edit.php?file=<?php echo $data['filename']; ?>" class="btn btn-success">Edit</a>
+                                <a href="admin_delete_func.php?file=<?php echo $data['filename']; ?>&t=<?php echo time() ?>" ref="<?php echo htmlentities($data['filename']); ?>.php" class="btn btn-danger deleteplugin">
+                                    Delete
+                                </a>
                             </td>
                         </tr>
                 <?php
-                    endforeach;
+                   }
                 }
                 ?>
                     </tbody>
