@@ -442,6 +442,14 @@ label{
 	transform: rotate(45deg);
 }
 
+/* To drag and delete widget */
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 0px solid rgba(0,0,0,.125);
+    padding: .75rem .50rem .25rem .50rem;
+}
+
 </style>
 	
 <!--[if lt IE 9]>
@@ -471,7 +479,7 @@ label{
 
 <div class="row">
 
-<div class="col-md-6">
+<div class="col-md-6" id="clientForm">
 
 <div class="card" style="">
 	<div class="card-body">
@@ -482,18 +490,14 @@ label{
 			<hr/>
 		</div>
 		<div class="clear">
-		<!---======================================================== FIX ========================================================-->
 			<?php			
 			//Set networks
 			$networks = [];
 			foreach ($allPlugins as $obj)
 				array_push($networks, $obj['network']);
 			$networks = array_unique($networks);
-			?>
-			
-		<!---======================================================== /FIX ========================================================-->
-		
-			
+			?>	
+				
 			<form action="client_add_func.php" method="post" id="create-client-plugin" enctype="multipart/form-data">
 
 				<!-------------------- Settings -------------------->
@@ -634,8 +638,6 @@ label{
 				</div>
 
 				<!-------------------- Actions -------------------->
-
-		<!---======================================================== FIX ========================================================-->
 
 				<div class="card" style="">
 					<div class="card-body">
@@ -903,7 +905,7 @@ label{
 
 </div><!--/col-md-6-->
 
-<div class="col-md-6">
+<div class="col-md-6" id="previewSection">
 
 <div class="login-box">
 <?php
@@ -1257,7 +1259,8 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<h5><?=count($data['data'])?> Ways to Enter</h5>
 				</div>
 
-				<!---------------------------------------------------- ACTION ---------------------------------------------------->
+				<!---------------------------------------------------- ACTION LIST---------------------------------------------------->
+				<section class="connectedSortable" id="action-list" style="min-height: 0px!important;">
 				<?php
 
 				//                        print_r($data);
@@ -1304,6 +1307,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						$shareTitle = $socialData['shareTitle'];
 						$delayTime = $socialData['delayTime'];
 						$type =  $socialData['type'];
+						$filename =  $socialData['filename'];
 						$actionName =  $socialData['actionName'];
 
 						$visitLink = $url;
@@ -1312,9 +1316,16 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						if ($delayTime < 1) {
 							$delayTime = 1;
 						}
-						//if($type == 'shareandvisit' && $network =='facebook') {
+						?>
+						<!-- Drag-Delete-Item -->
+						<div style="border: 1px solid #eee;" class="card direct-chat direct-chat-default my-drag-delete-item" filename="<?=$filename?>">
+       				       <div class="card-header ui-sortable-handle" style="cursor: move;">
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+								</div>
+						<?php
 					if($type == 'submit-then-share' && $network =='facebook') {?>
-						<!---------------------------------------------------- ACTION ---------------------------------------------------->
+						<!---------------------------------------------------- ACTION: submit-then-share ---------------------------------------------------->
 						<div class="card card-default">
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
 								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-<?php echo $id?>"></i></span>
@@ -1412,7 +1423,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 					<?php } else if($type == 'share-then-submit' && $network =='facebook') {?>
 
-						<!---------------------------------------------------- ACTION ---------------------------------------------------->
+						<!---------------------------------------------------- ACTION: share-then-submit ---------------------------------------------------->
 						<div class="card card-default">
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
 								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-<?php echo $id?>"></i></span>
@@ -1510,6 +1521,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						</script>
 					<?php } else if($type == 'visit-and-share' && $network =='facebook') {
 					?>
+						<!---------------------------------------------------- ACTION: visit-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
@@ -1617,7 +1629,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<?php
 					if($type == 'share-and-visit' && $network =='facebook') {
 					?>
-						<!---------------------------------------------------- ACTION ---------------------------------------------------->
+						<!---------------------------------------------------- ACTION: share-and-visit ---------------------------------------------------->
 
 						<div class="card card-default">
 
@@ -1720,7 +1732,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<?php
 					if($type == 'select-and-share' && $network == 'facebook') {
 					?>
-						<!----------------------------------------------------- ACTION select-and-share ----------------------------------->
+						<!---------------------------------------------------- ACTION: select-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
@@ -1892,7 +1904,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<?php } else if($type == 'share-and-refer' && $network == 'facebook') {
 					// $visitors = $plugin->getVisitors($socialKey);
 					?>
-						<!----------------------------------------------------- ACTION share-and-refer ----------------------------------->
+						<!---------------------------------------------------- ACTION: share-and-refer ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
@@ -2047,8 +2059,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						</script>
 
 					<?php } else if($type == 'scratch-and-share' && $network == 'facebook') { ?>
-						<!---------------------------------------------------- ACTION scratch-and-share ---------------------------------------------------->
-
+						<!---------------------------------------------------- ACTION: scratch-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey; ?>">
@@ -2249,6 +2260,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							})
 						</script>
 					<?php } else if($type == 'spin-and-share' && $network == 'facebook') { ?>
+						<!---------------------------------------------------- ACTION: spin-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey; ?>">
@@ -2460,8 +2472,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 						</script>
 					<?php } else if($type == 'play-then-share' && $network == 'facebook') {?>
-						<!------------- Action play-then-share ------------------------------->
-
+						<!---------------------------------------------------- ACTION: play-then-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
@@ -2566,7 +2577,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<?php } else if($type == 'record-and-share' && $network == 'facebook') {
 //                                    $recordType = 'video';
 						?>
-						<!------------- Action record-and-share ------------------------------->
+						<!---------------------------------------------------- ACTION: record-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
@@ -2785,13 +2796,22 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							})
 						</script>
 					<?php }?>
+
+							</div>
+						</div>
+						<!-- ./Drag-Delete-Item -->
 					<?php
 					endforeach;
 				} // if allSocial && count > 0 ?>
-
-
-			</div>
+			</section>	
+				<!---------------------------------------------------- ./ACTION LIST---------------------------------------------------->		
+			</div>		
 		</div><!--/accordion>-->
+		<div>
+			<button class="btn btn-block btn-info" onclick="savePreviewChange()">
+				<i class="fas fa-save"></i>&nbsp;Save Changes
+			</button>
+		</div>
 
 	</div>
 	<div class="tab-pane fade" id="points" role="tabpanel" aria-labelledby="points-tab">
@@ -2967,6 +2987,8 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 </div><!-- /.card -->
 </div><!-- /.login-box -->
 
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="<?php echo PATH_ROOT ?>/src/js/dashboard.js"></script>
 </div><!--/col-md-6-->
 
 </div><!-- /.row -->
@@ -2999,6 +3021,9 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 </div>
 
+<!-- jQuery UI 1.11.4 -->
+<script src="<?php echo PATH_ROOT ?>/plugins/jquery-ui/jquery-ui.min.js"></script>
+
 <!-- Bootstrap 4 -->
 <script src="<?php echo PATH_ROOT ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -3006,7 +3031,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 <script src="<?php echo PATH_ROOT ?>/plugins/select2/js/select2.full.min.js"></script>
 
 <!-- AdminLTE App -->
-<script src="<?php echo ASSET_ROOT ?>/js/adminlte.min.js"></script>
+<script src="<?php echo PATH_ROOT ?>/src/js/adminlte.min.js"></script>
 
 <!-- GAME -->
 <script src="<?php echo PATH_ROOT ?>/src/js/async-iframe.js"></script>
@@ -3059,15 +3084,16 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                         $('#pictureContainer').addClass('d-none')
                         $('#urlContainer').removeClass('d-none')
                     }
-                    // alert(message); // show response from the php script.
+                    showPreview();
                     alert('Created Plugin successfully.'); // show response from the php script.
-                    // window.location.href = "/socialsuite";
+                    
                 }
             });
 
 
-        });
-
+		});
+		
+		
         var next = 0;
         $("#add-more").click(function(e){
             e.preventDefault();
@@ -3489,7 +3515,42 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                 }
             });
         })
-    }
+	}
+	
+
+	function showPreview(){
+		$.ajax({
+			type: "GET",
+			url: "widget.php",              
+			success: function(data)
+			{
+				var newPreview=$(data).find("#previewSection");
+				$("#previewSection").html(newPreview.html())
+				$('.knob').knob()
+			}
+		});
+	}
+
+	function savePreviewChange(){
+		var actionlistsection = $("#action-list");
+		var order=[];
+		$("#action-list .my-drag-delete-item:visible").each(function(){
+			order.push($(this).attr('filename'));
+		});
+		$.ajax({
+			type: "POST",
+			url: "save_preview_change.php",
+			data:{
+				order:order
+			},              
+			success: function(data)
+			{
+				showPreview();
+				alert('The plugins saved successfully.')
+			}
+		});		
+	}
+
 </script>
 
 <script>
@@ -3510,7 +3571,10 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
         // drawDocSparklines()
         // drawMouseSpeedDemo()
 
-    })
+	})
+	
+
+	
 
 </script>
 
