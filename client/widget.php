@@ -12,8 +12,11 @@ $spin_limit = 3;
 @$info = (array)$data['info'];
 @$backgroundImage = $info['background_image'];
 @$pluginTitle = $info['title'];
+if($pluginTitle==null || $pluginTitle=='') $pluginTitle='Your headline here';	
 @$pluginCaption = $info['caption'];
+if($pluginCaption==null || $pluginCaption=='') $pluginCaption='Caption here (140 characters max)';
 @$description = $info['description'];
+if($description==null || $description=='') $description='Promotion description goes here. Choose a method to login or register';
 @$promotioncontent = $info['promotioncontent'];
 @$totalpoints = (int)$info['totalpoints'];
 @$expiry = $info['expiry'];
@@ -21,6 +24,9 @@ $spin_limit = 3;
 @$offersleft = (int)$info['offersleft'];
 @$network = $info['network'];
 @$brandMedia = (array)$info['media'];
+if($brandMedia==null || $brandMedia['mode']==''){
+	$brandMedia=array("mode"=>"url", "url"=>PATH_ROOT."/images/banner.jpg");;
+} 
 @$pluginType = $info['type'];
 @$maxPoints = $totalpoints;
 
@@ -114,15 +120,25 @@ $allPlugins = $social->loadAll();
 <link rel="stylesheet" href="<?php echo PATH_ROOT ?>/src/css/adminlte.min.css">
 <link rel="stylesheet" href="<?php echo PATH_ROOT ?>/src/css/style.css">
 
-<!-- summernote -->
+<!-- Text editor -->
 <link rel="stylesheet" href="<?php echo PATH_ROOT ?>/plugins/summernote/summernote-bs4.css">
 
 <!-- iCheck for checkboxes and radio inputs -->
 <link rel="stylesheet" href="<?php echo PATH_ROOT ?>/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 
+<!-- DataTables -->
+<link rel="stylesheet" href="<?php echo PATH_ROOT ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="<?php echo PATH_ROOT ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
 <!-- Select2 -->
 <link rel="stylesheet" href="<?php echo PATH_ROOT ?>/plugins/select2/css/select2.min.css">
 <link rel="stylesheet" href="<?php echo PATH_ROOT ?>/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+<!-- Millery --> 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" /> 
+<link href="<?php echo PATH_ROOT ?>/src/build/css/millery.min.css" rel="stylesheet" />
+<script src="<?php echo PATH_ROOT ?>/src/build/vendor/jquery.min.js"></script>
+<script src="<?php echo PATH_ROOT ?>/src/build/js/millery.min.js"></script>
 
 <!-- Spin Wheel (CSS) -->
 <link rel="stylesheet" href="<?php echo PATH_ROOT ?>/plugins/spin-wheel/css/sweetalert2.min.css"> <!-- sweetalert2 -->
@@ -132,15 +148,13 @@ $allPlugins = $social->loadAll();
 <!-- Record -->
 <link href="<?php echo PATH_ROOT;?>/plugins/record/css/video-js.min.css" rel="stylesheet">
 <link href="<?php echo PATH_ROOT;?>/plugins/record/css/videojs.record.css" rel="stylesheet">
+<!-- jQuery UI 1.11.4 -->
+<link href="<?php echo PATH_ROOT;?>/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 
 <style>
 
 a {
 	color: #666;
-}
-
-.content-wrapper {
-	background: transparent;
 }
 
 .layout-top-nav .wrapper .main-header .brand-image {
@@ -170,6 +184,10 @@ a {
 	box-shadow: 0 0 0px rgba(0,0,0,.125), 0 0px 0px rgba(0,0,0,.2);
 	margin-bottom: 0.5rem;
 	border: 1px solid #ddd;
+}
+
+.card-title {
+    float: none;
 }
 
 .info-box {
@@ -237,12 +255,42 @@ a {
 	border-color: #dc3545 transparent #dc3545 #dc3545;
 }
 
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #dc3545;
+}
+
 .alert {
 	text-align: center;
 	padding-top: 6px;
 	padding-bottom: 0px;
 	padding-left: 50px;
 	padding-right: auto;
+}
+
+#divB { display : none; }
+
+/**************************************** Millery ****************************************/
+
+.millery {
+	width: 100%;
+}
+
+.millery-theme-1 .millery-container .millery-bottom {
+	/*overflow-y: scroll;*/
+	min-height: 400px !important;
+}
+
+.millery-container .millery-bottom .millery-panel.millery-panel-overlay {
+	min-height: 400px;
+	overflow-y: auto;
+}
+
+@media screen and (max-width: 768px){
+	.millery {
+		width: auto;
+		height: calc(100vh - 100px);
+	}
 }
 
 /**************************************** SCRATCH CARD ****************************************/
@@ -450,6 +498,10 @@ label{
     padding: .75rem .50rem .25rem .50rem;
 }
 
+.direct-chat .card-body{
+	padding: 1.25rem!important;
+}
+
 </style>
 	
 <!--[if lt IE 9]>
@@ -475,21 +527,103 @@ label{
 <script src="<?php echo PATH_ROOT;?>/plugins/record/js/videojs.wavesurfer.min.js"></script>
 
 </head>
-<body>
+<body class="hold-transition layout-top-nav">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+    <div class="container">
+      <a href="https://suite.social/promo" class="navbar-brand">
+        <img src="<?php echo PATH_ROOT ?>/images/logos/suite.png" alt="AdminLTE Logo" class="brand-image"
+             style="opacity: .8">
+        <!--<span class="brand-text font-weight-light">Social Promo</span>-->
+      </a>
+      
+      <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="index3.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">Trending</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">Archive</a>
+          </li>		  
+          <li class="nav-item dropdown">
+            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Contact</a>
+            <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+              <li><a href="#" class="dropdown-item">Some action </a></li>
+			  <li class="dropdown-divider"></li>
+              <li><a href="#" class="dropdown-item">Some other action</a></li>
+
+            </ul>
+          </li>
+        </ul>
+
+        <!-- SEARCH FORM 
+        <form class="form-inline ml-0 ml-md-3">
+          <div class="input-group input-group-sm">
+            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+              <button class="btn btn-navbar" type="submit">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>-->
+      </div>
+
+      <!-- Right navbar links -->
+      <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+	  
+        <li class="nav-item">
+          <a style="color:#fff; margin-right:12px;line-height: 20px;" class="nav-link btn btn-danger" href="//suite.social/promo" role="button"><i class="fas fa-credit-card"></i> Sign-up</a>
+        </li>
+		
+        <li class="nav-item">
+          <a style="color:#fff;line-height: 20px;" class="nav-link btn btn-success" data-widget="control-sidebar" data-slide="true" href="#" role="button"><i class="fas fa-sign-in-alt"></i> Login</a>
+        </li>
+		
+      </ul>
+    </div>
+  </nav>
+  <!-- /.navbar -->
+  
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+<div class="pt-3"></div>
+<!-- Main content -->
+<section class="content">
+<div class="container-fluid">
+
+				<div class="alert alert-default alert-dismissible">
+                  <h6>Test out the promotion tool with all features! When your ready to create a live promotion, click the sign-up button for only £9.99!</h6>
+                </div>
 
 <div class="row">
 
-<div class="col-md-6" id="clientForm">
+<div class="col-12 col-sm-12 col-md-6" id="clientForm">
+<!-- Default box -->
+<div class="card">
+	<div class="card-header text-center">
+		<h3>Promotion: <span id="state">NEW</span></h3>
 
-<div class="card" style="">
+	</div>
 	<div class="card-body">
-		<div class="clear">
-			<h4 class="">
-				Client form
-			</h4>
-			<hr/>
-		</div>
-		<div class="clear">
+
+		<!--================================================== ACCORDIAN ==================================================-->
+
+		<div class="accordion" id="accordion">
+
+			<!---------------------------------------------------- SETTINGS ---------------------------------------------------->
+
 			<?php			
 			//Set networks
 			$networks = [];
@@ -498,158 +632,238 @@ label{
 			$networks = array_unique($networks);
 			?>	
 				
-			<form action="client_add_func.php" method="post" id="create-client-plugin" enctype="multipart/form-data">
+			<form action="client_add_func.php" method="post" id="create-client-plugin" enctype="multipart/form-data" novalidate>				
 
-				<!-------------------- Settings -------------------->
+			<div class="card-custom card card-default">
 
-				<div class="card" style="">
+				<a class="info-box-custom info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+					<span class="info-box-icon bg-default"><i class="fas fa-cogs"></i></span>
+
+					<div class="info-box-content">
+						<span class="info-box-text-custom info-box-text">Settings</span>
+					</div>
+					<span class="badge-custom badge badge-secondary float-right">1</span>					
+					<!-- /.info-box-content -->
+				</a>
+				<!-- /.info-box -->
+
+				<div id="collapse2" class="panel-collapse collapse in" data-parent="#accordion">
 					<div class="card-body">
-						<div class="clear">
-							<h4 class=""><b>Settings</b></h4>
-							<hr/>
+
+						<!-------------------- FORM -------------------->
+
+						<div class="form-group">
+							<label for="type">Select type</label>
+							<h6 class="text-muted"><small>Choose the type of promotion you want </small></h6>
+							<select class="form-control" name="type" id="type" required>
+								<option value="">----- Please Choose -----</option>
+								<option value="points">Points (Unlock Content)</option>
+								<option value="entries">Entries (Select Winner)</option>
+							</select>
+						</div>	
+
+						<div class="form-group">
+							<label for="totalpoints">Total Points/Entries</label>
+							<h6 class="text-muted"><small>Enter the total number of points/entries user needs to get to claim your offer.</small></h6>
+							<input type="number" class="form-control points_input" name="totalpoints" id="totalpoints" aria-describedby="helpIdTotalPoints" value="10" placeholder="Total points">
+						</div>	
+
+						<div class="form-group">
+							<label for="offersleft">Offers left</label>
+							<h6 class="text-muted"><small>Enter the total number of offers you have (e.g. 50 coupons, 10 prizes etc).</small></h6>  
+							<input type="number" min="0" max="10" class="form-control offers_input" name="offersleft" id="offersleft" aria-describedby="helpIdOffersLeft" value="1" placeholder="enter offers left">
+						</div>							
+						
+						<div class="form-group">
+							<label for="expiry">Expiry</label>
+							<h6 class="text-muted"><small>Choose when your promotion expires.</small></h6>          
+							<input type="date" class="form-control expiry_date_input" name="expiry" id="expiry" aria-describedby="helpIdExpiry" placeholder="enter expiry">
+						</div>							
+						
+						<div class="form-group">
+							<label>Login Type</label>
+							 <h6 class="text-muted"><small>Choose how users login.</small></h6>                                                       
+
+								<p>Email Login<br>
+								<input type="checkbox" class="login_type_check" name="my-checkbox" data-type="email" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"></br><br>
+								<input type="email" class="form-control" value="Enter email for login alerts"></p>
+								
+								<p>SMS Login<br>
+								<input type="checkbox" class="login_type_check" name="my-checkbox" data-type="sms" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"></br><br>
+								<input type="text" class="form-control" value="Enter Twilio API Key"></p>
+
+								<p>WhatsApp Login<br>
+								<input type="checkbox" class="login_type_check" name="my-checkbox" data-type="whatsapp" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"></br><br>
+								<input type="text" class="form-control" value="Enter WhatsApp Number"></p>
+
+								<p>Social Login<br>
+								<input type="checkbox" class="login_type_check" name="my-checkbox" data-type="social" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"></br><br>
+								<input type="email" class="form-control" value="Enter email for login alerts"></p>
+						   
+						</div>	
+
+						<h6 class="text-muted"><small>Options</small></h6>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="checkbox" class="form-check-input" name="exitpopup" id="exitpopup" value="1">
+								Exit popup?
+							</label>
 						</div>
-						<div class="clear">
 
-							<div class="form-group">
-								<label for="type">Choose type</label>
-								<select class="form-control" name="type" id="type" required>
-									<option value="">----- Please choose -----</option>
-									<option value="points" >Points</option>
-									<option value="entries" >Entries</option>
-								</select>
-							</div>
-
-							<div class="form-group">
-								<label for="totalpoints">Total points/entries</label>
-								<input type="text" class="form-control" name="totalpoints" id="totalpoints" aria-describedby="helpIdTitle" placeholder="total points">
-							</div>
-
-							<div class="form-group">
-								<label for="offersleft">Offers left</label>
-								<input type="number" min="0" max="10"
-									   class="form-control" name="offersleft" id="offersleft"
-									   aria-describedby="helpIdOffersLeft"
-									   placeholder="enter offers left">
-							</div>
-
-							<div class="form-group">
-								<label for="expiry">Expiry</label>
-								<input type="date"
-									   class="form-control" name="expiry" id="expiry"
-									   aria-describedby="helpIdExpiry"
-									   placeholder="enter expiry">
-							</div>
-
-						</div>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input type="checkbox" class="form-check-input" name="directoryinclusion" id="directoryinclusion" value="1">
+								Directory inclusion?
+							</label>
+						</div>							
+						
 					</div>
 				</div>
+			</div>
 
-				<!-------------------- Branding -------------------->
+			<!---------------------------------------------------- BRANDING ---------------------------------------------------->
 
-				<div class="card" style="">
+			<div class="card-custom card card-default">
+
+				<a class="info-box-custom info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+					<span class="info-box-icon bg-default"><i class="fas fa-id-card"></i></span>
+
+					<div class="info-box-content">
+						<span class="info-box-text-custom info-box-text">Branding</span>
+					</div>
+					<span class="badge-custom badge badge-secondary float-right">2</span>
+					<!-- /.info-box-content -->
+				</a>
+				<!-- /.info-box -->
+
+				<div id="collapse3" class="panel-collapse collapse"  data-parent="#accordion">
 					<div class="card-body">
-						<div class="clear">
-							<h4 class=""><b>Branding</b></h4>
-							<hr/>
+
+						<!-------------------- FORM -------------------->
+						
+						<div class="form-group">
+							<label for="title">Headline <span class="text-danger">*</span></label>
+							 <h6 class="text-muted"><small>What is your promotion called? (E.g. 50% discount on product etc).</small></h6> 
+							<input type="text" class="form-control headlineinput" name="title" id="title" aria-describedby="helpIdTitle" placeholder="Enter Headline">
+						</div>	
+
+						<div class="form-group">
+							<label for="caption">Caption <span class="text-danger">*</span></label>
+							 <h6 class="text-muted"><small>What is your promotion about? (140 characters max, used for meta tags).</small></h6> 
+							<input type="text" class="form-control captioninput" name="caption" id="caption" maxlength="140" aria-describedby="helpIdCaption" placeholder="Enter Caption">
+						</div>						
+
+						<div class="form-group">
+							<label for="description">Description</label>
+							<h6 class="text-muted"><small>What is your promotion about?</small></h6>
+							<textarea class="description_text_input" name="description" id="description" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+						</div>													
+
+						<div class="form-group">
+							<label for="promotioncontent">Promotion content</label>
+							<h6 class="text-muted"><small>What does users see after they complete all actions? (E.g. coupon, download, media or message etc).</small></h6>
+							<textarea class="textarea2" name="promotioncontent" id="promotioncontent" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+						</div>	
+
+						<div class="form-group">
+							<label for="rules">Terms & Conditions </label>
+							<h6 class="text-muted"><small>What are your promotion rules? (E.g. terms, privacy policy etc).</small></h6>
+							 <textarea class="rules_text_input" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+						</div>							
+						
+						<div class="form-group">
+							<label for="brand_media_type">Banner</label>
+							<select class="form-control" name="brand_media_type" id="brand_media_type" required>
+								<option value="">----- Please choose -----</option>
+								<option value="video">Video</option>
+								<option value="picture">Picture</option>
+								<option value="slide_show">SlideShow</option>
+							</select>
 						</div>
-						<div class="clear">
-
-							<div class="form-group">
-								<label for="title">Title</label>
-								<input type="text"
-									   class="form-control" name="title" id="title"
-									   aria-describedby="helpIdTitle"
-									   placeholder="enter title">
-								<small id="helpIdTitle" class="form-text text-muted">Title of your widget</small>
-							</div>
-							<div class="form-group">
-								<label for="caption">Caption</label>
-								<input type="text"
-									   class="form-control" name="caption" id="caption"
-									   aria-describedby="helpIdTitle"
-									   placeholder="enter caption">
-							</div>
-
-							<div class="form-group">
-								<label for="description">Description</label>
-								<textarea class="form-control" name="description" id="description"
-										  rows="3"></textarea>
-							</div>
-
-							<div class="form-group">
-								<label for="promotioncontent">Promotion content</label>
-								<textarea class="form-control" name="promotioncontent" id="promotioncontent"
-										  rows="10"></textarea>
-							</div>
-							<div class="form-group">
-								<label for="brand_media_type">Choose Type</label>
-								<select class="form-control" name="brand_media_type" id="brand_media_type" required>
-									<option value="">----- Please choose -----</option>
-									<option value="video">Video</option>
-									<option value="picture">Picture</option>
-									<option value="slide_show">SlideShow</option>
-								</select>
-							</div>
-							<div class="form-group d-none" id="brand_pic_container">
-								<label for="brand_pic_type">Choose picture type</label>
-								<select class="form-control" name="brand_pic_type" id="brand_pic_type" >
-									<option value="">----- Please choose -----</option>
-									<option value="url">URL</option>
-									<option value="upload">Image</option>
-								</select>
-							</div>
-							<div class="form-group d-none" id="brand_pic_url_container">
-								<label for="brand_pic_url">URL</label>
-								<input id="brand_pic_url" name="brand_pic_url" type="text" placeholder="" class="form-control input-md">
-							</div>
-							<div class="form-group d-none" id="brand_pic_upload_container">
-								<label for="brand_pic_upload">Image</label>
-								<input type="file" id="brand_pic_upload" name="brand_pic_upload" class="input-file" accept=".jpg,.jpeg,.png,.gif,.bmp">
-<!--                                        <div id="file_name_0"></div>-->
-							</div>
-							<div class="form-group d-none" id="brand_video_container">
-								<label for="brand_video_url">Video</label>
-								<input id="brand_video_url" name="brand_video_url" type="text" placeholder="" class="form-control input-md">
-							</div>
-							<div class="d-none" id="brand_slide_container">
-								<div class="form-group" id="slides">
-									<label class="control-label" for="field1">SlideShow URL</label>
-									<div class="controls">
-										<div>
-											<div class="entry input-group col-xs-6">
-												<input class="form-control" name="slides[]" type="text" placeholder="Enter slide show URL." />
-												<span class="input-group-btn">
-													<button class="btn btn-success btn-add" type="button">
-														<span style="font-size: 18px; font-weight: 700;" class="glyphicon glyphicon-plus">+</span>
-													</button>
-												</span>
-											</div>
+																														
+						<div class="form-group d-none" id="brand_pic_container">
+							<label for="brand_pic_type">Choose picture type</label>
+							<select class="form-control" name="brand_pic_type" id="brand_pic_type" >
+								<option value="">----- Please choose -----</option>
+								<option value="url">URL</option>
+								<option value="upload">Image</option>
+							</select>
+						</div>
+						
+						<div class="form-group d-none" id="brand_pic_url_container">
+							<label for="brand_pic_url">URL</label>
+							<input id="brand_pic_url" name="brand_pic_url" type="text" placeholder="" class="form-control input-md">
+						</div>
+						
+						<div class="form-group d-none" id="brand_pic_upload_container">
+							<!--<label for="brand_pic_upload">Image</label>
+							<input type="file" id="brand_pic_upload" name="brand_pic_upload" class="input-file" accept=".jpg,.jpeg,.png,.gif,.bmp"><!--<div id="file_name_0"></div>-->
+						
+							<a class='btn btn-default' href='javascript:;'>
+								<i class="fas fa-cloud-upload-alt"></i> Upload Banner
+								<!-- <input type="file" style='position:absolute;z-index:2;top:0;left:0;height:38px;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' id="brand_pic_upload" name="brand_pic_upload" class="input-file" accept=".jpg,.jpeg,.png,.gif,.bmp" size="40" onchange='$("#upload-logo").html($(this).val());'> -->
+								<input type='file' id="brand_pic_upload" name="brand_pic_upload" class="input-file"  onchange='$("#upload-logo").html($(this).val());'/>
+							</a>							
+						
+						</div>
+						
+						<div class="form-group d-none" id="brand_video_container">
+							<label for="brand_video_url">Video</label>
+							<input id="brand_video_url" name="brand_video_url" type="text" placeholder="" class="form-control input-md">
+						</div>
+						
+						<div class="d-none" id="brand_slide_container">
+							<div class="form-group" id="slides">
+								<label class="control-label" for="field1">SlideShow URL</label>
+								<div class="controls">
+									<div>
+										<div class="entry input-group col-xs-6">
+											<input class="form-control" name="slides[]" onchange="sliderurls(this.value)" type="text" placeholder="Enter slide show URL." />
+											<span class="input-group-btn">
+												<button class="btn btn-success btn-add" type="button">
+													<span style="font-size: 18px; font-weight: 700;" class="glyphicon glyphicon-plus">+</span>
+												</button>
+											</span>
 										</div>
 									</div>
 								</div>
 							</div>
-
-							<div class="form-group">
-								<label for="back_img_url">Background</label>
-								<input id="back_img_url" name="back_img_url" type="text" placeholder="enter background URL" class="form-control input-md">
-							</div>
 						</div>
+
+						<div class="form-group">
+							<label for="back_img_url">Background</label>
+							<input id="back_img_url" name="back_img_url" type="text" placeholder="enter background URL" class="form-control input-md">
+						</div>		
+
+						<!-------------------- / FORM -------------------->
+
 					</div>
 				</div>
+			</div>
 
-				<!-------------------- Actions -------------------->
+			<!---------------------------------------------------- ACTIONS ---------------------------------------------------->
 
-				<div class="card" style="">
+			<div class="card-custom card card-default">
+
+				<a class="info-box-custom info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+					<span class="info-box-icon bg-default"><i class="fas fa-share-alt"></i></span>
+
+					<div class="info-box-content">
+						<span class="info-box-text-custom info-box-text">Actions</span>
+
+					</div>
+					<span class="badge-custom badge badge-secondary float-right">3</span>
+					<!-- /.info-box-content -->
+				</a>
+				<!-- /.info-box -->
+
+				<div id="collapse4" class="panel-collapse collapse" data-parent="#accordion">
+				
 					<div class="card-body">
-						<div class="clear">
-							<h4 class=""><b>Actions</b></h4>
-							<hr/>
-						</div>
-						<div class="clear">
-
+					
 							<div class="form-group">
 								<label for="network">Choose Network</label>
-								<select class="form-control myselect2" name="network" id="network" required>
+								<select class="form-control select2" name="network" id="network" required>
 										<option value="">----- Please choose -----</option>
 										<?php
 										foreach ($networks as $network) :
@@ -853,59 +1067,88 @@ label{
 									   class="form-control" name="shareAction" id="shareAction"
 									   aria-describedby="helpIdShareAction"
 									   placeholder="enter share button name">
-							</div>
-
-						</div>
-					</div>
-				</div>
+							</div>						
 				
-		<!---======================================================== /FIX ========================================================-->			
+						</div>
+					</div>				
+						
+				</div>
 
-				<div class="card" style="">
+			<!---------------------------------------------------- TOOLS ---------------------------------------------------->
+
+			<div class="card-custom card card-default">
+
+				<a class="info-box-custom info-box" data-toggle="collapse"
+				   data-parent="#accordion" href="#collapse5">
+					<span class="info-box-icon bg-default"><i class="fas fa-tools"></i></span>
+
+					<div class="info-box-content">
+						<span class="info-box-text-custom info-box-text">Tools</span>
+
+					</div>
+					<span class="badge-custom badge badge-secondary float-right">4</span>
+					<!-- /.info-box-content -->
+				</a>
+				<!-- /.info-box -->
+
+				<div id="collapse5" class="panel-collapse collapse" data-parent="#accordion">
 					<div class="card-body">
-						<div class="clear">
-							<h4 class="">
-								<b>Options</b>
-							</h4>
-							<hr/>
-						</div>
-						<div class="clear">
 
-							<div class="form-check">
-								<label class="form-check-label">
-									<input type="checkbox" class="form-check-input" name="exitpopup"
-										   id="exitpopup"
-										   value="1">
-									Exit popup
-								</label>
-							</div>
+						<!-------------------- FORM -------------------->
 
-							<div class="form-check">
-								<label class="form-check-label">
-									<input type="checkbox" class="form-check-input" name="directoryinclusion"
-										   id="directoryinclusion"
-										   value="1">
-									Directory inclusion
-								</label>
-							</div>
 
-						</div>
+
+
+						<!-------------------- / FORM -------------------->
+
 					</div>
 				</div>
+			</div>
 
-				<div class="btn-group">
-					<!--                            <a href="--><?php //echo PATH_ROOT ;?><!--/client" class="btn btn-default">Cancel</a>-->
-					<button type="reset" class="btn btn-default">Reset</button>
-					<button type="submit" class="btn btn-primary">Submit</button>
-				</div>
-			</form>
-		</div>
+			<div class="btn-group">
+				<button type="reset" class="btn bg-gradient-success">Reset Promotion</button>
+				<button type="submit" class="btn bg-gradient-danger" id="submitbtn">Create Promotion</button>
+			</div>	
+			
+			</form>				
+
+		</div><!--/accordion>-->
+		
 	</div>
+	<!-- /.card-body -->
+	
+	<div class="card-footer">
+	
+			<div class="alert alert-success alert-dismissible">
+			  <h6>Success! Your promotion is created. Copy link or choose option below.</h6>
+			</div>
+
+<div class="input-group input-group mb-3">
+			  <!-- /btn-group -->
+			  <input type="text" class="form-control">
+			  <div class="input-group-prepend">
+				<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				  Options
+				</button>
+				<ul class="dropdown-menu" style="">
+				  <li class="dropdown-item"><a href="#">View Page</a></li>
+				  <li class="dropdown-item"><a href="#">Embed Code</a></li>
+				  <li class="dropdown-item"><a href="#">QR Code Poster</a></li>
+				  <li class="dropdown-item"><a href="#">Send by email</a></li>
+				  <li class="dropdown-item"><a href="#">Tab Generator</a></li>
+				  <li class="dropdown-item"><a href="#">Popup Generator</a></li>
+				</ul>
+			  </div>
+			</div>
+
+	</div>
+	<!-- /.card-footer-->
+	
+</div><!-- /.card -->
+	
 </div>
-
-</div><!--/col-md-6-->
-
-<div class="col-md-6" id="previewSection">
+		
+<div class="col-12 col-sm-12 col-md-6" id="previewSection">
 
 <div class="login-box">
 <?php
@@ -934,23 +1177,20 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 <div style="margin-top:12px;" class="row">
 	<div class="col-4 col-md-4 text-center">
-		<input type="text" class="knob" value="<?php echo $currentDay;?>" data-min="1" data-max="<?php echo $dayLeft;?>" data-width="90"
-			   data-height="90" data-fgColor="#dc3545">
-
+		<input type="text" class="knob" id="days_left_input" value="<?php echo $currentDay;?>" data-min="1" data-max="<?php echo $dayLeft;?>" data-width="90" data-height="90" data-fgColor="#dc3545">
 		<div class="knob-label"><b>Days Left</b></div>
 	</div>
 	<!-- ./col -->
 	<div class="col-4 col-md-4 text-center">
-		<input type="text" class="knob" value="<?php echo $offersleft?>" data-min="1" data-max="<?php echo $offersleft;?>" data-width="90"
-			   data-height="90" data-fgColor="#dc3545">
+		<input type="text" class="knob" id="offers_display_input" value="<?php echo $offersleft?>" data-min="1" data-max="<?php echo $offersleft;?>" data-width="90" data-height="90" data-fgColor="#dc3545">
 
 		<div class="knob-label"><b>Offers Left</b></div>
 	</div>
 	<!-- ./col -->
 	<div class="col-4 col-md-4 text-center">
-		<input type="text" class="knob" id="totalpoint" value="<?php echo $totalpoints?>" data-min="1" data-max="<?php echo $maxPoints;?>" data-width="90"
-			   data-height="90" data-fgColor="#dc3545">
-
+		<input type="text" class="knob" id="points_display_input" value="<?php echo $totalpoints?>" data-min="1" data-max="<?php echo $maxPoints;?>" data-width="90" data-height="90" data-fgColor="#dc3545">
+        <!--id="totalpoint"-->
+        
 		<div class="knob-label"><b>Points Left</b></div>
 	</div>
 	<!-- ./col -->
@@ -965,9 +1205,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		<ol class="carousel-indicators">
 			<?php foreach($slides as $key => $slide):?>
-				<li data-target="#carouselExampleIndicators"
-					data-slide-to="<?php echo $key;?>"
-					class="<?php echo $key ? '' : 'active';?>"></li>
+				<li data-target="#carouselExampleIndicators" data-slide-to="<?php echo $key;?>" class="<?php echo $key ? '' : 'active';?>"></li>
 			<?php endforeach;?>
 		</ol>
 		<div class="carousel-inner">
@@ -989,11 +1227,11 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 	</p>
 
 <?php } else { ?>
-	<p><img style="margin-top:12px" width="100%" src="<?php echo $brandMedia['url']?>"/></p>
+	<p id="bannerpreview"><img style="margin-top:12px" id="banner_image" width="100%" src="<?php echo $brandMedia['url']?>"/></p>
 <?php } ?>
 
-<div class="login-logo"><b><?php echo $pluginTitle?></b></div>
-<p class="login-box-msg"><?php echo $pluginCaption?></p>
+<div class="login-logo headlinebox"><b><?php echo $pluginTitle?></b></div>
+<p class="login-box-msg captionbox"><?php echo $pluginCaption?></p>
 <!-- /.login-logo -->
 
 <div style="padding-left: 20px;padding-right: 20px;">
@@ -1020,209 +1258,291 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 	<!--<a href="#info" data-toggle="collapse" class="btn btn-default btn-block">MORE INFO <i class="fas fa-question-circle"></i> </a>-->
 
 	<div id="info" class="collapse">
-		<br><p class="login-box-msg"><?php echo $description;?></p>
+		<br><p class="login-box-msg descriptionbox"><?php echo $description;?></p>
 	</div>
 
 	<!--======================================== LOGIN ========================================-->
 
 	<!--<a style="margin-top:10px" href="#login" data-toggle="collapse" class="btn btn-default btn-block">LOGIN NOW <i class="fas fa-sign-in-alt"></i> </a>-->
 
-	<div id="login" class="collapse">
+		<div id="login" class="collapse">
 
-		<br>
+			<br>
 
-		<div class="row">
-			<div class="col-5 col-sm-3">
-				<div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
-					<a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true">Email</a>
-					<a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">WhatsApp</a>
-					<a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">Social</a>
+			<div class="row">
+				<div class="col-5 col-sm-3">
+					<div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
+						<a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true">Email</a>
+						<a class="nav-link" id="vert-tabs-sms-tab" data-toggle="pill" href="#vert-tabs-sms" role="tab" aria-controls="vert-tabs-sms" aria-selected="true">SMS</a>
+						<a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">WhatsApp</a>
+						<a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">Social</a>
+					</div>
 				</div>
-			</div>
-			<div class="col-7 col-sm-9">
-				<div class="tab-content" id="vert-tabs-tabContent">
+				<div class="col-7 col-sm-9">
+					<div class="tab-content" id="vert-tabs-tabContent">
 
-					<!---------------------------------------- EMAIL LOGIN ---------------------------------------->
+						<!---------------------------------------- EMAIL LOGIN ---------------------------------------->
 
-					<div class="tab-pane text-left fade show active" id="vert-tabs-home" role="tabpanel" aria-labelledby="vert-tabs-home-tab">
+						<div class="tab-pane text-left fade show active" id="vert-tabs-home" role="tabpanel" aria-labelledby="vert-tabs-home-tab">
 
-						<p style="text-align:right" class="mb-1">
-							<a href="#"><u>Login here</u></a>
-						</p>
+							<p style="text-align:right" class="mb-1">
+								<a href="#"><u>Login here</u></a>
+							</p>
 
-						<form action="#" method="post">
-							<div class="input-group mb-3">
-								<input type="text" class="form-control" title="Full Name">
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<span class="fas fa-user"></span>
-									</div>
-								</div>
-							</div>
-							<div class="input-group mb-3">
-								<input type="email" class="form-control" title="Email">
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<span class="fas fa-envelope"></span>
-									</div>
-								</div>
-							</div>
-							<div class="input-group mb-3">
-								<input type="password" class="form-control" title="Password">
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<span class="fas fa-lock"></span>
-									</div>
-								</div>
-							</div>
-							<div class="input-group mb-3">
-
+							<form action="#" method="post">
 								<div class="input-group mb-3">
-									<div class="input-group-prepend">
-										<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-											Profile Pic
-										</button>
-										<ul class="dropdown-menu">
-											<li class="dropdown-item"><a href="#">Facebook</a></li>
-											<li class="dropdown-item"><a href="#">Instagram</a></li>
-											<li class="dropdown-item"><a href="#">Twitter</a></li>
-											<li class="dropdown-item"><a href="#">Youtube</a></li>
-											<li class="dropdown-item"><a href="#">Pinterest</a></li>
-											<li class="dropdown-item"><a href="#">Flickr</a></li>
-										</ul>
-									</div>
-									<!-- /btn-group -->
-									<input type="text" class="form-control" title="Username">
-									<span class="input-group-append">
-									<button type="button" class="btn btn-default btn-flat"><span class="fas fa-search"></span></button>
-								  </span>
-								</div>
-								<!-- /input-group -->
-
-							</div>
-
-							<div class="row">
-								<div class="col-8">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
-										<label class="custom-control-label" for="exampleCheck1">I agree to the <a href="#">terms of service</a>.</label>
+									<input type="text" class="form-control" title="Full Name">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fas fa-user"></span>
+										</div>
 									</div>
 								</div>
-								<!-- /.col -->
-								<div class="col-4">
-									<button type="submit" class="btn btn-default btn-block">Register</button>
-								</div>
-								<!-- /.col -->
-							</div>
-						</form>
-
-						<p class="mb-1">
-							<a href="forgot-password.html">I forgot my password</a>
-						</p>
-
-					</div>
-
-					<!---------------------------------------- WHATSAPP LOGIN ---------------------------------------->
-
-					<div class="tab-pane fade" id="vert-tabs-profile" role="tabpanel" aria-labelledby="vert-tabs-profile-tab">
-
-
-						<p style="text-align:right" class="mb-1">
-							<a href="#"><u>Login here</u></a>
-						</p>
-
-						<form action="#" method="post">
-							<div class="input-group mb-3">
-								<input type="text" class="form-control" title="Full Name">
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<span class="fas fa-user"></span>
-									</div>
-								</div>
-							</div>
-							<div class="input-group mb-3">
-								<input type="tel" class="form-control" title="WhatsApp">
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<span class="fab fa-whatsapp"></span>
-									</div>
-								</div>
-							</div>
-							<div class="input-group mb-3">
-								<input type="password" class="form-control" title="Password">
-								<div class="input-group-append">
-									<div class="input-group-text">
-										<span class="fas fa-lock"></span>
-									</div>
-								</div>
-							</div>
-							<div class="input-group mb-3">
-
 								<div class="input-group mb-3">
-									<div class="input-group-prepend">
-										<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-											Profile Pic
-										</button>
-										<ul class="dropdown-menu">
-											<li class="dropdown-item"><a href="#">Facebook</a></li>
-											<li class="dropdown-item"><a href="#">Instagram</a></li>
-											<li class="dropdown-item"><a href="#">Twitter</a></li>
-											<li class="dropdown-item"><a href="#">Youtube</a></li>
-											<li class="dropdown-item"><a href="#">Pinterest</a></li>
-											<li class="dropdown-item"><a href="#">Flickr</a></li>
-										</ul>
-									</div>
-									<!-- /btn-group -->
-									<input type="text" class="form-control" title="Username">
-									<span class="input-group-append">
-<button type="button" class="btn btn-default btn-flat"><span class="fas fa-search"></span></button>
-</span>
-								</div>
-								<!-- /input-group -->
-
-							</div>
-
-							<div class="row">
-								<div class="col-8">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck11">
-										<label class="custom-control-label" for="exampleCheck11">I agree to the <a href="#">terms of service</a>.</label>
+									<input type="email" class="form-control" title="Email">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fas fa-envelope"></span>
+										</div>
 									</div>
 								</div>
-								<!-- /.col -->
-								<div class="col-4">
-									<button type="submit" class="btn btn-danger btn-block">Verify</button>
+								<div class="input-group mb-3">
+									<input type="password" class="form-control" title="Password">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fas fa-lock"></span>
+										</div>
+									</div>
 								</div>
-								<!-- /.col -->
-							</div>
-						</form>
+								<div class="input-group mb-3">
 
-						<p class="mb-1">
-							<a href="forgot-password.html">I forgot my password</a>
-						</p>
+									<div class="input-group mb-3">
+										<div class="input-group-prepend">
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												Profile Pic
+											</button>
+											<ul class="dropdown-menu">
+												<li class="dropdown-item"><a href="#">Facebook</a></li>
+												<li class="dropdown-item"><a href="#">Instagram</a></li>
+												<li class="dropdown-item"><a href="#">Twitter</a></li>
+												<li class="dropdown-item"><a href="#">Youtube</a></li>
+												<li class="dropdown-item"><a href="#">Pinterest</a></li>
+												<li class="dropdown-item"><a href="#">Flickr</a></li>
+											</ul>
+										</div>
+										<!-- /btn-group -->
+										<input type="text" class="form-control" title="Username">
+										<span class="input-group-append">
+										<button type="button" class="btn btn-default btn-flat"><span class="fas fa-search"></span></button>
+									  </span>
+									</div>
+									<!-- /input-group -->
 
-					</div>
+								</div>
 
-					<!---------------------------------------- SOCIAL LOGIN ---------------------------------------->
+								<div class="row">
+									<div class="col-8">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
+											<label class="custom-control-label" for="exampleCheck1">I agree to the <a href="#">terms of service</a>.</label>
+										</div>
+									</div>
+									<!-- /.col -->
+									<div class="col-4">
+										<button type="submit" class="btn btn-default btn-block">Register</button>
+									</div>
+									<!-- /.col -->
+								</div>
+							</form>
 
-					<div class="tab-pane fade" id="vert-tabs-messages" role="tabpanel" aria-labelledby="vert-tabs-messages-tab">
-
-						<div class="social-auth-links text-center mb-3">
-
-							<a href="#" style="color: #fff;" class="btn btn-block btn-social btn-facebook"><i class="fab fa-facebook fa-2x"></i> Facebook </a>
-							<a href="#" style="color: #fff;" class="btn btn-block btn-social btn-linkedin"><i class="fab fa-linkedin fa-2x"></i> Linkedin </a>
-							<a href="#" style="color: #fff;" class="btn btn-block btn-social btn-google"><i class="fab fa-google fa-2x"></i> Google </a>
-							<a href="#" style="color: #fff;" class="btn btn-block btn-social btn-twitter"><i class="fab fa-twitter fa-2x"></i> Twitter </a>
+							<p class="mb-1">
+								<a href="forgot-password.html">I forgot my password</a>
+							</p>
 
 						</div>
-						<!-- /.social-auth-links -->
+						
+					 <!---------------------------------------- SMS LOGIN ---------------------------------------->			  
+									  
+						<div class="tab-pane fade" id="vert-tabs-sms" role="tabpanel" aria-labelledby="vert-tabs-sms-tab">
 
+
+						  <p style="text-align:right" class="mb-1">
+							<a href="#"><u>Login here</u></a>
+						  </p>
+						  
+						  <form action="#" method="post">
+							<div class="input-group mb-3">
+							  <input type="text" class="form-control" placeholder="Full Name">
+							  <div class="input-group-append">
+								<div class="input-group-text">
+								  <span class="fas fa-user"></span>
+								</div>
+							  </div>
+							</div>	  
+							<div class="input-group mb-3">
+							  <input type="tel" class="form-control" placeholder="Phone">
+							  <div class="input-group-append">
+								<div class="input-group-text">
+								  <span class="fab fa-whatsapp"></span>
+								</div>
+							  </div>
+							</div>
+							<div class="input-group mb-3">
+							  <input type="password" class="form-control" placeholder="Password">
+							  <div class="input-group-append">
+								<div class="input-group-text">
+								  <span class="fas fa-lock"></span>
+								</div>
+							  </div>
+							</div>
+							<div class="input-group mb-3">
+
+							<div class="input-group mb-3">
+							  <div class="input-group-prepend">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+								  Profile Pic
+								</button>
+								<ul class="dropdown-menu">
+								  <li class="dropdown-item"><a href="#">Facebook</a></li>
+								  <li class="dropdown-item"><a href="#">Instagram</a></li>
+								  <li class="dropdown-item"><a href="#">Twitter</a></li>
+								  <li class="dropdown-item"><a href="#">Youtube</a></li>
+								  <li class="dropdown-item"><a href="#">Pinterest</a></li>	
+								  <li class="dropdown-item"><a href="#">Flickr</a></li>			  
+								</ul>
+							  </div>
+							  <!-- /btn-group -->
+							  <input type="text" class="form-control" placeholder="Username">
+							  <span class="input-group-append">
+								<button type="button" class="btn btn-default btn-flat"><span class="fas fa-search"></span></button>
+							  </span>				  
+							</div>
+							<!-- /input-group -->
+
+							</div>
+						
+							<div class="row">
+							  <div class="col-8">
+							<div class="custom-control custom-checkbox">
+							  <input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck1">
+							  <label class="custom-control-label" for="exampleCheck1">I agree to the <a href="#">terms of service</a>.</label>
+							</div>
+							  </div>
+							  <!-- /.col -->
+							  <div class="col-4">
+								<button type="submit" class="btn btn-danger btn-block">Verify</button>
+							  </div>
+							  <!-- /.col -->
+							</div>
+						  </form>
+
+						  <p class="mb-1">
+							<a href="forgot-password.html">I forgot my password</a>
+						  </p>
+
+									  </div>						
+
+						<!---------------------------------------- WHATSAPP LOGIN ---------------------------------------->
+
+						<div class="tab-pane fade" id="vert-tabs-profile" role="tabpanel" aria-labelledby="vert-tabs-profile-tab">
+
+
+							<p style="text-align:right" class="mb-1">
+								<a href="#"><u>Login here</u></a>
+							</p>
+
+							<form action="#" method="post">
+								<div class="input-group mb-3">
+									<input type="text" class="form-control" title="Full Name">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fas fa-user"></span>
+										</div>
+									</div>
+								</div>
+								<div class="input-group mb-3">
+									<input type="tel" class="form-control" title="WhatsApp">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fab fa-whatsapp"></span>
+										</div>
+									</div>
+								</div>
+								<div class="input-group mb-3">
+									<input type="password" class="form-control" title="Password">
+									<div class="input-group-append">
+										<div class="input-group-text">
+											<span class="fas fa-lock"></span>
+										</div>
+									</div>
+								</div>
+								<div class="input-group mb-3">
+
+									<div class="input-group mb-3">
+										<div class="input-group-prepend">
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												Profile Pic
+											</button>
+											<ul class="dropdown-menu">
+												<li class="dropdown-item"><a href="#">Facebook</a></li>
+												<li class="dropdown-item"><a href="#">Instagram</a></li>
+												<li class="dropdown-item"><a href="#">Twitter</a></li>
+												<li class="dropdown-item"><a href="#">Youtube</a></li>
+												<li class="dropdown-item"><a href="#">Pinterest</a></li>
+												<li class="dropdown-item"><a href="#">Flickr</a></li>
+											</ul>
+										</div>
+										<!-- /btn-group -->
+										<input type="text" class="form-control" title="Username">
+										<span class="input-group-append">
+	<button type="button" class="btn btn-default btn-flat"><span class="fas fa-search"></span></button>
+	</span>
+									</div>
+									<!-- /input-group -->
+
+								</div>
+
+								<div class="row">
+									<div class="col-8">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" name="terms" class="custom-control-input" id="exampleCheck11">
+											<label class="custom-control-label" for="exampleCheck11">I agree to the <a href="#">terms of service</a>.</label>
+										</div>
+									</div>
+									<!-- /.col -->
+									<div class="col-4">
+										<button type="submit" class="btn btn-danger btn-block">Verify</button>
+									</div>
+									<!-- /.col -->
+								</div>
+							</form>
+
+							<p class="mb-1">
+								<a href="forgot-password.html">I forgot my password</a>
+							</p>
+
+						</div>
+
+						<!---------------------------------------- SOCIAL LOGIN ---------------------------------------->
+
+						<div class="tab-pane fade" id="vert-tabs-messages" role="tabpanel" aria-labelledby="vert-tabs-messages-tab">
+
+							<div class="social-auth-links text-center mb-3">
+
+								<a href="#" style="color: #fff;" class="btn btn-block btn-social btn-facebook"><i class="fab fa-facebook fa-2x"></i> Facebook </a>
+								<a href="#" style="color: #fff;" class="btn btn-block btn-social btn-linkedin"><i class="fab fa-linkedin fa-2x"></i> Linkedin </a>
+								<a href="#" style="color: #fff;" class="btn btn-block btn-social btn-google"><i class="fab fa-google fa-2x"></i> Google </a>
+								<a href="#" style="color: #fff;" class="btn btn-block btn-social btn-twitter"><i class="fab fa-twitter fa-2x"></i> Twitter </a>
+
+							</div>
+							<!-- /.social-auth-links -->
+
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-	</div>
+		</div>
 
 	<!--======================================== / LOGIN ========================================-->
 
@@ -1230,9 +1550,6 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 </div><!-- /.login-card-body -->
 
-<!--        <div class="pt-3 text-center">-->
-<!--            --><?php //echo $description;?>
-<!--        </div>-->
 <!---------------------------------------- TABS ---------------------------------------->
 
 <div class="card-body">
@@ -1260,7 +1577,8 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				</div>
 
 				<!---------------------------------------------------- ACTION LIST---------------------------------------------------->
-				<section class="connectedSortable" id="action-list" style="min-height: 0px!important;">
+				
+				<section id="action-list" style="min-height: 0px!important;">
 				<?php
 
 				//                        print_r($data);
@@ -1319,10 +1637,20 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						?>
 						<!-- Drag-Delete-Item -->
 						<div style="border: 1px solid #eee;" class="card direct-chat direct-chat-default my-drag-delete-item" filename="<?=$filename?>">
-       				       <div class="card-header ui-sortable-handle" style="cursor: move;">
-								<div class="card-tools">
+       				       <div class="card-header" >								
+								<div class="card-tools">									
+									<div class="btn btn-tool newhandle"><i class="fas fa-align-justify"></i></div>
+									<br>
 									<button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
 								</div>
+								<script>
+									$(function () {										
+										//sortable	
+										$( "#action-list" ).sortable({
+											handle: ".newhandle",	
+										});	
+									});
+								</script>
 						<?php
 					if($type == 'submit-then-share' && $network =='facebook') {?>
 						<!---------------------------------------------------- ACTION: submit-then-share ---------------------------------------------------->
@@ -2805,7 +3133,37 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				} // if allSocial && count > 0 ?>
 			</section>	
 				<!---------------------------------------------------- ./ACTION LIST---------------------------------------------------->		
-			</div>		
+			</div>
+
+				  <!---------------------------------------------------- BONUS ---------------------------------------------------->				
+				  				  
+                  <div class="card card-default">
+				  
+					<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse9">
+					  <span id="suite" class="info-box-icon bg-info"><i class="fas fa-award"></i></span>
+
+					  <div class="info-box-content">
+						<span class="info-box-text">Bonus: Complete All of the Steps Above</span>
+						
+					  </div>
+					  <span class="badge badge-danger float-right">+5</span>
+					  <!-- /.info-box-content -->
+					</a>
+					<!-- /.info-box -->					
+				
+                    <div id="collapse9" class="panel-collapse collapse">
+                      <div class="card-body">
+					  
+					<!-------------------- REVEAL -------------------->
+				  
+					<p>Complete all the steps above for bonus points</p>
+			
+					<!-------------------- / REVEAL -------------------->					  
+
+                      </div>
+                    </div>
+                  </div>
+			
 		</div><!--/accordion>-->
 		<div>
 			<button class="btn btn-block btn-info" onclick="savePreviewChange()">
@@ -2995,31 +3353,387 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 <!--================================================ / TERMS ================================================-->
 
-<div class="modal fade" id="modal-default">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Terms & Conditions</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Details here</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
 
 <div id="list-container">
 
 </div>
+
+<!--================================================== PROJECTS ==================================================-->
+
+<div class="row">
+<div class="col-md-12">
+
+              <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link active" href="#create" data-toggle="tab">Promotions</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#users" data-toggle="tab">Users</a></li>
+                </ul>
+              </div><!-- /.card-header -->
+                <div class="tab-content">
+                  <div class="active tab-pane" id="create">
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Campaigns</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Settings</th>
+					<th>Days</th>
+					<th>Users</th>
+					<th>Status</th>
+					<th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+				<tr>
+				   <td><img width="150px" src="<?php echo PATH_ROOT ?>/images/banner.jpg" alt="Pic"></td>
+				   <td>Promo Name</td>
+				   <td>
+				   <b>Type:</b> Points<br>
+				   <b>Total Points/Entries:</b> 100<br>
+				   <b>Offers:</b> 10<br>
+				   <b>Expiry:</b> 14/05/21<br>
+				   <b>Actions:</b> 10
+				   </td>
+				   <td>10</td>
+				   <td>100<br>
+				   <button type="button" class="btn btn-success btn-sm"><i class="fas fa-users"></i> View Users</button>
+				   </td>
+				   <td><span style="padding: .25em .4em;font-size: 75%;font-weight: 700;line-height: 1;border-radius: .25rem;" class="badge badge-success">Active</span></td>
+				   <td>
+					   <a class="btn btn-primary btn-sm" href="#"><i class="fas fa-link"></i> View</a>
+					   <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-xl"><i class="fas fa-pencil-alt"></i> Edit</button>
+					   <a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a>
+				   </td>
+			    </tr>
+				<tr>
+				   <td><img width="150px" src="<?php echo PATH_ROOT ?>/images/banner.jpg" alt="Pic"></td>
+				   <td>Promo Name</td>
+				   <td>
+				   <b>Type:</b> Points<br>
+				   <b>Total Points/Entries:</b> 100<br>
+				   <b>Offers:</b> 10<br>
+				   <b>Expiry:</b> 14/05/21<br>
+				   <b>Actions:</b> 10
+				   </td>
+				   <td>10</td>
+				   <td>100<br>
+				   <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-users"></i> UPGRADE</button>
+				   </td>
+				   <td><span style="padding: .25em .4em;font-size: 75%;font-weight: 700;line-height: 1;border-radius: .25rem;" class="badge badge-danger">Expired</span></td>
+				   <td>
+					   <a class="btn btn-primary btn-sm" href="#"><i class="fas fa-link"></i> View</a>
+					   <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-xl"><i class="fas fa-pencil-alt"></i> Edit</button>
+					   <a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a>
+				   </td>
+			    </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Settings</th>
+					<th>Days</th>
+					<th>Users</th>
+					<th>Status</th>
+					<th>Action</th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+				
+                  </div>
+                  <!-- /.tab-pane -->
+				  
+                  <div class="tab-pane" id="users">
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Campaigns</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Promotion</th>
+					<th>Contact</th>
+					<th>Stats</th>
+					<th>Days</th>
+					<th>Status</th>
+					<th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Promo Name</td>
+				   <td>
+				   <b>Login:</b> Email<br>
+				   <b>Contact:</b> name@gmail.com<br>
+				   </td>				   
+				   <td>
+				   <b>Type:</b> Points<br>
+				   <b>Total:</b> 100<br>
+				   <b>Actions:</b> 10
+				   </td>
+				   <td>10</td>
+				   <td><span style="padding: .25em .4em;font-size: 75%;font-weight: 700;line-height: 1;border-radius: .25rem;" class="badge badge-success">Active</span></td>
+				   <td>
+					   <a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a>
+				   </td>
+			    </tr>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Promo Name</td>
+				   <td>
+				   <b>Login:</b> Email<br>
+				   <b>Contact:</b> name@gmail.com<br>
+				   </td>				   
+				   <td>
+				   <b>Type:</b> Points<br>
+				   <b>Total:</b> 50<br>
+				   <b>Actions:</b> 5
+				   </td>
+				   <td>10</td>
+				   <td><span style="padding: .25em .4em;font-size: 75%;font-weight: 700;line-height: 1;border-radius: .25rem;" class="badge badge-danger">Banned</span></td>
+				   <td>
+					   <a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a>
+				   </td>
+			    </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Promotion</th>
+					<th>Contact</th>
+					<th>Stats</th>
+					<th>Days</th>
+					<th>Status</th>
+					<th>Action</th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+					
+                  </div>
+                  <!-- /.tab-pane -->
+
+                </div>
+                <!-- /.tab-content -->
+
+            <!-- /.nav-tabs-custom -->
+          </div>
+		</div>
+		<!-- /.row -->
+
+<!--================================================== /PROJECTS ==================================================-->
+  
+     </div><!--/.container-fluid-->
+	 
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+	
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-block">
+            <b>Version</b> 3.0
+        </div>
+        <strong>Copyright &copy; 2020 <a href="https://suite.social">Social Suite</a>.</strong> All rights reserved.
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+     <!--------------------------------------------------- GAMES --------------------------------------------------->
+
+<?php
+if ($data && count($data)>0) {
+foreach($data as $idx => $plugin):
+if($social->getType() == 'play-then-share') {
+$game = $social->getGame();
+?>
+<!-- The Modal -->
+<div class="modal fade" id="myModal_<?php echo $social->getFilename();?>">
+	<div class="modal-dialog modal-lg">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">What game? </h4>
+				<button type="button" class="close" data-dismiss="modal">×</button>
+			</div>
+			<div class="modal-body choice-modal" >
+				<div class="container-fluid">
+					<div class="row inner-scroll" >
+						<?php
+						foreach($game as $game_idx => $item):
+							$item = (array)$item;
+							?>
+							<div class="col-md-4">
+								<div class="gallery-card">
+									<div class="gallery-card-body">
+										<label class="block-check">
+											<img src="<?php echo $item['preview'];?>" class="img-responsive" />
+											<input type="checkbox" class="selected--game" id="selected_game_<?php echo $plugin->getFilename();?>_<?php echo $game_idx;?>"
+												   onchange="onSelectGame('<?php echo $item['name'];?>', '<?php echo $item['iframe'];?>', '<?php echo $item['preview'];?>', '<?php echo $game_idx;?>')">
+											<span class="checkmark"></span>
+										</label>
+										<div class="mycard-footer">
+											<a href="<?php echo $item['iframe']?>" target="_blank" class="card-link"><?php echo $item['name'];?></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php endforeach;?>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<?php }
+endforeach;
+}
+?>
+<div id="list-container">
+
+</div>
+
+     <!--------------------------------------------------- MODALS --------------------------------------------------->
+
+      <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Terms & Conditions</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p class="rulesbox">Details here</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+	  
+     <!--------------------------------------------------- CREATE --------------------------------------------------->
+ 
+      <div class="modal fade" id="create">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Sign-up Now!</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="text-center modal-body">
+					
+			<div id="divA">
+              <h2>Searching <span id="rotate" class="text-danger"> <span>Facebook</span> <span>Twitter</span> <span>Linkedin</span> <span>Instagram</span> <span>Pinterest</span> </span> for people who might be interested in your promotion...</h2>			  
+
+<center>
+<span class="w3-content w3-section" style="max-width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile1.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile2.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile3.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile4.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile5.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile6.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile7.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile8.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile9.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile10.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile11.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile12.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile13.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile14.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile15.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile16.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile17.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile18.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile19.jpg" style="width:150px">
+  <img class="mySlides" src="<?php echo PATH_ROOT ?>/images/profile20.jpg" style="width:150px">
+</span>
+</center>
+
+			</div>
+			
+			<div id="divB">
+			
+<h2 style="font-size: 48px; font-weight: 300; margin-top: 0px;margin-bottom: 0px;">
+<br>
+<script>
+function fakecounter(){
+
+//decrease/increase counter value (depending on perceived popularity of your site!)
+var decrease_increase=5000
+
+var counterdate=new Date()
+var currenthits=counterdate.getTime().toString()
+currenthits=parseInt(currenthits.substring(2,currenthits.length-4))+decrease_increase
+
+document.write("Reach <span class='text-danger'>"+currenthits+"</span> potential customers using Social Promotion!")
+}
+fakecounter()
+</script>
+
+</h2>			
+
+			  <br><p><a style="color:#fff;" class="btn bg-gradient-danger btn-lg" href="//suite.social/promo"><i class="fas fa-credit-card"></i> Sign-up now for only £9.99!</a>
+			  
+			</div>
+			           			  			  			  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
 
 <!-- jQuery UI 1.11.4 -->
 <script src="<?php echo PATH_ROOT ?>/plugins/jquery-ui/jquery-ui.min.js"></script>
@@ -3030,8 +3744,23 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 <!-- Select2 -->
 <script src="<?php echo PATH_ROOT ?>/plugins/select2/js/select2.full.min.js"></script>
 
+<!-- DataTables -->
+<script src="<?php echo PATH_ROOT ?>/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?php echo PATH_ROOT ?>/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="<?php echo PATH_ROOT ?>/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?php echo PATH_ROOT ?>/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+<!-- Bootstrap Switch -->
+<script src="<?php echo PATH_ROOT ?>/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
 <!-- AdminLTE App -->
 <script src="<?php echo PATH_ROOT ?>/src/js/adminlte.min.js"></script>
+
+<!-- AdminLTE for demo purposes -->
+<script src="<?php echo PATH_ROOT ?>/src/js/demo.js"></script>
+
+<!-- Text rotate -->
+<script  src="<?php echo PATH_ROOT ?>/src/js/rotate.js"></script>
 
 <!-- GAME -->
 <script src="<?php echo PATH_ROOT ?>/src/js/async-iframe.js"></script>
@@ -3041,338 +3770,917 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 <!-- Summernote -->
 <script src="<?php echo PATH_ROOT ?>/plugins/summernote/summernote-bs4.min.js"></script>
+
 <script>
+
+// TEXT EDITOR
+
   $(function () {
     // Summernote
     $('.textarea').summernote()
   })
+ 
+   $(function () {
+    // Summernote
+    $('.textarea2').summernote()
+  })
+  
+// DATATABLES
+
+  $(function () {
+	$("#example1").DataTable({
+	  "responsive": true,
+	  "autoWidth": false,
+	});
+	$('#example2').DataTable({
+	  "responsive": true,
+	  "autoWidth": false,
+	});
+  });
+  
+</script>
+
+<script>
+$(function () {
+	//Initialize Select2 Elements
+	$("select#network").select2({
+	theme: 'bootstrap4'
+	})
+});
 </script>
 
 <script type="text/javascript">
-  $(function () {
-    //Initialize Select2 Elements
-    $('.select2').select2()
+$(document).ready(function () {
+$('#summernote').summernote()
+// this is the id of the form
+$("#create-client-plugin").submit(function(e) {
 
-    //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
+	e.preventDefault(); // avoid to execute the actual submit of the form.
+
+	var form = $(this);
+	var url = 'client_add_func.php';
+	var fd = new FormData(this);
+
+	$.ajax({
+		type: "POST",
+		// dataType: "json",
+		contentType: false,
+		processData: false,
+		url: url,
+		data: fd, // serializes the form's elements.
+		// data: form.serialize(), // serializes the form's elements.
+		success: function(data)
+		{
+			var success = data.success;
+			var message = data.message;
+			if (success) {
+				$("#create-client-plugin").trigger("reset");
+				$('#pictureContainer').addClass('d-none')
+				$('#urlContainer').removeClass('d-none')
+			}
+			showPreview();
+			Swal.fire(
+                      'Created!',
+                      'Created Plugin successfully.',
+                      'success'
+            );
+		}
+	});
+
+
+});
+
+
+var next = 0;
+$("#add-more").click(function(e){
+	e.preventDefault();
+	var addto = "#field" + next;
+	var addRemove = "#field" + (next);
+	next = next + 1;
+	var newIn =
+		'<div id="field'+ next +'" name="field'+ next +'">' +
+		'<div class="card" style="">' +
+		'<div class="card-body">' +
+		'<div class="clear">' +
+		'<div class="form-group"> ' +
+		'<label for="picture_name_' + next + '">Name</label>' +
+		'<input id="picture_name_' + next + '" name="picture_name[]" type="text" placeholder="" class="form-control input-md"> ' +
+		'</div>' +
+		'<div class="form-group">\n' +
+		'<label for="network">Choose Pic Mode</label>\n' +
+		'<select class="form-control" onchange="changePictureMode(' + next + ')" name="pic_mode[]" id="pic_mode_' + next +'" required>\n' +
+		'<option value="">----- Please choose -----</option>\n' +
+		'<option value="url">URL</option>\n' +
+		'<option value="upload">Upload</option>\n' +
+		'</select>\n' +
+		'</div>' +
+		'<div class="form-group d-none" id="url_container_' + next + '"> ' +
+		'<label for="picture_url_' + next + '">URL</label>' +
+		'<input id="picture_url_' + next + '" name="picture_url[]" type="text" placeholder="" class="form-control input-md"> ' +
+		'</div>' +
+		'<div class="form-group d-none" id="upload_container_' + next + '">\n' +
+		'<label for="picture_src_' + next + '">Image</label>\n' +
+		'<input type="file" id="picture_src_' + next + '" name="picture_src' + next + '" class="input-file" accept=".jpg,.jpeg,.png,.gif,.bmp">\n' +
+		'<div id="file_name_' + next + '"></div>\n' +
+		'</div>' +
+		'</div>' +
+		'</div>' +
+		'</div>' +
+		'</div>';
+	var newInput = $(newIn);
+	var removeBtn = '<div class="form-group"><button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >Remove</button></div>';
+	var removeButton = $(removeBtn);
+	$(addto).after(newInput);
+	$(addRemove).after(removeButton);
+	$("#field" + next).attr('data-source',$(addto).attr('data-source'));
+	$("#count").val(next);
+
+	$('.remove-me').click(function(e){
+		e.preventDefault();
+		var fieldNum = this.id.charAt(this.id.length-1);
+		var fieldID = "#field" + fieldNum;
+		$(this).remove();
+		$(fieldID).remove();
+	});
+});
+
+var nextCheckbox = 0
+$("#add-more-checkbox").click(function(e){
+	e.preventDefault();
+	var addto = "#checkboxField" + nextCheckbox;
+	var addRemove = "#checkboxField" + (nextCheckbox);
+	nextCheckbox = nextCheckbox + 1;
+	var newIn =
+		'<div id="checkboxField'+ nextCheckbox +'" name="checkboxField'+ nextCheckbox +'">' +
+		'<div class="form-group"> ' +
+		'<input id="checkbox_label_' + nextCheckbox + '" name="checkbox_label[]" type="text" placeholder="Enter checkbox label" class="form-control input-md"> ' +
+		'</div>' +
+		'</div>';
+	var newInput = $(newIn);
+	var removeBtn = '<div class="form-group"><button id="remove' + (nextCheckbox - 1) + '" class="btn btn-danger remove-checkbox" >Remove</button></div>';
+	var removeButton = $(removeBtn);
+	$(addto).after(newInput);
+	$(addRemove).after(removeButton);
+	$("#checkboxField" + next).attr('data-source',$(addto).attr('data-source'));
+	$("#count").val(next);
+
+	$('.remove-checkbox').click(function(e){
+		e.preventDefault();
+		var fieldNum = this.id.charAt(this.id.length-1);
+		var fieldID = "#checkboxField" + fieldNum;
+		$(this).remove();
+		$(fieldID).remove();
+	});
+});
+
+$('#brand_media_type').change(function() {
+	var media_type = $(this).val()
+	if(media_type == 'picture') {
+		$('#brand_pic_container').removeClass('d-none')
+		$('#brand_video_container').addClass('d-none')
+		$('#brand_slide_container').addClass('d-none')
+	} else if(media_type == 'video') {
+		$('#brand_pic_container').addClass('d-none')
+		$('#brand_video_container').removeClass('d-none')
+		$('#brand_slide_container').addClass('d-none')
+		$('#brand_pic_url_container').addClass('d-none')
+		$('#brand_pic_upload_container').addClass('d-none')
+	} else if(media_type == 'slide_show') {
+		$('#brand_pic_container').addClass('d-none')
+		$('#brand_video_container').addClass('d-none')
+		$('#brand_slide_container').removeClass('d-none')
+		$('#brand_pic_url_container').addClass('d-none')
+		$('#brand_pic_upload_container').addClass('d-none')
+	}
+})
+
+$('#brand_pic_type').change(function() {
+	var pic_type = $(this).val()
+	if(pic_type == 'url') {
+		$('#brand_pic_url_container').removeClass('d-none')
+		$('#brand_pic_upload_container').addClass('d-none')
+	} else if(pic_type == 'upload') {
+		$('#brand_pic_url_container').addClass('d-none')
+		$('#brand_pic_upload_container').removeClass('d-none')
+	}
+})
+
+$('#action').change(function() {
+	var actionValue = $(this).val();
+	var actionType = $('#plugin-' + actionValue).val()
+
+	clearContainer()
+	if(actionType == 'select-and-share') {
+		$('#selectShareContainer').removeClass('d-none')
+	} else if(actionType == 'share-and-refer') {
+		$('#friendContainer').removeClass('d-none')
+	} else if (actionType == 'scratch-and-share' || actionType == 'spin-and-share') {
+		$('#scratchContainer').removeClass('d-none')
+	} else if (actionType == 'play-then-share') {
+		$('#gameContainer').removeClass('d-none')
+		$('#scratchContainer').removeClass('d-none')
+		hideAllGameButton()
+		$('#choose_game_' + actionValue).removeClass('d-none')
+	} else if (actionType == 'submit-then-share') {
+		$('#urlContainer').removeClass('d-none')
+		$('#descriptionContainer').removeClass('d-none')
+	} else if (actionType == 'record-and-share') {
+		$('#recordContainer').removeClass('d-none')
+		$('#scratchContainer').removeClass('d-none')
+	} else {
+		$('#urlContainer').removeClass('d-none')
+	}
+})
+
+$('#selectType').change(function() {
+	var selectType = $(this).val()
+	if(selectType == 'image') {
+		$('#pictureContainer').removeClass('d-none')
+		$('#checkboxContainer').addClass('d-none')
+	} else if (selectType == 'checkbox') {
+		$('#pictureContainer').addClass('d-none')
+		$('#checkboxContainer').removeClass('d-none')
+	}
+})
+
+$('#record_type').change(function() {
+	var recordType = $(this).val()
+
+	if(recordType == 'image') {
+		$('#lengthContainer').addClass('d-none')
+	} else {
+		$('#lengthContainer').removeClass('d-none')
+		if(recordType == 'audio') {
+			$("#record_length").prop('min',5);
+			$("#record_length").prop('max',30);
+
+		} else if(recordType == 'video') {
+			$("#record_length").prop('min',5);
+			$("#record_length").prop('max',60);
+
+		} else if(recordType == 'gif') {
+			$("#record_length").prop('min',5);
+			$("#record_length").prop('max',15);
+
+		}
+		$('#record_length').on('mouseup keyup', function () {
+			var max = parseInt($(this).attr('max'));
+			var min = parseInt($(this).attr('min'));
+			$(this).val(Math.min(max, Math.max(min, $(this).val())));
+		});
+	}
+})
+
+function clearContainer() {
+	$('#selectShareContainer').addClass('d-none')
+	$('#urlContainer').addClass('d-none')
+	$('#friendContainer').addClass('d-none')
+	$('#scratchContainer').addClass('d-none')
+	$('#gameContainer').addClass('d-none')
+	$('#descriptionContainer').addClass('d-none')
+	$('#recordContainer').addClass('d-none')
+}
+
+});
+
+$(document).on('click', '.btn-add', function(e)
+{
+e.preventDefault();
+
+var controlForm = $('.controls div:first'),
+	currentEntry = $(this).parents('.entry:first'),
+	newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+newEntry.find('input').val('');
+console.log(controlForm, currentEntry, newEntry, "plus button===")
+controlForm.find('.entry:not(:last) .btn-add')
+	.removeClass('btn-add').addClass('btn-remove')
+	.removeClass('btn-success').addClass('btn-danger')
+	.html('<span class="glyphicon glyphicon-minus" style="font-size: 18px; margin-top: 8px; font-weight: 700;"> - </span>');
+}).on('click', '.btn-remove', function(e)
+{
+$(this).parents('.entry:first').remove();
+
+e.preventDefault();
+return false;
+});
+
+function changePictureMode(idx) {
+var mode = $('#pic_mode_' + idx).val()
+if(mode == 'url') {
+	$('#url_container_' + idx).removeClass('d-none')
+	$('#upload_container_' + idx).addClass('d-none')
+} else {
+	$('#url_container_' + idx).addClass('d-none')
+	$('#upload_container_' + idx).removeClass('d-none')
+}
+}
+
+function hideAllGameButton() {
+$('.choose--game').addClass('d-none')
+}
+
+function onPreview(iframe) {
+window.open('', '', )
+}
+
+function uncheckAll() {
+// var checkboxes = $('.selected--game')
+$('.selected--game').prop('checked', false)
+// for(var i = 0 ; i < checkboxes.length; i ++) {
+//     checkboxes[i].prop('checked', false)
+// }
+}
+
+function onSelectGame(name, url, preview, idx) {
+var game_key = $('#game_key').val()
+var actionValue = $('#action').val();
+
+uncheckAll()
+if(game_key == idx) {
+	$('#game_key').val(-1)
+	$('#game_name').val("")
+	$('#game_iframe').val("")
+	$('#game_preview').val("")
+	$('#game_preview_container').addClass('d-none')
+} else {
+	$('#game_key').val(idx)
+	$('#game_name').val(name)
+	$('#game_iframe').val(url)
+	$('#game_preview').val(preview)
+
+	$('#selected_game_' + actionValue + '_' + idx).prop('checked', true)
+	$('#game_preview_container').removeClass('d-none')
+	$('#game_preview_image').prop('src', preview)
+}
+}
+//when select network
+$("select#network").change(function() {
+	var selectedNetwork = $("select#network").val();			
+	$("select#action").html('');
+	for (var x in actions) {
+		if (actions[x]['network'] == selectedNetwork) {
+			console.log(actions[x]['network']);
+			var newOption = new Option(actions[x]['actionName'], actions[x]['filename'], false, false);
+			$('select#action').append(newOption)
+		}
+	}
+
+	//Initialize Select2 Elements
+	$('select#action').select2({
+	theme: 'bootstrap4'
+	})
+
+});
+var actions = <?php echo json_encode($allPlugins) ?>;
+</script>
+
+<!-- page script -->
+<script type="text/javascript">
+
+//SWAP DIV
+
+$("#divA").delay(20000).fadeOut(function() {
+     $("#divB").fadeIn();
+     $(this).remove();
+});
+
+//SLIDEHSOW
+
+var myIndex = 0;
+carousel();
+
+function carousel() {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  myIndex++;
+  if (myIndex > x.length) {myIndex = 1}    
+  x[myIndex-1].style.display = "block";  
+  setTimeout(carousel, 500); // Change image every 1 seconds
+}
+
+</script>
+
+<script>
+  $(function () {
+    /* jQueryKnob */
+
+    $('.knob').knob({
+      /*change : function (value) {
+       //console.log("change : " + value);
+       },
+       release : function (value) {
+       console.log("release : " + value);
+       },
+       cancel : function () {
+       console.log("cancel : " + this.value);
+       },*/
+      draw: function () {
+
+        // "tron" case
+        if (this.$.data('skin') == 'tron') {
+
+          var a   = this.angle(this.cv)  // Angle
+            ,
+              sa  = this.startAngle          // Previous start angle
+            ,
+              sat = this.startAngle         // Start angle
+            ,
+              ea                            // Previous end angle
+            ,
+              eat = sat + a                 // End angle
+            ,
+              r   = true
+
+          this.g.lineWidth = this.lineWidth
+
+          this.o.cursor
+          && (sat = eat - 0.3)
+          && (eat = eat + 0.3)
+
+          if (this.o.displayPrevious) {
+            ea = this.startAngle + this.angle(this.value)
+            this.o.cursor
+            && (sa = ea - 0.3)
+            && (ea = ea + 0.3)
+            this.g.beginPath()
+            this.g.strokeStyle = this.previousColor
+            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false)
+            this.g.stroke()
+          }
+
+          this.g.beginPath()
+          this.g.strokeStyle = r ? this.o.fgColor : this.fgColor
+          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false)
+          this.g.stroke()
+
+          this.g.lineWidth = 2
+          this.g.beginPath()
+          this.g.strokeStyle = this.o.fgColor
+          this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false)
+          this.g.stroke()
+
+          return false
+        }
+      }
+    })
+    /* END JQUERY KNOB */
+
+    //INITIALIZE SPARKLINE CHARTS
+    $('.sparkline').each(function () {
+      var $this = $(this)
+      $this.sparkline('html', $this.data())
     })
 
-        // this is the id of the form
-        $("#create-client-plugin").submit(function(e) {
+    /* SPARKLINE DOCUMENTATION EXAMPLES http://omnipotent.net/jquery.sparkline/#s-about */
+    drawDocSparklines()
+    drawMouseSpeedDemo()
 
-            e.preventDefault(); // avoid to execute the actual submit of the form.
+  })
 
-            var form = $(this);
-            var url = 'client_add_func.php';
-            var fd = new FormData(this);
+  function drawDocSparklines() {
 
-            $.ajax({
-                type: "POST",
-                // dataType: "json",
-                contentType: false,
-                processData: false,
-                url: url,
-                data: fd, // serializes the form's elements.
-                // data: form.serialize(), // serializes the form's elements.
-                success: function(data)
-                {
-                    var success = data.success;
-                    var message = data.message;
-                    if (success) {
-                        $("#create-client-plugin").trigger("reset");
-                        $('#pictureContainer').addClass('d-none')
-                        $('#urlContainer').removeClass('d-none')
-                    }
-                    showPreview();
-                    alert('Created Plugin successfully.'); // show response from the php script.
-                    
-                }
-            });
+    // Bar + line composite charts
+    $('#compositebar').sparkline('html', {
+      type    : 'bar',
+      barColor: '#aaf'
+    })
+    $('#compositebar').sparkline([4, 1, 5, 7, 9, 9, 8, 7, 6, 6, 4, 7, 8, 4, 3, 2, 2, 5, 6, 7],
+      {
+        composite: true,
+        fillColor: false,
+        lineColor: 'red'
+      })
 
 
-		});
-		
-		
-        var next = 0;
-        $("#add-more").click(function(e){
-            e.preventDefault();
-            var addto = "#field" + next;
-            var addRemove = "#field" + (next);
-            next = next + 1;
-            var newIn =
-                '<div id="field'+ next +'" name="field'+ next +'">' +
-                '<div class="card" style="">' +
-                '<div class="card-body">' +
-                '<div class="clear">' +
-                '<div class="form-group"> ' +
-                '<label for="picture_name_' + next + '">Name</label>' +
-                '<input id="picture_name_' + next + '" name="picture_name[]" type="text" placeholder="" class="form-control input-md"> ' +
-                '</div>' +
-                '<div class="form-group">\n' +
-                '<label for="network">Choose Pic Mode</label>\n' +
-                '<select class="form-control" onchange="changePictureMode(' + next + ')" name="pic_mode[]" id="pic_mode_' + next +'" required>\n' +
-                '<option value="">----- Please choose -----</option>\n' +
-                '<option value="url">URL</option>\n' +
-                '<option value="upload">Upload</option>\n' +
-                '</select>\n' +
-                '</div>' +
-                '<div class="form-group d-none" id="url_container_' + next + '"> ' +
-                '<label for="picture_url_' + next + '">URL</label>' +
-                '<input id="picture_url_' + next + '" name="picture_url[]" type="text" placeholder="" class="form-control input-md"> ' +
-                '</div>' +
-                '<div class="form-group d-none" id="upload_container_' + next + '">\n' +
-                '<label for="picture_src_' + next + '">Image</label>\n' +
-                '<input type="file" id="picture_src_' + next + '" name="picture_src' + next + '" class="input-file" accept=".jpg,.jpeg,.png,.gif,.bmp">\n' +
-                '<div id="file_name_' + next + '"></div>\n' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>';
-            var newInput = $(newIn);
-            var removeBtn = '<div class="form-group"><button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >Remove</button></div>';
-            var removeButton = $(removeBtn);
-            $(addto).after(newInput);
-            $(addRemove).after(removeButton);
-            $("#field" + next).attr('data-source',$(addto).attr('data-source'));
-            $("#count").val(next);
+    // Line charts taking their values from the tag
+    $('.sparkline-1').sparkline()
 
-            $('.remove-me').click(function(e){
-                e.preventDefault();
-                var fieldNum = this.id.charAt(this.id.length-1);
-                var fieldID = "#field" + fieldNum;
-                $(this).remove();
-                $(fieldID).remove();
-            });
-        });
+    // Larger line charts for the docs
+    $('.largeline').sparkline('html',
+      {
+        type  : 'line',
+        height: '2.5em',
+        width : '4em'
+      })
 
-        var nextCheckbox = 0
-        $("#add-more-checkbox").click(function(e){
-            e.preventDefault();
-            var addto = "#checkboxField" + nextCheckbox;
-            var addRemove = "#checkboxField" + (nextCheckbox);
-            nextCheckbox = nextCheckbox + 1;
-            var newIn =
-                '<div id="checkboxField'+ nextCheckbox +'" name="checkboxField'+ nextCheckbox +'">' +
-                '<div class="form-group"> ' +
-                '<input id="checkbox_label_' + nextCheckbox + '" name="checkbox_label[]" type="text" placeholder="Enter checkbox label" class="form-control input-md"> ' +
-                '</div>' +
-                '</div>';
-            var newInput = $(newIn);
-            var removeBtn = '<div class="form-group"><button id="remove' + (nextCheckbox - 1) + '" class="btn btn-danger remove-checkbox" >Remove</button></div>';
-            var removeButton = $(removeBtn);
-            $(addto).after(newInput);
-            $(addRemove).after(removeButton);
-            $("#checkboxField" + next).attr('data-source',$(addto).attr('data-source'));
-            $("#count").val(next);
+    // Customized line chart
+    $('#linecustom').sparkline('html',
+      {
+        height      : '1.5em',
+        width       : '8em',
+        lineColor   : '#f00',
+        fillColor   : '#ffa',
+        minSpotColor: false,
+        maxSpotColor: false,
+        spotColor   : '#77f',
+        spotRadius  : 3
+      })
 
-            $('.remove-checkbox').click(function(e){
-                e.preventDefault();
-                var fieldNum = this.id.charAt(this.id.length-1);
-                var fieldID = "#checkboxField" + fieldNum;
-                $(this).remove();
-                $(fieldID).remove();
-            });
-        });
+    // Bar charts using inline values
+    $('.sparkbar').sparkline('html', { type: 'bar' })
 
-        $('#brand_media_type').change(function() {
-            var media_type = $(this).val()
-            if(media_type == 'picture') {
-                $('#brand_pic_container').removeClass('d-none')
-                $('#brand_video_container').addClass('d-none')
-                $('#brand_slide_container').addClass('d-none')
-            } else if(media_type == 'video') {
-                $('#brand_pic_container').addClass('d-none')
-                $('#brand_video_container').removeClass('d-none')
-                $('#brand_slide_container').addClass('d-none')
-                $('#brand_pic_url_container').addClass('d-none')
-                $('#brand_pic_upload_container').addClass('d-none')
-            } else if(media_type == 'slide_show') {
-                $('#brand_pic_container').addClass('d-none')
-                $('#brand_video_container').addClass('d-none')
-                $('#brand_slide_container').removeClass('d-none')
-                $('#brand_pic_url_container').addClass('d-none')
-                $('#brand_pic_upload_container').addClass('d-none')
-            }
+    $('.barformat').sparkline([1, 3, 5, 3, 8], {
+      type               : 'bar',
+      tooltipFormat      : '{{value:levels}} - {{value}}',
+      tooltipValueLookups: {
+        levels: $.range_map({
+          ':2' : 'Low',
+          '3:6': 'Medium',
+          '7:' : 'High'
         })
+      }
+    })
 
-        $('#brand_pic_type').change(function() {
-            var pic_type = $(this).val()
-            if(pic_type == 'url') {
-                $('#brand_pic_url_container').removeClass('d-none')
-                $('#brand_pic_upload_container').addClass('d-none')
-            } else if(pic_type == 'upload') {
-                $('#brand_pic_url_container').addClass('d-none')
-                $('#brand_pic_upload_container').removeClass('d-none')
-            }
-        })
-
-        $('#action').change(function() {
-            var actionValue = $(this).val();
-            var actionType = $('#plugin-' + actionValue).val()
-
-            clearContainer()
-            if(actionType == 'select-and-share') {
-                $('#selectShareContainer').removeClass('d-none')
-            } else if(actionType == 'share-and-refer') {
-                $('#friendContainer').removeClass('d-none')
-            } else if (actionType == 'scratch-and-share' || actionType == 'spin-and-share') {
-                $('#scratchContainer').removeClass('d-none')
-            } else if (actionType == 'play-then-share') {
-                $('#gameContainer').removeClass('d-none')
-                $('#scratchContainer').removeClass('d-none')
-                hideAllGameButton()
-                $('#choose_game_' + actionValue).removeClass('d-none')
-            } else if (actionType == 'submit-then-share') {
-                $('#urlContainer').removeClass('d-none')
-                $('#descriptionContainer').removeClass('d-none')
-            } else if (actionType == 'record-and-share') {
-                $('#recordContainer').removeClass('d-none')
-                $('#scratchContainer').removeClass('d-none')
-            } else {
-                $('#urlContainer').removeClass('d-none')
-            }
-        })
-
-        $('#selectType').change(function() {
-            var selectType = $(this).val()
-            if(selectType == 'image') {
-                $('#pictureContainer').removeClass('d-none')
-                $('#checkboxContainer').addClass('d-none')
-            } else if (selectType == 'checkbox') {
-                $('#pictureContainer').addClass('d-none')
-                $('#checkboxContainer').removeClass('d-none')
-            }
-        })
-
-        $('#record_type').change(function() {
-            var recordType = $(this).val()
-
-            if(recordType == 'image') {
-                $('#lengthContainer').addClass('d-none')
-            } else {
-                $('#lengthContainer').removeClass('d-none')
-                if(recordType == 'audio') {
-                    $("#record_length").prop('min',5);
-                    $("#record_length").prop('max',30);
-
-                } else if(recordType == 'video') {
-                    $("#record_length").prop('min',5);
-                    $("#record_length").prop('max',60);
-
-                } else if(recordType == 'gif') {
-                    $("#record_length").prop('min',5);
-                    $("#record_length").prop('max',15);
-
-                }
-                $('#record_length').on('mouseup keyup', function () {
-                    var max = parseInt($(this).attr('max'));
-                    var min = parseInt($(this).attr('min'));
-                    $(this).val(Math.min(max, Math.max(min, $(this).val())));
-                });
-            }
-        })
-
-        function clearContainer() {
-            $('#selectShareContainer').addClass('d-none')
-            $('#urlContainer').addClass('d-none')
-            $('#friendContainer').addClass('d-none')
-            $('#scratchContainer').addClass('d-none')
-            $('#gameContainer').addClass('d-none')
-            $('#descriptionContainer').addClass('d-none')
-            $('#recordContainer').addClass('d-none')
+    // Tri-state charts using inline values
+    $('.sparktristate').sparkline('html', { type: 'tristate' })
+    $('.sparktristatecols').sparkline('html',
+      {
+        type    : 'tristate',
+        colorMap: {
+          '-2': '#fa7',
+          '2' : '#44f'
         }
-        //select2
-        $('.myselect2').select2({});
+      })
+
+    // Composite line charts, the second using values supplied via javascript
+    $('#compositeline').sparkline('html', {
+      fillColor     : false,
+      changeRangeMin: 0,
+      chartRangeMax : 10
+    })
+    $('#compositeline').sparkline([4, 1, 5, 7, 9, 9, 8, 7, 6, 6, 4, 7, 8, 4, 3, 2, 2, 5, 6, 7],
+      {
+        composite     : true,
+        fillColor     : false,
+        lineColor     : 'red',
+        changeRangeMin: 0,
+        chartRangeMax : 10
+      })
+
+    // Line charts with normal range marker
+    $('#normalline').sparkline('html',
+      {
+        fillColor     : false,
+        normalRangeMin: -1,
+        normalRangeMax: 8
+      })
+    $('#normalExample').sparkline('html',
+      {
+        fillColor       : false,
+        normalRangeMin  : 80,
+        normalRangeMax  : 95,
+        normalRangeColor: '#4f4'
+      })
+
+    // Discrete charts
+    $('.discrete1').sparkline('html',
+      {
+        type     : 'discrete',
+        lineColor: 'blue',
+        xwidth   : 18
+      })
+    $('#discrete2').sparkline('html',
+      {
+        type          : 'discrete',
+        lineColor     : 'blue',
+        thresholdColor: 'red',
+        thresholdValue: 4
+      })
+
+    // Bullet charts
+    $('.sparkbullet').sparkline('html', { type: 'bullet' })
+
+    // Pie charts
+    $('.sparkpie').sparkline('html', {
+      type  : 'pie',
+      height: '1.0em'
+    })
+
+    // Box plots
+    $('.sparkboxplot').sparkline('html', { type: 'box' })
+    $('.sparkboxplotraw').sparkline([1, 3, 5, 8, 10, 15, 18],
+      {
+        type        : 'box',
+        raw         : true,
+        showOutliers: true,
+        target      : 6
+      })
+
+    // Box plot with specific field order
+    $('.boxfieldorder').sparkline('html', {
+      type                     : 'box',
+      tooltipFormatFieldlist   : ['med', 'lq', 'uq'],
+      tooltipFormatFieldlistKey: 'field'
+    })
+
+    // click event demo sparkline
+    $('.clickdemo').sparkline()
+    $('.clickdemo').bind('sparklineClick', function (ev) {
+      var sparkline = ev.sparklines[0],
+          region    = sparkline.getCurrentRegionFields()
+      value         = region.y
+      alert('Clicked on x=' + region.x + ' y=' + region.y)
+    })
+
+    // mouseover event demo sparkline
+    $('.mouseoverdemo').sparkline()
+    $('.mouseoverdemo').bind('sparklineRegionChange', function (ev) {
+      var sparkline = ev.sparklines[0],
+          region    = sparkline.getCurrentRegionFields()
+      value         = region.y
+      $('.mouseoverregion').text('x=' + region.x + ' y=' + region.y)
+    }).bind('mouseleave', function () {
+      $('.mouseoverregion').text('')
+    })
+  }
+
+  /**
+   ** Draw the little mouse speed animated graph
+   ** This just attaches a handler to the mousemove event to see
+   ** (roughly) how far the mouse has moved
+   ** and then updates the display a couple of times a second via
+   ** setTimeout()
+   **/
+  function drawMouseSpeedDemo() {
+    var mrefreshinterval = 500 // update display every 500ms
+    var lastmousex       = -1
+    var lastmousey       = -1
+    var lastmousetime
+    var mousetravel      = 0
+    var mpoints          = []
+    var mpoints_max      = 30
+    $('html').mousemove(function (e) {
+      var mousex = e.pageX
+      var mousey = e.pageY
+      if (lastmousex > -1) {
+        mousetravel += Math.max(Math.abs(mousex - lastmousex), Math.abs(mousey - lastmousey))
+      }
+      lastmousex = mousex
+      lastmousey = mousey
+    })
+    var mdraw = function () {
+      var md      = new Date()
+      var timenow = md.getTime()
+      if (lastmousetime && lastmousetime != timenow) {
+        var pps = Math.round(mousetravel / (timenow - lastmousetime) * 1000)
+        mpoints.push(pps)
+        if (mpoints.length > mpoints_max) {
+          mpoints.splice(0, 1)
+        }
+        mousetravel = 0
+        $('#mousespeed').sparkline(mpoints, {
+          width        : mpoints.length * 2,
+          tooltipSuffix: ' pixels per second'
+        })
+      }
+      lastmousetime = timenow
+      setTimeout(mdraw, mrefreshinterval)
+    }
+    // We could use setInterval instead, but I prefer to do it this way
+    setTimeout(mdraw, mrefreshinterval);
+  }
+</script>
+
+<script>
+
+    $("input[data-bootstrap-switch]").each(function(){
+      $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    });
+	
+</script>
+
+<script>
+    // Settings Form Scripts
+    $('#type').change(function () {
+        var selected_type = $(this).val();
+        if (selected_type == 'points') {
+            $('#promotion_type_text').text('Points');
+        } else if (selected_type == 'entries') {
+            $('#promotion_type_text').text('Entries');
+        }
+    });
+    $('.points_input').keyup(function (event) {
+        newText = event.target.value;
+        var points_element = $('#points_display_input');
+        points_element.val(newText);
+        points_element.attr("data-max", newText);
+        points_element.attr("data-width", newText);
+        points_element.attr("data-height", newText);
+    });
+    $('.offers_input').keyup(function (event) {
+        newText = event.target.value;
+        var points_element = $('#offers_display_input');
+        points_element.val(newText);
+        points_element.attr("data-max", newText);
+        points_element.attr("data-width", newText);
+        points_element.attr("data-height", newText);
+
+
+    });
+    $('.expiry_date_input').change(function (event) {
+        var end_date = new Date(event.target.value);
+        var today = new Date();
+        var points_element = $('#days_left_input');
+        var days_left = calculate_days_difference(today, end_date);
+        points_element.val(days_left);
+        points_element.attr("data-max", days_left);
+        points_element.attr("data-width", days_left);
+        points_element.attr("data-height", days_left);
     });
 
-    $(document).on('click', '.btn-add', function(e)
-    {
-        e.preventDefault();
 
-        var controlForm = $('.controls div:first'),
-            currentEntry = $(this).parents('.entry:first'),
-            newEntry = $(currentEntry.clone()).appendTo(controlForm);
-
-        newEntry.find('input').val('');
-        console.log(controlForm, currentEntry, newEntry, "plus button===")
-        controlForm.find('.entry:not(:last) .btn-add')
-            .removeClass('btn-add').addClass('btn-remove')
-            .removeClass('btn-success').addClass('btn-danger')
-            .html('<span class="glyphicon glyphicon-minus" style="font-size: 18px; margin-top: 8px; font-weight: 700;"> - </span>');
-    }).on('click', '.btn-remove', function(e)
-    {
-        $(this).parents('.entry:first').remove();
-
-        e.preventDefault();
-        return false;
-    });
-
-    function changePictureMode(idx) {
-        var mode = $('#pic_mode_' + idx).val()
-        if(mode == 'url') {
-            $('#url_container_' + idx).removeClass('d-none')
-            $('#upload_container_' + idx).addClass('d-none')
-        } else {
-            $('#url_container_' + idx).addClass('d-none')
-            $('#upload_container_' + idx).removeClass('d-none')
-        }
-    }
-
-    function hideAllGameButton() {
-        $('.choose--game').addClass('d-none')
-    }
-
-    function onPreview(iframe) {
-        window.open('', '', )
-    }
-
-    function uncheckAll() {
-        // var checkboxes = $('.selected--game')
-        $('.selected--game').prop('checked', false)
-        // for(var i = 0 ; i < checkboxes.length; i ++) {
-        //     checkboxes[i].prop('checked', false)
-        // }
-    }
-
-    function onSelectGame(name, url, preview, idx) {
-        var game_key = $('#game_key').val()
-        var actionValue = $('#action').val();
-
-        uncheckAll()
-        if(game_key == idx) {
-            $('#game_key').val(-1)
-            $('#game_name').val("")
-            $('#game_iframe').val("")
-            $('#game_preview').val("")
-            $('#game_preview_container').addClass('d-none')
-        } else {
-            $('#game_key').val(idx)
-            $('#game_name').val(name)
-            $('#game_iframe').val(url)
-            $('#game_preview').val(preview)
-
-            $('#selected_game_' + actionValue + '_' + idx).prop('checked', true)
-            $('#game_preview_container').removeClass('d-none')
-            $('#game_preview_image').prop('src', preview)
-        }
-    }
-    //when select network
-    $("select#network").change(function() {
-            var selectedNetwork = $("select#network").val();			
-            $("select#action").html('');
-            for (var x in actions) {
-                if (actions[x]['network'] == selectedNetwork) {
-                    console.log(actions[x]['network']);
-                    var newOption = new Option(actions[x]['actionName'], actions[x]['filename'], false, false);
-                    $('select#action').append(newOption)
+    $('.login_type_check').on('switchChange.bootstrapSwitch', function (event, state) {
+        var type = $(this).data('type');
+        if ($(this).is(':checked')) {
+            switch (type) {
+                case'email': {
+                    $('#vert-tabs-home-tab').show();
+                    break;
+                }
+                case 'sms': {
+                    $('#vert-tabs-sms-tab').show();
+                    break;
+                }
+                case 'whatsapp': {
+                    $('#vert-tabs-profile-tab').show();
+                    break;
+                }
+                case 'social': {
+                    $('#vert-tabs-messages-tab').show();
+                    break;
                 }
             }
-            $('select#action').select2({});
+        } else {
+            switch (type) {
+                case'email': {
+                    $('#vert-tabs-home-tab').hide();
+                    break;
+                }
+                case 'sms': {
+                    $('#vert-tabs-sms-tab').hide();
+                    break;
+                }
+                case 'whatsapp': {
+                    $('#vert-tabs-profile-tab').hide();
+                    break;
+                }
+                case 'social': {
+                    $('#vert-tabs-messages-tab').hide();
+                    break;
+                }
+            }
+        }
+    });
 
+    function calculate_days_difference(startDate, endDate) {
+        oneDay = 24 * 60 * 60 * 1000;
+        return Math.ceil((endDate.getTime() - startDate.getTime()) / oneDay);
+    }
+
+    // Branding Form Scripts
+    $(function () {
+        $('.headlineinput').keyup(function (event) {
+            newText = event.target.value;
+            $('.headlinebox').text(newText);
         });
-    var actions = <?php echo json_encode($allPlugins) ?>;
+        $('.captioninput').keyup(function (event) {
+            newText = event.target.value;
+            $('.captionbox').text(newText);
+        });		
+        $('.description_text_input').summernote({
+            callbacks: {
+                onKeyup: function (e) {
+                    setTimeout(function () {
+                        $(".descriptionbox").html($('.description_text_input').val());
+                    }, 200);
+                }
+            }
+        });
+
+        $('#brand_pic_url').change(function (event) {
+            newText = event.target.value;
+            $('#bannerpreview').html('<img style="margin-top:12px" id="banner_image" width="100%" src="<?php echo PATH_ROOT ?>/images/banner.jpg"/>');
+            $('#banner_image').attr('src',newText);
+        });	
+
+        $('#brand_video_url').change(function (event) {
+            newText = event.target.value;
+            var videoObj = parseVideo(newText);
+            // console.log(videoObj);return false;	
+		   if (videoObj.type =="youtube")
+		    { 
+		           var videoId = convert_youtube(newText);
+		    }
+		   else if (videoObj.type =="vimeo")
+		    {
+		            var videoId = convert_vimeo(newText);
+		    }
+		    else
+		    {
+		           var videoId = newText;
+		    }
+		    // console.log('===='+videoId);
+            // $('#bannerpreview').html('<video width="630" controls autoplay><source src="'+newText+'" id="video_here">Your browser does not support HTML5 video.</video>');
+            // $('#bannerpreview').html('<iframe src="'+newText+'" frameborder="0" allowfullscreen class="video"></iframe>');
+            $('#bannerpreview').html('<div class="video-container">'+videoId+'</div>');
+        });		
+
+        $('.rules_text_input').summernote({
+            callbacks: {
+                onKeyup: function (e) {
+                    setTimeout(function () {
+                        $(".rulesbox").html($('.rules_text_input').val());
+                    }, 200);
+                }
+            }
+        });
+    })
+
+    $("#upload_banner_button").change(function() {
+        readURL(this);
+    });
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#banner_image').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+    }
+
+    function readURL(input) {
+    	$('#bannerpreview').html('<img style="margin-top:12px" id="banner_image" width="100%" src="<?php echo PATH_ROOT ?>/images/banner.jpg"/>');
+	  if (input.files && input.files[0]) {
+	    var reader = new FileReader();
+	    
+	    reader.onload = function(e) {
+	      $('#banner_image').attr('src', e.target.result);
+	    }
+	    
+	    reader.readAsDataURL(input.files[0]); // convert to base64 string
+	  }
+	}
+
+	$("#brand_pic_upload").change(function() {
+	  readURL(this);
+	});
+
+	function convert_youtube(input) {
+	  var pattern = /(?:http?s?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(\S+)/g;
+	  if (pattern.test(input)) {
+	    var replacement = '<iframe width="630" height="445" src="http://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>';
+	    var input = input.replace(pattern, replacement);
+	    // For start time, turn get param & into ?
+	    var input = input.replace('&amp;t=', '?t=');
+	  }
+	  return input;
+	}
+
+	function convert_vimeo(input) {
+	  var pattern = /(?:http?s?:\/\/)?(?:www\.)?(?:vimeo\.com)\/?(\S+)/g;
+	  if (pattern.test(input)) {
+	   var replacement = '<iframe width="630" height="445" src="//player.vimeo.com/video/$1" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
+	   var input = input.replace(pattern, replacement);
+	  }
+	  return input;
+	}
+
+	function parseVideo (url) {
+	    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+
+	    if (RegExp.$3.indexOf('youtu') > -1) {
+	        var type = 'youtube';
+	    } else if (RegExp.$3.indexOf('vimeo') > -1) {
+	        var type = 'vimeo';
+	    }
+
+	    return {
+	        type: type,
+	        id: RegExp.$6
+	    };
+	}
+
+	function sliderurls(url){
+		$("#bannerpreview").html("");
+		var numItems = $('.carousel-item').length;
+		console.log(numItems);
+		if(numItems==0)
+		{
+			$('#sliders').append('<div class="carousel-item active"><img class="d-block w-100" src="'+url+'" alt="First slide"></div>');
+		}else{
+			$('#sliders').append('<div class="carousel-item"><img class="d-block w-100" src="'+url+'" alt="First slide"></div>');
+		}
+	}
+
+	$('.carousel').carousel();
+
 </script>
 
 <!--==================================================================== WIDGET CODE ====================================================================-->
@@ -3546,7 +4854,11 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 			success: function(data)
 			{
 				showPreview();
-				alert('The plugins saved successfully.')
+				Swal.fire(
+                      'Saved!',
+                      'The plugins saved successfully.',
+                      'success'
+            	);
 			}
 		});		
 	}
