@@ -507,7 +507,7 @@ label{
 <!--[if lt IE 9]>
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-<script src="<?php echo PATH_ROOT ?>/plugins/jquery/jquery.min.js"></script>
+<!-- <script src="<?php echo PATH_ROOT ?>/plugins/jquery/jquery.min.js"></script> -->
 
 <!-- Spin Wheel (JS) -->
 <!--<script src="--><?php //echo PATH_ROOT ?><!--/mockup/plugins/spin-wheel/js/jquery-2.1.1.js"></script>-->
@@ -860,215 +860,101 @@ label{
 				<div id="collapse4" class="panel-collapse collapse" data-parent="#accordion">
 				
 					<div class="card-body">
-					
-							<div class="form-group">
-								<label for="network">Choose Network</label>
-								<select class="form-control select2" name="network" id="network" required>
-										<option value="">----- Please choose -----</option>
-										<?php
-										foreach ($networks as $network) :
-										?>
-											<option value="<?= $network ?>"><?= $network ?></option>
-										<?php
-										endforeach;
-										?>
-									</select>
-							</div>
+										
+<!---================================================== NEW FORM ==================================================--->		
 
-							<div class="form-group">
-								<label for="action">Choose Action</label>
-								<select class="form-control" name="action" id="action" required>
-									<option value="">----- Please choose -----</option>
+						<ul id="millery-example" data-title='Networks'>
+						
+						<!---------- NETWORK ---------->
+							<?php
+							foreach ($networks as $network) :
+							?>			
+															
+							<li><i class="fa fa-save"></i><?= $network ?>
+								<ul data-title='<?= $network ?>'>			
 									<?php
 									if ($allPlugins && count($allPlugins)>0) {
 										foreach($allPlugins as $idx => $plugin):
+											if ($network==$plugin['network']) {
 											?>
-											<option value="<?php echo $plugin['filename'];?>"><?php echo $plugin['actionName'];?></option>
+											<li>
+												<?php echo $plugin['actionName'];?>
+												<div class="content" filename="<?php echo $plugin['filename'];?>">	
+
+												</div>
+											</li>   
 										<?php
+											}
 										endforeach;
 									}
 									?>
-								</select>
-								<?php
-								if ($allPlugins && count($allPlugins)>0) {
-									foreach($allPlugins as $idx => $plugin):
-
-										?>
-									<input type="hidden" id="plugin-<?php echo $plugin['filename']; ?>" name="plugin-<?php echo $plugin['filename']; ?>" value="<?php echo $plugin['type']; ?>" />
-									<?php
-									endforeach;
+												
+								</ul>
+							</li>
+							
+							<?php
+							endforeach;
+							?>
+						<!---------- ./NETWORK  ---------->						
+							
+						</ul>
+						<div id="millery-1" class="millery millery-theme-1"></div>
+						<script type="text/javascript">
+							$(".millery").millery({
+								source: $("#millery-example"),
+								debug: true,
+								panelType: "overlay",
+								visibleColumns: 1,
+								// searchable: true,
+								onbeforeappend: function(millery, column, def){
+									// millery: millery plugin instance
+									// column: created column DOM element
+									// def: column configuration
+									console.log('*4', millery)
+									console.log('*5', millery)
+									console.log('*6', millery)
+									return true; // false prevents attachment
+								},
+								onnodeclick: function (instance, node, data, e) {
+									var contentNode = $(node.data("original")); //find div in selected Li
+									var tempBox=$("#tempActionBox");
+									var filename;			
+									if (contentNode) {
+										var content = contentNode.find(".content");
+										filename=content.attr("filename");
+										if (content.length) {
+											instance.setPanelData(tempBox.html());
+										} else {
+											instance.setPanelData("");
+										}
+									} else {
+										instance.setPanelData(JSON.stringify(data));
+									}
+									//javascript for forms
+									actionChange(filename);
+									$(".actionSubmitButton").click(function(){
+										$("#create-client-plugin").trigger("submit",[true]);
+									})	
+									$("input[name='action']").val(filename);
+									// ./javascript for forms
+									return true;
 								}
-								?>
-							</div>
+							});
+									
+						</script>
 
-							<div class="d-none" id="gameContainer">
-								<?php
-								if ($allPlugins && count($allPlugins)>0) {
+	<!---================================================== /NEW FORM ==================================================--->	
+							<input type="hidden"  name="action"/>
+							<?php
+							if ($allPlugins && count($allPlugins)>0) {
 								foreach($allPlugins as $idx => $plugin):
-									if($plugin['type'] == 'play-then-share') {?>
-										<div class="choose--game d-none" style="margin-bottom: 10px; margin-top: 10px;" id="choose_game_<?php echo $plugin['filename'];?>">
-											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_<?php echo $plugin['filename'];?>">
-												Choose Game
-											</button>
-										</div>
-									<?php }
 
+									?>
+								<input type="hidden" id="plugin-<?php echo $plugin['filename']; ?>" name="plugin-<?php echo $plugin['filename']; ?>" value="<?php echo $plugin['type']; ?>" />
+								<?php
 								endforeach;
-								}?>
-								<div class="d-none" style="margin-top: 20px; margin-bottom: 20px;" id="game_preview_container">
-									<img src="" width="65%" id="game_preview_image" />
-								</div>
-								<input type="hidden" id="game_key" name="game_key" value="-1" />
-								<input type="hidden" id="game_name" name="game_name" value="" />
-								<input type="hidden" id="game_iframe" name="game_iframe" value="" />
-								<input type="hidden" id="game_preview" name="game_preview" value="" />
-							</div>
-							<div class="d-none" id="descriptionContainer">
-								<div class="form-group">
-									<label for="description">Description</label>
-									<textarea id="summernote" name="submit_description"></textarea>
-								</div>
-							</div>
-							<div class="d-none" id="selectShareContainer">
-								<div class="form-group">
-									<label for="shareDescription">Description</label>
-									<textarea class="form-control" name="shareDescription" id="shareDescription" rows="3"></textarea>
-								</div>
-								<div class="form-group">
-									<label for="selectType">Choose Type</label>
-									<select class="form-control" name="selectType" id="selectType">
-										<option value="">----- Please choose -----</option>
-										<option value="image">Image select</option>
-										<option value="checkbox">Checkbox</option>
-									</select>
-								</div>
-								<div class="card d-none" id="pictureContainer" style="">
-									<div class="card-body">
-										<div class="clear">
-											<h4 class="">
-												Enter Picture
-											</h4>
-											<hr/>
-										</div>
-										<div class="clear">
-											<div id="field">
-												<div id="field0">
-													<div class="card" style="">
-														<div class="card-body">
-															<div class="clear">
-																<div class="form-group">
-																	<label for="picture_name_0">Name</label>
-																	<input id="picture_name_0" name="picture_name[]" type="text" placeholder="" class="form-control input-md">
-																</div>
-																<div class="form-group">
-																	<label for="network">Choose Pic Mode</label>
-																	<select class="form-control" name="pic_mode[]" id="pic_mode_0" onchange="changePictureMode(0)">
-																		<option value="">----- Please choose -----</option>
-																		<option value="url">URL</option>
-																		<option value="upload">Upload</option>
-																	</select>
-																</div>
-																<div class="form-group d-none" id="url_container_0">
-																	<label for="picture_url_0">URL</label>
-																	<input id="picture_url_0" name="picture_url[]" type="text" placeholder="" class="form-control input-md">
-																</div>
-																<div class="form-group d-none" id="upload_container_0">
-																	<label for="picture_src_0">Image</label>
-																	<input type="file" id="picture_src_0" name="picture_src_0" class="input-file" accept=".jpg,.jpeg,.png,.gif,.bmp">
-																	<div id="file_name_0"></div>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- Button -->
-											<div class="form-group">
-												<button type="button" id="add-more" name="add-more" class="btn btn-primary">Add More</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="d-none" id="checkboxContainer">
-									<div id="checkboxField">
-										<div id="checkboxField0">
-											<div class="form-group">
-												<input id="checkbox_label_0" name="checkbox_label[]" type="text" placeholder="Enter checkbox label" class="form-control input-md">
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<button type="button" id="add-more-checkbox" name="add-more-checkbox" class="btn btn-primary">Add More</button>
-									</div>
-								</div>
-							</div>
-							<div class="d-none" id="scratchContainer">
-								<div class="form-group">
-									<label for="scratchUrl">Select URL</label>
-									<input type="text" class="form-control" name="scratchUrl" id="scratchUrl" aria-describedby="helpIdUrl" placeholder="enter url">
-								</div>
-							</div>
-							<div class="d-none" id="urlContainer">
-								<div class="form-group">
-									<label for="url">Select URL/Embed code </label>
-									<input type="text" class="form-control" name="url" id="url" aria-describedby="helpIdUrl" placeholder="enter url">
-								</div>
-								<div class="form-group">
-									<label for="embedcode">Embed code</label>
-									<textarea class="form-control" name="embedcode" id="embedcode" rows="3"></textarea>
-								</div>
-							</div>
-							<div class="d-none" id="friendContainer">
-								<div class="form-group">
-									<label for="numFriends">Number of friends</label>
-									<input type="text"
-										   class="form-control" name="numFriends" id="numFriends"
-										   aria-describedby="helpIdFriends"
-										   placeholder="enter number of friends">
-								</div>
-							</div>
-							<div class="d-none" id="recordContainer">
-								<div class="form-group">
-									<label for="record_type">Choose option</label>
-									<select class="form-control" name="record_type" id="record_type">
-										<option value="">----- Please choose -----</option>
-										<option value="audio">Audio</option>
-										<option value="video">Video</option>
-										<option value="image">Image</option>
-										<option value="gif">Gif</option>
-									</select>
-								</div>
-								<div class="d-none form-group" id="lengthContainer">
-									<label for="record_length">Length</label>
-									<input type="number"
-										   class="form-control" name="record_length" id="record_length"
-										   aria-describedby="helpIdRecordLength"
-										   placeholder="enter record length">
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="numpoint">Number of points</label>
-								<input type="text"
-									   class="form-control" name="numpoint" id="numpoint"
-									   aria-describedby="helpIdNumpoint"
-									   placeholder="enter number of point">
-							</div>
-							<div class="form-group">
-								<label for="visitAction">Visit action</label>
-								<input type="text"
-									   class="form-control" name="visitAction" id="visitAction"
-									   aria-describedby="helpIdVisitAction"
-									   placeholder="enter action name">
-							</div>
-							<div class="form-group">
-								<label for="shareAction">Share action</label>
-								<input type="text"
-									   class="form-control" name="shareAction" id="shareAction"
-									   aria-describedby="helpIdShareAction"
-									   placeholder="enter share button name">
-							</div>						
-				
+							}
+							?>					
 						</div>
 					</div>				
 						
@@ -1197,7 +1083,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 </div>
 <!-- /.row -->
 <?php if($brandMedia['mode'] == 'video') { ?>
-	<p><div class="video-container"><iframe src="<?php echo $brandMedia['url']; ?>" frameborder="0" allowfullscreen class="video"></iframe></div></p>
+	<p><div class="video-container embed-responsive embed-responsive-16by9"><iframe src="<?php echo $brandMedia['url']; ?>" frameborder="0" allowfullscreen class="video"></iframe></div></p>
 <?php } else if($brandMedia['mode'] == 'slide') {
 	$slides = (array)$brandMedia['url'];
 	?>
@@ -1225,7 +1111,11 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 		</a>
 	</div>
 	</p>
-
+	<script>
+		$(function () {
+			$('.carousel').carousel();
+		});
+	</script>
 <?php } else { ?>
 	<p id="bannerpreview"><img style="margin-top:12px" id="banner_image" width="100%" src="<?php echo $brandMedia['url']?>"/></p>
 <?php } ?>
@@ -1567,13 +1457,15 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 		<div class="pt-3"></div>
 
 		<!--================================================== ACCORDIAN ==================================================-->
-
+		<?php
+			@$allSocials = (array)$data['data'];
+		?>
 		<div id="accordion">
 			<div class="all-plugins-data">
 
 
 				<div class="alert alert-danger alert-dismissible">
-					<h5><?=count($data['data'])?> Ways to Enter</h5>
+					<h5><?=count($allSocials)?> Ways to Enter</h5>
 				</div>
 
 				<!---------------------------------------------------- ACTION LIST---------------------------------------------------->
@@ -1582,8 +1474,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				<?php
 
 				//                        print_r($data);
-				//                            print_r($allSocials);die;
-				@$allSocials = (array)$data['data'];
+				//                            print_r($allSocials);die;				
 				if ($allSocials && count($allSocials) > 0) {
 					foreach($allSocials as $socialKey => $clientData):
 //                                    print_r($clientData);die;
@@ -3354,8 +3245,175 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 <!--================================================ / TERMS ================================================-->
 
 
-<div id="list-container">
+<div id="tempActionBox" style="display:none">
+	<div class="d-none" id="gameContainer">
+		<?php
+		if ($allPlugins && count($allPlugins)>0) {
+		foreach($allPlugins as $idx => $plugin):
+			if($plugin['type'] == 'play-then-share') {?>
+				<div class="choose--game d-none" style="margin-bottom: 10px; margin-top: 10px;" id="choose_game_<?php echo $plugin['filename'];?>">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_<?php echo $plugin['filename'];?>">
+						Choose Game
+					</button>
+				</div>
+			<?php }
 
+		endforeach;
+		}?>
+		<div class="d-none" style="margin-top: 20px; margin-bottom: 20px;" id="game_preview_container">
+			<img src="" width="65%" id="game_preview_image" />
+		</div>
+		<input type="hidden" id="game_key" name="game_key" value="-1" />
+		<input type="hidden" id="game_name" name="game_name" value="" />
+		<input type="hidden" id="game_iframe" name="game_iframe" value="" />
+		<input type="hidden" id="game_preview" name="game_preview" value="" />
+	</div>
+	<div class="d-none" id="descriptionContainer">
+		<div class="form-group">
+			<label for="description">Description</label>
+			<textarea id="summernote" name="submit_description"></textarea>
+		</div>
+	</div>
+	<div class="d-none" id="selectShareContainer">
+		<div class="form-group">
+			<label for="shareDescription">Description</label>
+			<textarea class="form-control" name="shareDescription" id="shareDescription" rows="3"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="selectType">Choose Type</label>
+			<select class="form-control" name="selectType" id="selectType">
+				<option value="">----- Please choose -----</option>
+				<option value="image">Image select</option>
+				<option value="checkbox">Checkbox</option>
+			</select>
+		</div>
+		<div class="card d-none" id="pictureContainer" style="">
+			<div class="card-body">
+				<div class="clear">
+					<h4 class="">
+						Enter Picture
+					</h4>
+					<hr/>
+				</div>
+				<div class="clear">
+					<div id="field">
+						<div id="field0">
+							<div class="card" style="">
+								<div class="card-body">
+									<div class="clear">
+										<div class="form-group">
+											<label for="picture_name_0">Name</label>
+											<input id="picture_name_0" name="picture_name[]" type="text" placeholder="" class="form-control input-md">
+										</div>
+										<div class="form-group">
+											<label for="network">Choose Pic Mode</label>
+											<select class="form-control" name="pic_mode[]" id="pic_mode_0" onchange="changePictureMode(0)">
+												<option value="">----- Please choose -----</option>
+												<option value="url">URL</option>
+												<option value="upload">Upload</option>
+											</select>
+										</div>
+										<div class="form-group d-none" id="url_container_0">
+											<label for="picture_url_0">URL</label>
+											<input id="picture_url_0" name="picture_url[]" type="text" placeholder="" class="form-control input-md">
+										</div>
+										<div class="form-group d-none" id="upload_container_0">
+											<label for="picture_src_0">Image</label>
+											<input type="file" id="picture_src_0" name="picture_src_0" class="input-file" accept=".jpg,.jpeg,.png,.gif,.bmp">
+											<div id="file_name_0"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Button -->
+					<div class="form-group">
+						<button type="button" id="add-more" name="add-more" class="btn btn-primary">Add More</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="d-none" id="checkboxContainer">
+			<div id="checkboxField">
+				<div id="checkboxField0">
+					<div class="form-group">
+						<input id="checkbox_label_0" name="checkbox_label[]" type="text" placeholder="Enter checkbox label" class="form-control input-md">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<button type="button" id="add-more-checkbox" name="add-more-checkbox" class="btn btn-primary">Add More</button>
+			</div>
+		</div>
+	</div>
+	<div class="d-none" id="scratchContainer">
+		<div class="form-group">
+			<label for="scratchUrl">Select URL</label>
+			<input type="text" class="form-control" name="scratchUrl" id="scratchUrl" aria-describedby="helpIdUrl" placeholder="enter url">
+		</div>
+	</div>
+	<div class="d-none" id="urlContainer">
+		<div class="form-group">
+			<label for="url">Select URL/Embed code </label>
+			<input type="text" class="form-control" name="url" id="url" aria-describedby="helpIdUrl" placeholder="enter url">
+		</div>
+		<div class="form-group">
+			<label for="embedcode">Embed code (Supports OEmbed)</label>
+			<textarea class="form-control" name="embedcode" id="embedcode" rows="3"></textarea>
+		</div>
+	</div>
+	<div class="d-none" id="friendContainer">
+		<div class="form-group">
+			<label for="numFriends">Number of friends</label>
+			<input type="text"
+				class="form-control" name="numFriends" id="numFriends"
+				aria-describedby="helpIdFriends"
+				placeholder="enter number of friends">
+		</div>
+	</div>
+	<div class="d-none" id="recordContainer">
+		<div class="form-group">
+			<label for="record_type">Choose option</label>
+			<select class="form-control" name="record_type" id="record_type">
+				<option value="">----- Please choose -----</option>
+				<option value="audio">Audio</option>
+				<option value="video">Video</option>
+				<option value="image">Image</option>
+				<option value="gif">Gif</option>
+			</select>
+		</div>
+		<div class="d-none form-group" id="lengthContainer">
+			<label for="record_length">Length</label>
+			<input type="number"
+				class="form-control" name="record_length" id="record_length"
+				aria-describedby="helpIdRecordLength"
+				placeholder="enter record length">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="numpoint">Number of points</label>
+		<input type="text"
+			class="form-control" name="numpoint" id="numpoint"
+			aria-describedby="helpIdNumpoint"
+			placeholder="enter number of point">
+	</div>
+	<div class="form-group">
+		<label for="visitAction">Visit action</label>
+		<input type="text"
+			class="form-control" name="visitAction" id="visitAction"
+			aria-describedby="helpIdVisitAction"
+			placeholder="enter action name">
+	</div>
+	<div class="form-group">
+		<label for="shareAction">Share action</label>
+		<input type="text"
+			class="form-control" name="shareAction" id="shareAction"
+			aria-describedby="helpIdShareAction"
+			placeholder="enter share button name">
+	</div>	
+	<button type="button" class="pull-right btn bg-gradient-success actionSubmitButton">Submit</button>		
 </div>
 
 <!--================================================== PROJECTS ==================================================-->
@@ -3575,55 +3633,55 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
      <!--------------------------------------------------- GAMES --------------------------------------------------->
 
 <?php
-if ($data && count($data)>0) {
-foreach($data as $idx => $plugin):
-if($social->getType() == 'play-then-share') {
-$game = $social->getGame();
-?>
-<!-- The Modal -->
-<div class="modal fade" id="myModal_<?php echo $social->getFilename();?>">
-	<div class="modal-dialog modal-lg">
+if ($allPlugins && count($allPlugins)>0) {
+foreach($allPlugins as $idx => $plugin):
+	if($plugin['type'] == 'play-then-share') {
+		$game = $plugin['game'];
+		?>
+		<!-- The Modal -->
+		<div class="modal fade" id="myModal_<?php echo $plugin['filename'];?>">
+			<div class="modal-dialog modal-lg">
 
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">What game? </h4>
-				<button type="button" class="close" data-dismiss="modal">×</button>
-			</div>
-			<div class="modal-body choice-modal" >
-				<div class="container-fluid">
-					<div class="row inner-scroll" >
-						<?php
-						foreach($game as $game_idx => $item):
-							$item = (array)$item;
-							?>
-							<div class="col-md-4">
-								<div class="gallery-card">
-									<div class="gallery-card-body">
-										<label class="block-check">
-											<img src="<?php echo $item['preview'];?>" class="img-responsive" />
-											<input type="checkbox" class="selected--game" id="selected_game_<?php echo $plugin->getFilename();?>_<?php echo $game_idx;?>"
-												   onchange="onSelectGame('<?php echo $item['name'];?>', '<?php echo $item['iframe'];?>', '<?php echo $item['preview'];?>', '<?php echo $game_idx;?>')">
-											<span class="checkmark"></span>
-										</label>
-										<div class="mycard-footer">
-											<a href="<?php echo $item['iframe']?>" target="_blank" class="card-link"><?php echo $item['name'];?></a>
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">What are your Interest? </h4>
+						<button type="button" class="close" data-dismiss="modal">×</button>
+					</div>
+					<div class="modal-body choice-modal" >
+						<div class="container-fluid">
+							<div class="row inner-scroll" >
+								<?php
+								foreach($game as $game_idx => $item):
+									$item = (array)$item;
+									?>
+									<div class="col-md-4">
+										<div class="gallery-card">
+											<div class="gallery-card-body">
+												<label class="block-check">
+													<img src="<?php echo $item['preview'];?>" class="img-responsive" />
+													<input type="checkbox" class="selected--game" id="selected_game_<?php echo $plugin['filename'];?>_<?php echo $game_idx;?>"
+														   onchange="onSelectGame('<?php echo $item['name'];?>', '<?php echo $item['iframe'];?>', '<?php echo $item['preview'];?>', '<?php echo $game_idx;?>')">
+													<span class="checkmark"></span>
+												</label>
+												<div class="mycard-footer">
+													<a href="<?php echo $item['iframe']?>" target="_blank" class="card-link"><?php echo $item['name'];?></a>
+												</div>
+											</div>
 										</div>
 									</div>
-								</div>
+								<?php endforeach;?>
 							</div>
-						<?php endforeach;?>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+							</div>
+						</div>
+
 					</div>
 				</div>
-
 			</div>
 		</div>
-	</div>
-</div>
-<?php }
+	<?php }
 endforeach;
 }
 ?>
@@ -3813,7 +3871,7 @@ $(function () {
 $(document).ready(function () {
 $('#summernote').summernote()
 // this is the id of the form
-$("#create-client-plugin").submit(function(e) {
+$("#create-client-plugin").submit(function(e, silence) {
 
 	e.preventDefault(); // avoid to execute the actual submit of the form.
 
@@ -3831,19 +3889,23 @@ $("#create-client-plugin").submit(function(e) {
 		// data: form.serialize(), // serializes the form's elements.
 		success: function(data)
 		{
+			console.log('*3', data);
 			var success = data.success;
 			var message = data.message;
 			if (success) {
-				$("#create-client-plugin").trigger("reset");
+				// $("#create-client-plugin").trigger("reset");
 				$('#pictureContainer').addClass('d-none')
 				$('#urlContainer').removeClass('d-none')
 			}
 			showPreview();
-			Swal.fire(
+			if(silence){				
+			}else{
+				Swal.fire(
                       'Created!',
                       'Created Plugin successfully.',
                       'success'
-            );
+          		);
+			}			
 		}
 	});
 
@@ -3965,32 +4027,7 @@ $('#brand_pic_type').change(function() {
 	}
 })
 
-$('#action').change(function() {
-	var actionValue = $(this).val();
-	var actionType = $('#plugin-' + actionValue).val()
 
-	clearContainer()
-	if(actionType == 'select-and-share') {
-		$('#selectShareContainer').removeClass('d-none')
-	} else if(actionType == 'share-and-refer') {
-		$('#friendContainer').removeClass('d-none')
-	} else if (actionType == 'scratch-and-share' || actionType == 'spin-and-share') {
-		$('#scratchContainer').removeClass('d-none')
-	} else if (actionType == 'play-then-share') {
-		$('#gameContainer').removeClass('d-none')
-		$('#scratchContainer').removeClass('d-none')
-		hideAllGameButton()
-		$('#choose_game_' + actionValue).removeClass('d-none')
-	} else if (actionType == 'submit-then-share') {
-		$('#urlContainer').removeClass('d-none')
-		$('#descriptionContainer').removeClass('d-none')
-	} else if (actionType == 'record-and-share') {
-		$('#recordContainer').removeClass('d-none')
-		$('#scratchContainer').removeClass('d-none')
-	} else {
-		$('#urlContainer').removeClass('d-none')
-	}
-})
 
 $('#selectType').change(function() {
 	var selectType = $(this).val()
@@ -4031,15 +4068,7 @@ $('#record_type').change(function() {
 	}
 })
 
-function clearContainer() {
-	$('#selectShareContainer').addClass('d-none')
-	$('#urlContainer').addClass('d-none')
-	$('#friendContainer').addClass('d-none')
-	$('#scratchContainer').addClass('d-none')
-	$('#gameContainer').addClass('d-none')
-	$('#descriptionContainer').addClass('d-none')
-	$('#recordContainer').addClass('d-none')
-}
+
 
 });
 
@@ -4144,23 +4173,6 @@ $("#divA").delay(20000).fadeOut(function() {
      $("#divB").fadeIn();
      $(this).remove();
 });
-
-//SLIDEHSOW
-
-var myIndex = 0;
-carousel();
-
-function carousel() {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";  
-  }
-  myIndex++;
-  if (myIndex > x.length) {myIndex = 1}    
-  x[myIndex-1].style.display = "block";  
-  setTimeout(carousel, 500); // Change image every 1 seconds
-}
 
 </script>
 
@@ -4587,6 +4599,7 @@ function carousel() {
             // $('#bannerpreview').html('<video width="630" controls autoplay><source src="'+newText+'" id="video_here">Your browser does not support HTML5 video.</video>');
             // $('#bannerpreview').html('<iframe src="'+newText+'" frameborder="0" allowfullscreen class="video"></iframe>');
             $('#bannerpreview').html('<div class="video-container">'+videoId+'</div>');
+			$("#create-client-plugin").trigger("submit",[true]);
         });		
 
         $('.rules_text_input').summernote({
@@ -4667,25 +4680,61 @@ function carousel() {
 	    };
 	}
 
-	function sliderurls(url){
-		$("#bannerpreview").html("");
-		var numItems = $('.carousel-item').length;
-		console.log(numItems);
-		if(numItems==0)
-		{
-			$('#sliders').append('<div class="carousel-item active"><img class="d-block w-100" src="'+url+'" alt="First slide"></div>');
-		}else{
-			$('#sliders').append('<div class="carousel-item"><img class="d-block w-100" src="'+url+'" alt="First slide"></div>');
-		}
+	function sliderurls(url){	
+		// $("#bannerpreview").html("");
+		// var numItems = $('.carousel-item').length;
+		// console.log(numItems);
+		// if(numItems==0)
+		// {
+		// 	$('#sliders').append('<div class="carousel-item active"><img class="d-block w-100" src="'+url+'" alt="First slide"></div>');
+		// }else{
+		// 	$('#sliders').append('<div class="carousel-item"><img class="d-block w-100" src="'+url+'" alt="First slide"></div>');
+		// }
+		$("#create-client-plugin").trigger("submit",[true]);
 	}
-
-	$('.carousel').carousel();
-
 </script>
 
 <!--==================================================================== WIDGET CODE ====================================================================-->
 
 <script type="text/javascript">
+	//millery-action
+	function actionChange(actionValue) {
+		console.log("*1", actionValue); //actionValue = $plugin->filename
+		var actionType = $('#plugin-' + actionValue).val()
+		console.log("*2", actionType); //actionType = $plugin->type
+
+		clearContainer()
+		if(actionType == 'select-and-share') {
+			$('#selectShareContainer').removeClass('d-none')
+		} else if(actionType == 'share-and-refer') {
+			$('#friendContainer').removeClass('d-none')
+		} else if (actionType == 'scratch-and-share' || actionType == 'spin-and-share') {
+			$('#scratchContainer').removeClass('d-none')
+		} else if (actionType == 'play-then-share') {
+			$('#gameContainer').removeClass('d-none')
+			$('#scratchContainer').removeClass('d-none')
+			hideAllGameButton()
+			$('#choose_game_' + actionValue).removeClass('d-none')
+		} else if (actionType == 'submit-then-share') {
+			$('#urlContainer').removeClass('d-none')
+			$('#descriptionContainer').removeClass('d-none')
+		} else if (actionType == 'record-and-share') {
+			$('#recordContainer').removeClass('d-none')
+			$('#scratchContainer').removeClass('d-none')
+		} else {
+			$('#urlContainer').removeClass('d-none')
+		}
+	}
+	function clearContainer() {
+		$('#selectShareContainer').addClass('d-none')
+		$('#urlContainer').addClass('d-none')
+		$('#friendContainer').addClass('d-none')
+		$('#scratchContainer').addClass('d-none')
+		$('#gameContainer').addClass('d-none')
+		$('#descriptionContainer').addClass('d-none')
+		$('#recordContainer').addClass('d-none')
+	}
+
     function updateTotalPoint(point) {
         var totalpoint = $('#totalpoint').val();
         totalpoint -= point;
