@@ -13,9 +13,6 @@
     <title>Social Promo Widget</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Social -->
-    <link rel="stylesheet" href="https://suite.social/src/css/social-buttons.css">
-    <link rel="stylesheet" href="https://suite.social/src/css/social-colors.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?php echo ASSET_ROOT ?>/plugins/fontawesome-free/css/all.min.css">
     <!-- Google Font: Source Sans Pro -->
@@ -49,7 +46,7 @@
                 ?>
                 <a href="<?php echo PATH_ROOT?>/admin" class="btn btn-primary">Add</a>
 
-                <table class="table table-hover table-striped">
+                <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>Filename</th>
@@ -96,6 +93,16 @@
     </div>
 </div>
 <script type="text/javascript">
+  
+// DATATABLES
+
+  $(function () {
+	$("#example1").DataTable({
+	  "responsive": true,
+	  "autoWidth": false,
+	});
+
+
     $(document).ready(function () {
         function loadAllPlugins() {
             $.ajax({

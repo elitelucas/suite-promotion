@@ -272,6 +272,14 @@ a {
 
 /**************************************** Millery ****************************************/
 
+.millery-theme-1 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node {
+    /* color: #fff; */
+}
+
+.millery-theme-1 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node .millery-node-more {
+    color: #fff;
+}
+
 .millery {
 	width: 100%;
 }
@@ -292,6 +300,7 @@ a {
 		height: calc(100vh - 100px);
 	}
 }
+
 
 /**************************************** SCRATCH CARD ****************************************/
 
@@ -383,11 +392,12 @@ a {
 }
 
 .mycard-footer {
-	height: 25px;
-	background: #333333;
-	font-size: 15px;
-	text-indent: 10px;
-	/* border-radius: 0 0px 4px 4px;*/
+    height: 30px;
+    background: #eee;
+    font-size: 15px;
+    text-indent: 10px;
+    /* border-radius: 0 0px 4px 4px; */
+    font-weight: bold;
 }
 
 .gallery-card {
@@ -501,7 +511,6 @@ label{
 .direct-chat .card-body{
 	padding: 1.25rem!important;
 }
-
 </style>
 	
 <!--[if lt IE 9]>
@@ -870,7 +879,7 @@ label{
 							foreach ($networks as $network) :
 							?>			
 															
-							<li><i class="fa fa-save"></i><?= $network ?>
+							<li><?= $network ?>
 								<ul data-title='<?= $network ?>'>			
 									<?php
 									if ($allPlugins && count($allPlugins)>0) {
@@ -905,16 +914,7 @@ label{
 								debug: true,
 								panelType: "overlay",
 								visibleColumns: 1,
-								// searchable: true,
-								onbeforeappend: function(millery, column, def){
-									// millery: millery plugin instance
-									// column: created column DOM element
-									// def: column configuration
-									console.log('*4', millery)
-									console.log('*5', millery)
-									console.log('*6', millery)
-									return true; // false prevents attachment
-								},
+								// searchable: true,							
 								onnodeclick: function (instance, node, data, e) {
 									var contentNode = $(node.data("original")); //find div in selected Li
 									var tempBox=$("#tempActionBox");
@@ -939,9 +939,21 @@ label{
 									// ./javascript for forms
 									return true;
 								}
+							})
+							
+							$(function () {
+								addIconColor();
 							});
-									
-						</script>
+
+							function addIconColor(){
+								var nodes= $(".millery-column-wrapper .millery-column-content .millery-node");								
+								nodes.each(function(index){
+									var network=$.trim($(this).text()).toLowerCase();									
+									$(this).attr('id',network);	
+									$(this).html($(this).html().replace(network, `<i class='fab fa-${network}' style='font-size:20px'></i>&nbsp;&nbsp;`+network));								
+								})
+							}
+						</script>						
 
 	<!---================================================== /NEW FORM ==================================================--->	
 							<input type="hidden"  name="action"/>
@@ -3645,12 +3657,12 @@ foreach($allPlugins as $idx => $plugin):
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title">What are your Interest? </h4>
+						<h4 class="modal-title">Choose a game </h4>
 						<button type="button" class="close" data-dismiss="modal">×</button>
 					</div>
 					<div class="modal-body choice-modal" >
 						<div class="container-fluid">
-							<div class="row inner-scroll" >
+							<div class="row" >
 								<?php
 								foreach($game as $game_idx => $item):
 									$item = (array)$item;
@@ -3659,13 +3671,13 @@ foreach($allPlugins as $idx => $plugin):
 										<div class="gallery-card">
 											<div class="gallery-card-body">
 												<label class="block-check">
-													<img src="<?php echo $item['preview'];?>" class="img-responsive" />
-													<input type="checkbox" class="selected--game" id="selected_game_<?php echo $plugin['filename'];?>_<?php echo $game_idx;?>"
-														   onchange="onSelectGame('<?php echo $item['name'];?>', '<?php echo $item['iframe'];?>', '<?php echo $item['preview'];?>', '<?php echo $game_idx;?>')">
+													<img src="<?=$item['preview'];?>" class="img-responsive" />
+													<input type="checkbox" class="selected--game" id="selected_game_<?=$plugin['filename']?>_<?=$game_idx;?>"
+														   onchange="onSelectGame('<?=$item['name'];?>', '<?=$item['iframe'];?>', '<?=$item['preview'];?>', '<?=$game_idx;?>','<?=$plugin['filename']?>')">
 													<span class="checkmark"></span>
 												</label>
 												<div class="mycard-footer">
-													<a href="<?php echo $item['iframe']?>" target="_blank" class="card-link"><?php echo $item['name'];?></a>
+													<a href="<?=$item['iframe']?>" target="_blank" class="card-link"><?=$item['name'];?></a>
 												</div>
 											</div>
 										</div>
@@ -4114,16 +4126,11 @@ window.open('', '', )
 }
 
 function uncheckAll() {
-// var checkboxes = $('.selected--game')
 $('.selected--game').prop('checked', false)
-// for(var i = 0 ; i < checkboxes.length; i ++) {
-//     checkboxes[i].prop('checked', false)
-// }
 }
 
-function onSelectGame(name, url, preview, idx) {
+function onSelectGame(name, url, preview, idx,actionValue) {
 var game_key = $('#game_key').val()
-var actionValue = $('#action').val();
 
 uncheckAll()
 if(game_key == idx) {
@@ -4137,9 +4144,10 @@ if(game_key == idx) {
 	$('#game_name').val(name)
 	$('#game_iframe').val(url)
 	$('#game_preview').val(preview)
-
-	$('#selected_game_' + actionValue + '_' + idx).prop('checked', true)
 	$('#game_preview_container').removeClass('d-none')
+
+	$('#selected_game_' + actionValue + '_' + idx).prop('checked', true)	
+	console.log('#selected_game_' + actionValue + '_' + idx)
 	$('#game_preview_image').prop('src', preview)
 }
 }

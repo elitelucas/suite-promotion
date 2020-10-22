@@ -157,7 +157,8 @@ class Social {
                         $imgUrl = '';
                         if($mode) {
                             $target_dir = 'uploads/';
-                            $target_file = $target_dir.basename($previewImages[$i]['name']);
+                            // $target_file = $target_dir.basename($previewImages[$i]['name']);
+                            $target_file = $target_dir.time()."_$i"; //new filename
 
                             // Check file size
                             if ($previewImages[$i]["size"] > 500000) {

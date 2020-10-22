@@ -149,13 +149,13 @@ background-size: cover;
     font-size: 18px;
 }
 
+/**************************************** BANNER ****************************************/ 
+
 .top {
   margin: 0;
   opacity: 1;
   text-align: center;
 }
-
-/**************************************** BANNER ****************************************/ 
 
   .jumbotron-facebook {
 	background: #5b8dcd;

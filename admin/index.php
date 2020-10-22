@@ -1,79 +1,65 @@
 <?php require_once '../initial.php'; ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <title>Social Promo Widget</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Social -->
-    <link rel="stylesheet" href="https://suite.social/src/css/social-buttons.css">
-    <link rel="stylesheet" href="https://suite.social/src/css/social-colors.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="<?php echo ASSET_ROOT ?>/plugins/fontawesome-free/css/all.min.css">
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Admin</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="<?php echo ASSET_ROOT ?>/css/adminlte.css">
-    <link rel="stylesheet" href="<?php echo ASSET_ROOT ?>/css/style.css">
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!-- jQuery -->
-    <script src="<?php echo PATH_ROOT ?>/plugins/jquery/jquery.min.js"></script>
-
-    <!-- Boostrap -->
-    <script src="<?php echo PATH_ROOT ?>/plugins/bootstrap/js/bootstrap.bundle.js"></script>
-
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../src/css/adminlte.min.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body>
-<div class="container">
-    <div class="card" style="">
-        <div class="card-body">
-            <div class="clear">
-                <h4 class="card-title">
-                    <a href="<?php echo PATH_ROOT ;?>/admin">All Plugins</a> &raquo; Create new plugin
-                </h4>
-            </div>
-            <div class="clear">
+<body class="hold-transition layout-top-nav">
+<div class="wrapper">
 
-                <?php
-//                $data = $this->data;
-//                @$message = $data['message'];
-//                @$type = $data['type'];
-//                @$network = $data['network'];
-//                @$id = $data['id'];
-//                @$placeholder = $data['placeholder'];
-//                //                    @$title = $data['title'];
-//                @$actionName = $data['actionName'];
-//                @$visitLink = $data['visitLink'];
-//                @$shareLink = $data['shareLink'];
-//                @$shareTitle = $data['shareTitle'];
-//                @$delayTime = $data['delayTime'];
-//                @$filename = $data['filename'];
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Plugins</h1>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
 
-//                if ($message) {
-//                    ?>
-<!--                    <div class="alert alert-success" role="alert">--><?php //echo $message?><!--</div>-->
-<!--                    --><?php
-//                }
-//                ?>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+	  
+            <!-- general form elements -->
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Settings</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+			  <div class="card-body">
                 <form action="" method="post" id="create-plugin">
 
                     <div class="form-group">
                         <label for="type">Choose type</label>
                         <select class="form-control" name="type" id="type" required>
                             <option value="">----- Please choose -----</option>
-                            <option value="visit-and-share" >Visit and Share</option>
-                            <option value="share-and-visit" >Share and Visit</option>
-                            <option value="share-then-submit" >Share then Submit</option>
-                            <option value="submit-then-share" >Submit then Share</option>
-                            <option value="select-and-share" >Select and Share</option>
-                            <option value="share-and-refer" >Refer and Share</option>
-                            <option value="scratch-and-share" >Scratch and Share</option>
-                            <option value="spin-and-share" >Spin and Share</option>
                             <option value="play-then-share" >Play then Share</option>
                             <option value="record-and-share" >Record and Share</option>
+                            <option value="scratch-and-share" >Scratch and Share</option>
+                            <option value="select-and-share" >Select and Share</option>
+                            <option value="share-and-refer" >Refer and Share</option>
+                            <option value="share-and-visit" >Share and Visit</option>
+                            <option value="share-then-submit" >Share then Submit</option>
+                            <option value="spin-and-share" >Spin and Share</option>
+                            <option value="submit-then-share" >Submit then Share</option>
+                            <option value="visit-and-share" >Visit and Share</option>
                         </select>
                     </div>
                     <div class="card d-none" id="gameContainer" style="">
@@ -168,13 +154,15 @@
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
+                </div>
+                <!-- /.card-body -->
+
             </div>
-        </div>
-    </div>
-</div>
-<div id="list-container">
-<!-- --><?php //require_once 'listall.php';?>
-</div>
+            <!-- /.card -->
+			
+<div id="list-container"></div>
+					
+<!--================================================== PROJECTS ==================================================-->
 
       <div class="modal fade" id="modal-lg">
         <div class="modal-dialog modal-lg">
@@ -202,6 +190,38 @@
         <!-- /.modal-dialog -->
       </div>
       <!-- /.modal -->
+	  
+		
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-block">
+            <b>Version</b> 3.0
+        </div>
+        <strong>Copyright &copy; 2020 <a href="https://suite.social">Social Suite</a>.</strong> All rights reserved.
+    </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- bs-custom-file-input -->
+<script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../src/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../src/js/demo.js"></script>
 
 <script type="text/javascript">
 
@@ -331,5 +351,6 @@
         }
     })
 </script>
+
 </body>
 </html>

@@ -1,2 +1,0 @@
-<?php 
-$configSocial = '{"type":"visit-and-share","network":"youtube","id":"yyy","title":null,"actionName":"youtubuaction","visitLink":null,"shareLink":"CODE","shareTitle":null,"delayTime":"2","filename":"youtubufile","game":[]}';

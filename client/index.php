@@ -568,7 +568,7 @@ label{
 
 		<!--================================================== ACCORDIAN ==================================================-->
 
-		<div id="accordion">
+		<div class="accordion" id="accordion">
 
 			<!---------------------------------------------------- SETTINGS ---------------------------------------------------->
 			
@@ -588,7 +588,7 @@ label{
 				</a>
 				<!-- /.info-box -->
 
-				<div id="collapse2" class="panel-collapse collapse">
+				<div id="collapse2" class="panel-collapse collapse in" data-parent="#accordion">
 					<div class="card-body">
 
 						<!-------------------- FORM -------------------->
@@ -677,7 +677,7 @@ label{
 				</a>
 				<!-- /.info-box -->
 
-				<div id="collapse3" class="panel-collapse collapse">
+				<div id="collapse3" class="panel-collapse collapse"  data-parent="#accordion">
 					<div class="card-body">
 
 						<!-------------------- FORM -------------------->
@@ -798,7 +798,7 @@ label{
 				</a>
 				<!-- /.info-box -->
 
-				<div id="collapse4" class="panel-collapse collapse">
+				<div id="collapse4" class="panel-collapse collapse" data-parent="#accordion">
 				
 					<div class="card-body">
 
@@ -1038,7 +1038,7 @@ label{
 				</a>
 				<!-- /.info-box -->
 
-				<div id="collapse5" class="panel-collapse collapse">
+				<div id="collapse5" class="panel-collapse collapse" data-parent="#accordion">
 					<div class="card-body">
 
 						<!-------------------- FORM -------------------->

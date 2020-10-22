@@ -1,2 +1,0 @@
-<?php 
-$referData = '{"share-and-refer":{"count":"1","uniqueId":"5097232186","visitors":["4541181203","819818028","4541181205"]},"":{"visitors":["4541181203"]},"refer-share":{"count":"10","uniqueId":"819818028","visitors":[]}}';

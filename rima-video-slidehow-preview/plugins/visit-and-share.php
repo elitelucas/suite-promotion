@@ -1,2 +1,0 @@
-<?php 
-$configSocial = '{"type":"visit-and-share","network":"facebook","id":"facebook","title":null,"actionName":"Visit and Share Facebook","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=https://scotch.io&quote=title","shareTitle":null,"delayTime":"10","filename":"visit-and-share","game":[]}';
