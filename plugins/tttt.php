@@ -1,0 +1,2 @@
+<?php 
+$configSocial = '{"type":"record-and-share","network":"youtube","id":"youtube","title":null,"actionName":"ttt","visitLink":null,"shareLink":"SHORTCODE","shareTitle":null,"delayTime":"10","filename":"tttt","game":[]}';

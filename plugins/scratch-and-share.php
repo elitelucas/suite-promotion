@@ -1,2 +1,2 @@
 <?php 
-$configSocial = '{"type":"scratch-and-share","network":"facebook","id":"facebook","title":null,"actionName":"Scratch and Share Facebook","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=<URL>&quote=<TITLE>","shareTitle":null,"delayTime":"10","filename":"scratch-and-share","game":[]}';
+$configSocial = '{"type":"scratch-and-share","network":"facebook","id":"youtube","iconid":"fab fa-facebook","title":null,"actionName":"Scratch and Share Facebook","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=<URL>&quote=<TITLE>","shareTitle":null,"delayTime":"10","filename":"scratch-and-share","game":[]}';

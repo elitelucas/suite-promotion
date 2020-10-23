@@ -1,2 +1,2 @@
 <?php 
-$configSocial = '{"type":"submit-then-share","network":"facebook","id":"facebook","title":null,"actionName":"Submit then Share Facebook","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=<URL>&quote=<TITLE>","shareTitle":null,"delayTime":"10","filename":"submit-then-share","game":[]}';
+$configSocial = '{"type":"submit-then-share","network":"facebook","id":"facebook","title":null,"actionName":"Submit then Share Facebook","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=<URL>&quote=<TITLE>","shareTitle":null,"delayTime":"13","filename":"submit-then-share","game":[]}';

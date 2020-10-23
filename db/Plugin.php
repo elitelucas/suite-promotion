@@ -41,6 +41,7 @@ class Plugin {
                         'type' => $currentData->getType(),
                         'network' => $currentData->getNetwork(),
                         'id' => $currentData->getID(),
+                        'iconid' => $currentData->getIconID(),
                         'title' => $currentData->getTitle(),
                         'actionName' => $currentData->getActionName(),
                         'visitLink' => $currentData->getvisitLink(),

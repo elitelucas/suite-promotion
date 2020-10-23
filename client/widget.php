@@ -2,6 +2,7 @@
 require_once '../initial.php';
 require_once '../db/Plugin.php';
 require_once '../db/Social.php';
+require_once '../networkicons.php'; //networkicons
 
 $plugin = new Plugin();
 $data = $plugin->load();
@@ -273,7 +274,7 @@ a {
 /**************************************** Millery ****************************************/
 
 .millery-theme-1 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node {
-    /* color: #fff; */
+    color: #fff;
 }
 
 .millery-theme-1 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node .millery-node-more {
@@ -879,7 +880,7 @@ label{
 							foreach ($networks as $network) :
 							?>			
 															
-							<li><?= $network ?>
+							<li network="<?= $network ?>"><?= $network ?>
 								<ul data-title='<?= $network ?>'>			
 									<?php
 									if ($allPlugins && count($allPlugins)>0) {
@@ -888,7 +889,8 @@ label{
 											?>
 											<li>
 												<?php echo $plugin['actionName'];?>
-												<div class="content" filename="<?php echo $plugin['filename'];?>">	
+												<div class="content" filename="<?php echo $plugin['filename'];?>" actionname="<?php echo $plugin['actionName'];?>" 
+												colorid="<?= $plugin['id']?>" iconid="<?= $plugin['iconid']?>">	
 
 												</div>
 											</li>   
@@ -914,8 +916,52 @@ label{
 								debug: true,
 								panelType: "overlay",
 								visibleColumns: 1,
-								// searchable: true,							
-								onnodeclick: function (instance, node, data, e) {
+								// searchable: true,
+								// onbeforeinit: function(millery){
+								// 	console.log('onbeforeinit')
+								// }, 						
+								// oninit: function(millery){
+								// 	console.log('oninit')
+								// }, 						
+								// onbeforeappend : function(millery){
+								// 	console.log('onbeforeappend ')
+								// 	console.log($(".millery-column[data-index='1'] .millery-column-content").html())
+								// 	return true;
+								// }, 						
+								// onafterappend: function(millery){
+								// 	console.log('onafterappend')
+								// 	console.log($(".millery-column[data-index='1'] .millery-column-content").html())
+								// }, 						
+								// onbeforepanelclose : function(millery){
+								// 	console.log('onbeforepanelclose ')
+								// 	return true;
+								// }, 						
+								// onafterpanelclose : function(millery){
+								// 	console.log('onafterpanelclose ')
+								// }, 						
+								// onbeforepanelopen : function(millery){
+								// 	console.log('onbeforepanelopen ')
+								// 	return true;
+								// }, 						
+								// onafterpanelopen : function(millery){
+								// 	console.log('onafterpanelopen ')
+								// }, 						
+								// onbeforeremove : function(millery){
+								// 	console.log('onbeforeremove ')
+								// 	return true;
+								// }, 						
+								// onafterremove : function(millery){
+								// 	console.log('onafterremove ')
+								// }, 						
+								// onbackbutton : function(millery){
+								// 	console.log('onbackbutton ')
+								// 	return true;
+								// }, 						
+								// onbreadcrumb : function(millery){
+								// 	console.log('onbreadcrumb ')
+								// 	return true;
+								// }, 						
+								onnodeclick: function (instance, node, data, e) {									
 									var contentNode = $(node.data("original")); //find div in selected Li
 									var tempBox=$("#tempActionBox");
 									var filename;			
@@ -937,6 +983,7 @@ label{
 									})	
 									$("input[name='action']").val(filename);
 									// ./javascript for forms
+									needPluginIcon = true;
 									return true;
 								}
 							})
@@ -945,14 +992,42 @@ label{
 								addIconColor();
 							});
 
+							var networkicons=<?php echo json_encode(NETICONS)?>;
+
 							function addIconColor(){
 								var nodes= $(".millery-column-wrapper .millery-column-content .millery-node");								
 								nodes.each(function(index){
-									var network=$.trim($(this).text()).toLowerCase();									
-									$(this).attr('id',network);	
-									$(this).html($(this).html().replace(network, `<i class='fab fa-${network}' style='font-size:20px'></i>&nbsp;&nbsp;`+network));								
+									if($(this).hasClass('millery-node-parent')){ //Network
+										var network=$.trim($(this).text()).toLowerCase();									
+										$(this).attr('id',network);	
+										var networkiconclass=networkicons[network];
+										if(networkiconclass==null) networkiconclass=`fab fa-${network}`;
+										$(this).html($(this).html().replace(network, `<i class='${networkiconclass}' style='font-size:20px'></i>&nbsp;&nbsp;`+network));								
+									}
 								})
 							}
+							
+							var needPluginIcon=true;
+							setInterval(() => {								
+								if(needPluginIcon){
+									if($(".millery-column[data-index='1'] .millery-column-content .millery-node").length){
+										needPluginIcon=false;
+										console.log('here code')
+										var network=$(".millery-column[data-index='1'] .millery-column-header").text();
+										$(".millery-column[data-index='1'] .millery-column-content .millery-node").each(function(index){
+																					
+											var originLi=$(`#millery-example li[network='${network}'] ul li:nth-child(${index+1})`);										
+											var originhtml=originLi.find(".content").attr("actionname");
+											var colorid=originLi.find(".content").attr("colorid");
+											var iconid=originLi.find(".content").attr("iconid");
+											var newhtml=`<i class="${iconid}" style="font-size:20px"></i>&nbsp;&nbsp;`+originhtml;
+											$(this).attr('id',colorid)
+											$(this).html(newhtml)
+										});
+									}
+								}
+							}, 200);
+													
 						</script>						
 
 	<!---================================================== /NEW FORM ==================================================--->	
@@ -1507,23 +1582,10 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						@$recordLength = $clientData['recordLength'];
 
 						@$socialData = $clientData['social'];
-						// echo '<pre>';
-      //                   print_r($socialData);
-      //                   echo '</pre>';
-      //                   exit;
-//                                    $title =  $socialData->getPlaceholder();
-						
-						/*$network =  $socialData->getNetwork();
-						$id =  $socialData->getID();
-						$shareLink = $socialData->getShareLink();
-						$shareTitle = $socialData->getShareTitle();
-						$delayTime = $socialData->getDelayTime();
-						$type =  $socialData->getType();
-						$actionName =  $socialData->getActionName();
-						*/
 
 						$network =  $socialData['network'];
 						$id =  $socialData['id'];
+						$iconid =  $socialData['iconid'];
 						$shareLink = $socialData['shareLink'];
 						$shareTitle = $socialData['shareTitle'];
 						$delayTime = $socialData['delayTime'];
@@ -1555,11 +1617,11 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 									});
 								</script>
 						<?php
-					if($type == 'submit-then-share' && $network =='facebook') {?>
+					if($type == 'submit-then-share') {?>
 						<!---------------------------------------------------- ACTION: submit-then-share ---------------------------------------------------->
 						<div class="card card-default">
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-<?php echo $id?>"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 								<div class="info-box-content">
 									<span class="info-box-text"><?php echo $visitAction;?></span>
 								</div>
@@ -1652,12 +1714,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							});
 						</script>
 
-					<?php } else if($type == 'share-then-submit' && $network =='facebook') {?>
+					<?php } else if($type == 'share-then-submit') {?>
 
 						<!---------------------------------------------------- ACTION: share-then-submit ---------------------------------------------------->
 						<div class="card card-default">
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-<?php echo $id?>"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 								<div class="info-box-content">
 									<span class="info-box-text"><?php echo $visitAction;?></span>
 								</div>
@@ -1750,13 +1812,13 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 								// }
 							});
 						</script>
-					<?php } else if($type == 'visit-and-share' && $network =='facebook') {
+					<?php } else if($type == 'visit-and-share') {
 					?>
 						<!---------------------------------------------------- ACTION: visit-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-<?php echo $id?>"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 
 								<div class="info-box-content">
 									<!--                                            <span class="info-box-text">Visit then share action</span>-->
@@ -1858,14 +1920,14 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<?php } ?>
 
 					<?php
-					if($type == 'share-and-visit' && $network =='facebook') {
+					if($type == 'share-and-visit') {
 					?>
 						<!---------------------------------------------------- ACTION: share-and-visit ---------------------------------------------------->
 
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-facebook"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 
 								<div class="info-box-content">
 									<!--                                            <span class="info-box-text">Share then visit action</span>-->
@@ -1961,13 +2023,13 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 					<?php } ?>
 					<?php
-					if($type == 'select-and-share' && $network == 'facebook') {
+					if($type == 'select-and-share') {
 					?>
 						<!---------------------------------------------------- ACTION: select-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-facebook"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 
 								<div class="info-box-content">
 									<span class="info-box-text"><?php echo $visitAction?></span>
@@ -2132,14 +2194,14 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							})
 						</script>
 
-					<?php } else if($type == 'share-and-refer' && $network == 'facebook') {
+					<?php } else if($type == 'share-and-refer') {
 					// $visitors = $plugin->getVisitors($socialKey);
 					?>
 						<!---------------------------------------------------- ACTION: share-and-refer ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
-								<span id="facebook" class="info-box-icon bg-info"><i class="fab fa-facebook"></i></span>
+								<span id="facebook" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 
 								<div class="info-box-content">
 									<span class="info-box-text"><?php echo $visitAction?></span>
@@ -2289,12 +2351,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							})
 						</script>
 
-					<?php } else if($type == 'scratch-and-share' && $network == 'facebook') { ?>
+					<?php } else if($type == 'scratch-and-share') { ?>
 						<!---------------------------------------------------- ACTION: scratch-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey; ?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-facebook"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 
 								<div class="info-box-content">
 									<span class="info-box-text"><?php echo $visitAction; ?></span>
@@ -2490,12 +2552,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 								// }
 							})
 						</script>
-					<?php } else if($type == 'spin-and-share' && $network == 'facebook') { ?>
+					<?php } else if($type == 'spin-and-share') { ?>
 						<!---------------------------------------------------- ACTION: spin-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey; ?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-facebook"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 
 								<div class="info-box-content">
 									<span class="info-box-text"><?php echo $visitAction; ?></span>
@@ -2702,12 +2764,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							})
 
 						</script>
-					<?php } else if($type == 'play-then-share' && $network == 'facebook') {?>
+					<?php } else if($type == 'play-then-share') {?>
 						<!---------------------------------------------------- ACTION: play-then-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-facebook"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 
 								<div class="info-box-content">
 									<!--<span class="info-box-text">Share then visit action</span>-->
@@ -2805,14 +2867,14 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							}
 
 						</script>
-					<?php } else if($type == 'record-and-share' && $network == 'facebook') {
+					<?php } else if($type == 'record-and-share') {
 //                                    $recordType = 'video';
 						?>
 						<!---------------------------------------------------- ACTION: record-and-share ---------------------------------------------------->
 						<div class="card card-default">
 
 							<a class="info-box" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $socialKey?>">
-								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="fab fa-facebook"></i></span>
+								<span id="<?php echo $id?>" class="info-box-icon bg-info"><i class="<?php echo $iconid?>"></i></span>
 
 								<div class="info-box-content">
 									<!--                                            <span class="info-box-text">Share then visit action</span>-->
@@ -4707,9 +4769,9 @@ $("#divA").delay(20000).fadeOut(function() {
 <script type="text/javascript">
 	//millery-action
 	function actionChange(actionValue) {
-		console.log("*1", actionValue); //actionValue = $plugin->filename
+		// console.log("*1", actionValue); //actionValue = $plugin->filename
 		var actionType = $('#plugin-' + actionValue).val()
-		console.log("*2", actionType); //actionType = $plugin->type
+		// console.log("*2", actionType); //actionType = $plugin->type
 
 		clearContainer()
 		if(actionType == 'select-and-share') {

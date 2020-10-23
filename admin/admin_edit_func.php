@@ -4,6 +4,11 @@
     require_once DIR_ROOT . '/db/Social.php';
 
     $message = null;
+    $picFiles = array();
+    foreach($_FILES as $key => $file) {
+        $picFiles[] = $file;
+    }
+
     $result = array(
         'success' => false,
         'message' => 'Error on update plugin'
@@ -21,7 +26,7 @@
         }
 
         $social = new Social();
-        $social->setDataByArray($dataPost);
+        $social->setDataByArray($dataPost,$picFiles);
 
         $social->save();
         $result['message'] = 'Save plugin successfull!';

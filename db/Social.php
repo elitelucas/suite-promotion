@@ -4,6 +4,7 @@ class Social {
     protected $type;
     protected $network;
     protected $id;
+    protected $iconid;
     protected $title;
     protected $actionName;
     protected $visitLink;
@@ -36,6 +37,14 @@ class Social {
 
     public function setID($id) {
         $this->id = $id;
+    }
+
+    public function getIconID() {
+        return $this->iconid;
+    }
+
+    public function setIconID($iconid) {
+        $this->iconid = $iconid;
     }
 
     public function getTitle() {
@@ -116,6 +125,7 @@ class Social {
             'type' => $this->type,
             'network' => $this->network,
             'id' => $this->id,
+            'iconid' => $this->iconid,
             'title' => $this->title,
             'actionName' => $this->actionName,
             'visitLink' => $this->visitLink,
@@ -134,6 +144,7 @@ class Social {
             @$type = $data['type'];
             @$network = $data['network'];
             @$id = $data['id'];
+            @$iconid = $data['iconid'];
             @$title = $data['title'];
             @$actionName = $data['actionName'];
             @$visitLink = $data['visitLink'];
@@ -185,6 +196,7 @@ class Social {
             $this->setType($type);
             $this->setNetwork($network);
             $this->setID($id);
+            $this->setIconID($iconid);
             $this->setTitle($title);
             $this->setActionName($actionName);
             $this->setVisitLink($visitLink);
@@ -266,6 +278,7 @@ class Social {
                         'type' => $tmp->type,
                         'network' => $tmp->network,
                         'id' => $tmp->id,
+                        'iconid' => $tmp->iconid,
                         'title' => $tmp->title,
                         'actionName' => $tmp->actionName,
                         'visitLink' => $tmp->visitLink,
