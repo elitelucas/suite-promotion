@@ -75,6 +75,8 @@ if (isset($dataPost)) {
     @$recordType = $dataPost['record_type'];
     @$recordLength = $dataPost['record_length'];
 
+    @$embedcode = $dataPost['embedcode']; //embedcode
+
     $pictures = array();
     $refer = array();
 
@@ -250,6 +252,12 @@ if (isset($dataPost)) {
                     'url' => $scratchUrl,
                     'recordType' => $recordType,
                     'recordLength' => $recordLength,
+                );
+            } else if ($actionType == 'share-and-visit' || $actionType == 'visit-and-share'|| $actionType == 'share-then-submit') {
+                $newData['data'][$action] = array(
+                    'numpoint' => $numpoint,
+                    'url' => $scratchUrl,
+                    'embedcode' => $embedcode,
                 );
             } else {
                 $newData['data'][$action] = array(

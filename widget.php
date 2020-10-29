@@ -447,16 +447,23 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 	<div class="row">
 
-		<div class="col-6 col-md-6">
+		<div class="col-4 col-md-4">
 			<a href="#info" data-toggle="collapse" class="btn btn-block btn-secondary">
 				<i class="fas fa-question-circle"></i> INFO
 			</a>
 		</div>
 		<!-- /.col -->
 
-		<div class="col-6 col-md-6">
+		<div class="col-4 col-md-4">
 			<a href="#login" data-toggle="collapse" class="btn btn-block btn-secondary">
 				<i class="fas fa-sign-in-alt"></i> LOGIN
+			</a>
+		</div>
+		<!-- /.col -->
+		
+		<div class="col-4 col-md-4">
+			<a href="#comments" data-toggle="collapse" class="btn btn-block btn-secondary">
+				<i class="fas fa-comments"></i> COMMENTS
 			</a>
 		</div>
 		<!-- /.col -->
@@ -672,6 +679,10 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 	</div>
 
 	<!--======================================== / LOGIN ========================================-->
+	
+	<div id="comments" class="collapse">
+		No comments yet
+	</div>
 
 </div>
 
@@ -703,7 +714,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 
 				<div class="alert alert-danger alert-dismissible">
-					<h5>7 Ways to Enter</h5>
+					<h5><?=count((array)$data['data'])?> Ways to Enter</h5>
 				</div>
 
 				<!---------------------------------------------------- ACTION ---------------------------------------------------->
