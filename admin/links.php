@@ -178,9 +178,24 @@ $networks = array_unique($networks);
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+              <div class="row">
+                <div class="col-sm-8">
+                  <button class="btn btn-danger" @click="btnDelSelected()"><i class="fas fa-trash"></i>Delete Selected</button>
+                </div>
+                <div class="col-sm-4">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search for links' ID, Networks, Actions" v-model="search">
+                  </div>
+                </div>
+              </div>
+
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
+                    <th><input type="checkbox" @click="checkall($event)"></th>
                     <th>Widget Image</th>
                     <th>ID</th>
                     <th style="width:15%">Networks</th>
@@ -190,7 +205,8 @@ $networks = array_unique($networks);
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(link, index) in links" :key="index">
+                  <tr v-for="(link, index) in links" :key="index" v-if="searched(index)">
+                    <td> <input type="checkbox" :value="index" v-model="checkedLinks"></td>
                     <td><img width="150px" :src="link.imageURL" alt="Widget-Image"></td>
                     <td>{{link.id}}</td>
                     <td>{{getStringFromArray(link.networks)}}</td>
@@ -208,6 +224,7 @@ $networks = array_unique($networks);
                 </tbody>
                 <tfoot>
                   <tr>
+                  <th><input type="checkbox" @click="checkall($event)"></th>
                     <th>Widget Image</th>
                     <th>ID</th>
                     <th>Networks</th>
@@ -263,7 +280,7 @@ $networks = array_unique($networks);
   <script src="../plugins/summernote/summernote-bs4.min.js"></script>
   <!-- Vue.js -->
   <script src="../src/js/vue.js"></script>
-  <script src="../src/js/links.js?version=2"></script>
+  <script src="../src/js/links.js?<?= time() ?>"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
@@ -277,7 +294,7 @@ $networks = array_unique($networks);
           // onChange: function(e) {
           //   app.currentlink.banner = $(this).val();
           // }
-          onChange: function(contents, $editable) {          
+          onChange: function(contents, $editable) {
             app.currentlink.banner = contents;
           },
           onChangeCodeview: function(contents, $editable) {
@@ -304,7 +321,7 @@ $networks = array_unique($networks);
 
     function setFormFromCurrentLink() {
       //id-vmodel
-      $('#banner').summernote('code', app.currentlink.banner);    //banner 
+      $('#banner').summernote('code', app.currentlink.banner); //banner 
       //imageULR-vmodel
 
       //networks

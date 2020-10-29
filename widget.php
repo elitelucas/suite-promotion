@@ -738,7 +738,8 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						@$game = (array)$clientData['game'];
 						@$submitDescription = $clientData['description'];
 						@$shareType = $clientData['type'];
-
+						@$embedcode =  $clientData['embedcode'];
+						
 						@$recordType = $clientData['recordType'];
 						@$recordLength = $clientData['recordLength'];
 
@@ -764,6 +765,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						$shareTitle = $socialData['shareTitle'];
 						$delayTime = $socialData['delayTime'];
 						$type =  $socialData['type'];
+						$filename =  $socialData['filename'];
 						$actionName =  $socialData['actionName'];
 
 						$visitLink = $url;
@@ -889,7 +891,11 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							<div id="collapse<?php echo $socialKey?>" class="panel-collapse collapse">
 								<div class="card-body">
 									<!-------------------- REVEAL -------------------->
-									<div id="share-and-submit-<?php echo "$socialKey-$network"?>">
+									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
+									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
+										Continue&nbsp;<i class="fas fa-arrow-right"></i>
+									</a>
+									<div id="share-and-submit-<?php echo "$socialKey-$network"?>" style="display:none">
 										<a id="action5"
 										   href="javascript:void(0);"
 										   style="color: #fff; -webkit-transition-delay: 3s;transition-delay: 3s;"
@@ -914,6 +920,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							</div>
 						</div>
 						<script type="text/javascript">
+							$(".continueembed").click(function(){
+								var filename=$(this).attr('filename');
+								$(`#iframe_${filename}`).fadeOut();
+								$(this).fadeOut();
+								$(`#share-and-submit-<?php echo "$socialKey-$network"?>`).fadeIn();
+							});
 							$(document).on('click', '.sharefb<?php echo "$socialKey-$network";?>', function () {
 								var openUrl = '<?php echo $shareLink; ?>';
 								var currentUrl = encodeURI(location.href);
@@ -989,9 +1001,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							<div id="collapse<?php echo $socialKey?>" class="panel-collapse collapse in">
 								<div class="card-body">
 									<!-------------------- REVEAL -------------------->
-
+									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
+									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
+										Continue&nbsp;<i class="fas fa-arrow-right"></i>
+									</a>
 									<a id="action-<?php echo "$socialKey-$network";?>" href="javascript:void(0);"
-									   style="color: #fff; -webkit-transition: width , height;transition: width , height;-webkit-transition-delay: <?php echo $delayTime?>s;transition-delay: <?php echo $delayTime?>s;"
+									   style="display:none;color: #fff; -webkit-transition: width , height;transition: width , height;-webkit-transition-delay: <?php echo $delayTime?>s;transition-delay: <?php echo $delayTime?>s;"
 									   class="btn btn-block btn-social btn-<?php echo $id?>" data-toggle="collapse" aria-expanded="false" aria-controls="FBLike<?php echo $socialKey?>">
 										<i class="fab fa-<?php echo $id?> fa-2x"></i> <?php echo $shareAction?></a>
 
@@ -1010,6 +1025,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							</div>
 						</div>
 						<script type="text/javascript">
+							$(".continueembed").click(function(){
+								var filename=$(this).attr('filename');
+								$(`#iframe_${filename}`).fadeOut();
+								$(this).fadeOut();
+								$(`#action-<?php echo "$socialKey-$network";?>`).fadeIn();
+							});
 							$(document).on('click', '#action-<?php echo "$socialKey-$network";?>', function () {
 								popup('<?php echo $visitLink; ?>', '<?php echo $socialKey;?>');
 								// console.log(getDiffDays(), "==========")
@@ -1098,8 +1119,11 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 								<div class="card-body">
 
 									<!-------------------- REVEAL -------------------->
-
-									<a id="action2" href="javascript:void(0);" style="color: #fff; " class="btn btn-block btn-social btn-facebook sharefb<?php echo $socialKey?>">
+									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
+									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
+										Continue&nbsp;<i class="fas fa-arrow-right"></i>
+									</a>
+									<a id="action2" href="javascript:void(0);" style="display:none;color: #fff; " class="btn btn-block btn-social btn-facebook sharefb<?php echo $socialKey?>">
 										<i class="fab fa-facebook fa-2x"></i> <?php echo $shareAction;?></a>
 
 									<div id="FBLike<?php echo $socialKey?>" style="display:none;-webkit-transition: width , height;transition: width , height;-webkit-transition-delay: <?php echo $delayTime?>s;transition-delay: <?php echo $delayTime?>s;" class="collapse text-center" >
@@ -1117,6 +1141,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							</div>
 						</div>
 						<script type="text/javascript">
+							$(".continueembed").click(function(){
+								var filename=$(this).attr('filename');
+								$(`#iframe_${filename}`).fadeOut();
+								$(this).fadeOut();
+								$(`.sharefb<?php echo $socialKey?>`).fadeIn();
+							});
 							$(document).on('click', '.openFbAddPoint<?php echo $socialKey?>', function () {
 								popup('<?php echo $visitLink?>', '<?php echo $socialKey;?>');
 								// if(getDiffDays() > 48) {

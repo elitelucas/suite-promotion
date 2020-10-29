@@ -39,6 +39,7 @@ if (isset($dataPost)) {
     @$description = $dataPost['description'];
     @$promotioncontent = $dataPost['promotioncontent'];
     @$totalpoints = $dataPost['totalpoints'];
+    @$comment = $dataPost['comment'];
     @$expiry = $dataPost['expiry'];
     @$offersleft = $dataPost['offersleft'];
     @$type = $dataPost['type'];
@@ -181,6 +182,7 @@ if (isset($dataPost)) {
         'network' => $network,
         'media' => $brand,
         'background_image' => $backImgUrl,
+        'comment' => $comment,
     );
 
     $newData = array(

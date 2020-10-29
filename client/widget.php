@@ -30,6 +30,7 @@ if($brandMedia==null || $brandMedia['mode']==''){
 	$brandMedia=array("mode"=>"url", "url"=>PATH_ROOT."/images/banner.jpg");;
 } 
 @$pluginType = $info['type'];
+@$comment = $info['comment'];
 @$maxPoints = $totalpoints;
 
 $now = time(); // or your date as well
@@ -59,9 +60,6 @@ if(@$link->actions!=null){
 	}
 	$allPlugins=$newarr;
 }
-// var_dump(@$link->actions);
-// var_dump($allPlugins);
-// die();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -419,6 +417,56 @@ a {
 	}
 }
 
+.millery-theme-2 .millery-container .millery-top .millery-search input[type='search'] {
+    color: #ccc;
+}
+	
+.millery-theme-2 .millery-container .millery-top .millery-search input[type='search']::-webkit-input-placeholder {
+	color:#ccc;
+}
+
+.millery-theme-2 .millery-container .millery-top .millery-search input[type='search']:-ms-input-placeholder {
+	color:#ccc;
+}
+
+.millery-theme-2 .millery-container .millery-top .millery-search input[type='search']::-ms-input-placeholder {
+	color:#ccc;
+}
+
+.millery-theme-2 .millery-container .millery-top .millery-search input[type='search']::placeholder {
+	color:#ccc;
+}
+
+.millery-theme-2 .millery-container .millery-top .millery-close-button, .millery-theme-2 .millery-container .millery-top .millery-back-button {
+    background: #dc3545;
+    color: #fff;
+    border-top: 2px solid #d32535;
+    border-right: 2px solid #d32535;
+    border-left: 2px solid #d32535;
+    border-bottom: 2px solid #d32535;
+}
+
+.millery-theme-2 .millery-container .millery-top .millery-breadcrumbs .millery-breadcrumb:after {
+    color: #dc3545;
+}
+
+.millery-theme-2 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node.millery-node-active {
+    background: #dc3545;
+    color: #fff;
+    -webkit-box-shadow: inset 0px -2px 2px 0px #d32535;
+    box-shadow: inset 0px -2px 2px 0px #d32535;
+}
+
+.millery-theme-2 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node .millery-node-more {
+    color: #dc3545;
+}
+
+.millery-theme-2 .millery-container .millery-top .millery-search .icon {
+    color: #dc3545;
+}
+
+
+
 /**************************************** SCRATCH CARD ****************************************/
 
 .scratch-container {
@@ -729,7 +777,9 @@ label{
 <div class="container-fluid">
 
 	<div id="linkbanner" class="text-center top">
-		<?= @$link ->banner?>
+		<?php if($referralId!=null)
+		 echo @$link ->banner;
+		?>
 	</div>
 	
 	<div id="create" class="alert alert-default alert-dismissible">
@@ -826,7 +876,7 @@ label{
 						<div class="form-group">
                           <label>Comments</label>
 						  <h6 class="text-muted"><small>Check tools > Comments for embed code </small></h6>						  
-                          <textarea class="form-control" rows="3" placeholder="Enter embed code"></textarea>
+                          <textarea class="form-control" rows="3" placeholder="Enter embed code" name="comment"></textarea>
                         </div>
 
 						<h6 class="text-muted"><small>Options</small></h6>
@@ -1185,7 +1235,105 @@ label{
 
 						<!-------------------- FORM -------------------->
 
-
+    <ul id="millery-2">
+	
+	<!-- TOOL -->
+	
+        <li>Forms
+            <ul>
+                <li>Form Builder</li>
+				<li>Form Generator</li>
+            </ul>
+        </li>
+		
+	<!-- TOOL -->
+	
+        <li>Music Player
+            <ul>
+                <li>Plugin 1</li>
+                <li>Plugin 2</li>
+            </ul>
+        </li>
+		
+	<!-- TOOL -->
+	
+        <li>Social Stream
+            <ul>
+                <li>Plugin 1</li>
+                <li>Plugin 2</li>
+            </ul>
+        </li>
+		
+	<!-- TOOL -->
+	
+        <li>Daily Deal
+            <ul>
+                <li>Plugin 1</li>
+                <li>Plugin 2</li>
+            </ul>
+        </li>
+		
+	<!-- TOOL -->
+	
+        <li>Birthday Deal
+            <ul>
+                <li>Plugin 1</li>
+                <li>Plugin 2</li>
+            </ul>
+        </li>
+		
+	<!-- NETWORK -->
+	
+        <li>Weather Deal
+            <ul>
+                <li>Plugin 1</li>
+                <li>Plugin 2</li>
+            </ul>
+        </li>
+		
+	<!-- TOOL -->
+	
+        <li>Video Quiz
+            <ul>
+                <li>Plugin 1</li>
+                <li>Plugin 2</li>
+            </ul>
+        </li>
+		
+	<!-- TOOL -->
+	
+        <li>Games
+            <ul>
+                <li>Plugin 1</li>
+                <li>Plugin 2</li>
+            </ul>
+        </li>
+		
+	<!-- TOOL -->
+	
+        <li>Postcards
+            <ul>
+                <li>Plugin 1</li>
+                <li>Plugin 2</li>
+            </ul>
+        </li>
+		
+    </ul>
+    <div id="millery-2" class="millery millery-theme-2"></div>
+    <script type="text/javascript">
+        $(".millery").millery({
+            source: $("#millery-2"),			
+			debug: true,
+			panelType: "overlay",
+			visibleColumns: 1,
+			keepState: false,
+			searchable: true,
+            onnodeclick: function (instance, node, data) {
+                instance.setPanelData(JSON.stringify(data));
+                return true;
+            }
+        });
+    </script>
 
 
 						<!-------------------- / FORM -------------------->
@@ -1650,8 +1798,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 	<!--======================================== / LOGIN ========================================-->
 
-	<div id="comments" class="collapse">
-		No comments yet
+	<div id="comments" class="collapse text-center" style="padding:10px;">
+		<?php if($comment): ?>
+			<?=$comment?>
+		<?php else: ?>
+			No comments yet
+		<?php endif;?>
 	</div>
 
 
@@ -1691,15 +1843,9 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				
 				<section id="action-list" style="min-height: 0px!important;">
 				<?php
-
-				//                        print_r($data);
-				//                            print_r($allSocials);die;				
+			
 				if ($allSocials && count($allSocials) > 0) {
 					foreach($allSocials as $socialKey => $clientData):
-//                                    print_r($clientData);die;
-//                                $socialData = $this->data;
-
-//                                @$pluginData = $clientData['data'];
 						@$url = $clientData['url'];
 						@$numpoint = $clientData['numpoint'];
 						@$content = (array)$clientData['content'];
@@ -1724,9 +1870,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						$delayTime = $socialData['delayTime'];
 						$type =  $socialData['type'];
 						$filename =  $socialData['filename'];
-						$actionName =  $socialData['actionName'];
-
-						
+						$actionName =  $socialData['actionName'];						
 
 						$visitLink = $url;
 
@@ -2424,7 +2568,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 								var url = 'client_add_visitor.php';
 								var fd = new FormData();
 								var postData = {
-									referralId: <?php echo $referralId;?>,
+									referralId: '<?php echo $referralId;?>',
 									limitCount: <?php echo $count;?>
 								}
 
@@ -2979,6 +3123,8 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 								</div>
 							</div>
 						</div>
+						<!-- GAME -->
+						<script src="<?php echo PATH_ROOT ?>/src/js/async-iframe.js"></script>
 						<script>
 							// Super Wheel Script
 							$(document).on('click', '.codegena_iframe<?php echo $socialKey;?>', function() {
@@ -3883,7 +4029,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 			
 			<p>
                 <div class="form-group">
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                  <select id="select-copy" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
                     <option>Apply for the job</option>
                     <option>Attend our event</option>
                     <option>Chat on our site</option>
@@ -3905,6 +4051,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                     <option>Check out our post</option>
                     <option>Check out our profile</option>
                     <option>Check out our shop</option>
+					<option>Check out our store</option>
                     <option>Check out our website</option>
                     <option>Check-in at our business</option>
                     <option>Comment on our post</option>
@@ -3946,6 +4093,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                     <option>See our post</option>
                     <option>See our profile</option>
                     <option>See our shop</option>
+					<option>See our store</option>
                     <option>See our website</option>
                     <option>Send your feedback</option>
                     <option>Sign Up to our newsletter</option>
@@ -3969,6 +4117,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                     <option>View our post</option>
                     <option>View our profile</option>
                     <option>View our shop</option>
+					<option>View our store</option>
                     <option>View our website</option>
                     <option>Visit our auction </option>
                     <option>Visit our blog</option>
@@ -3988,6 +4137,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                     <option>Visit our post</option>
                     <option>Visit our profile</option>
                     <option>Visit our shop</option>
+					<option>Visit our store</option>
                     <option selected="selected">Visit our website</option>
                   </select>
                 </div>
@@ -4023,7 +4173,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 			
 			<p>
                 <div class="form-group">
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                  <select id="select-share" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
                     <option>Share our account</option>
                     <option>Share our app</option>
                     <option>Share our auction</option>
@@ -4241,7 +4391,7 @@ fakecounter()
 
 
 <!-- jQuery UI 1.11.4 -->
-<script src="<?php echo PATH_ROOT ?>/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="<?php echo PATH_ROOT ?>/plugins/jquery-ui/jquery-ui.js"></script>
 
 <!-- Bootstrap 4 -->
 <script src="<?php echo PATH_ROOT ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -4266,9 +4416,6 @@ fakecounter()
 
 <!-- Text rotate -->
 <script  src="<?php echo PATH_ROOT ?>/src/js/rotate.js"></script>
-
-<!-- GAME -->
-<script src="<?php echo PATH_ROOT ?>/src/js/async-iframe.js"></script>
 
 <!-- jQuery Knob -->
 <script src="<?php echo PATH_ROOT ?>/plugins/jquery-knob/jquery.knob.min.js"></script>
@@ -4321,20 +4468,20 @@ $(function () {
 
 $(function(){
   // turn the element to select2 select style
-  $('.select2').select2({
+  $('#select-copy').select2({
     placeholder: "Select action"
   }).on('change', function(e) {
-    var data = $(".select2 option:selected").text();
+    var data = $("#select-copy option:selected").text();
     $("#copy-visit").val(data);
   });
 });
   
 $(function(){
   // turn the element to select2 select style
-  $('.select2').select2({
+  $('#select-share').select2({
     placeholder: "Select action"
   }).on('change', function(e) {
-    var data = $(".select2 option:selected").text();
+    var data = $("#select-share option:selected").text();
     $("#copy-share").val(data);
   });
   

@@ -1,0 +1,2 @@
+<?php 
+$configSocial = '{"type":"play-then-share","network":"youtube","id":"facebook","iconid":"fab fa-facebook","title":null,"actionName":"Playandshareaction","visitLink":null,"shareLink":"SHORTCODE","shareTitle":null,"delayTime":"20","filename":"newplay","game":[{"name":"Corona","iframe":"http:\/\/localhost\/promo\/games\/corona","url":"http:\/\/localhost\/promo\/games\/corona\/xxx","image":"http:\/\/localhost\/promo\/uploads\/1603952018_0","preview":"http:\/\/localhost\/promo\/uploads\/1603952018_0"}]}';

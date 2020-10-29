@@ -19,7 +19,9 @@ var app = new Vue({
       //   actions: ["Play then share", "Record and Share"],
       // },     
     ],
-    allNetworks:["Facebook", "Twitter", "Pinterest"]
+    allNetworks: ["Facebook", "Twitter", "Pinterest"],
+    search: "",
+    checkedLinks: []
   },
   computed: {
     isNextPossible: function () {
@@ -68,17 +70,16 @@ var app = new Vue({
         }
       }
       this.links = JSON.parse(JSON.stringify(newlinks));
-      saveDataToDatabase();      
+      saveDataToDatabase();
       this.showClear();
-      alert("Link Updated Successfully!")     
+      alert("Link Updated Successfully!")
     },
     deleteLink: function (linkid) {
-      if (confirm(`Do you want to remove [${linkid}] link?`)) {
+      if (confirm(`Do you want to delete [${linkid}] link?`)) {
         for (var x in this.links) {
           if (this.links[x].id == linkid) {
             this.links.splice(x, 1);
             saveDataToDatabase();
-            alert("Link Deleted Successfully!")
             return;
           }
         }
@@ -88,7 +89,7 @@ var app = new Vue({
       this.links.push(this.currentlink);
       saveDataToDatabase();
       this.showClear();
-      alert("Link Created Successfully!")   
+      alert("Link Created Successfully!")
     },
     showClear: function () {
       this.method = "create";
@@ -100,8 +101,47 @@ var app = new Vue({
         actions: [],
       };
       setFormFromCurrentLink();
+      this.checkedLinks = [];
       $("html, body").animate({ scrollTop: 0 }, "slow");
     },
+    btnDelSelected: function () {
+
+      if (confirm(`Do you want to delete selected links?`)) {
+        var newLinks = [];
+        for (var x in this.links) {
+          if (this.checkedLinks.indexOf(Number(x)) == -1) { //not in selected array           
+            newLinks.push(this.links[x]);
+          }
+        }
+        this.links = JSON.parse(JSON.stringify(newLinks))
+        saveDataToDatabase();
+        this.showClear();
+      }
+    },
+    searched: function (index) {
+      var link = this.links[index];
+      var r1 = link['id'].includes(this.search);
+      var r2;
+      for (var x in link['networks'])
+        if (link['networks'][x].includes(this.search)) {
+          r2 = true;
+          break;
+        }
+      var r3;
+      for (var x in link['actions'])
+        if (link['actions'][x].includes(this.search)) {
+          r3 = true;
+          break;
+        }
+      return r1 || r2 || r3;
+    },
+    checkall: function (e) {
+      if (e.target.checked) {
+        this.checkedLinks = Array.from(Array(this.links.length).keys())
+      } else {
+        this.checkedLinks = []
+      }
+    }
   },
 });
 
@@ -119,6 +159,8 @@ function loadDataFromDatabase() {
       app.links = JSON.parse(data);
     },
   });
+
+
 }
 
 //save links to json

@@ -30,6 +30,7 @@ if($brandMedia==null || $brandMedia['mode']==''){
 	$brandMedia=array("mode"=>"url", "url"=>PATH_ROOT."/images/banner.jpg");;
 } 
 @$pluginType = $info['type'];
+@$comment = $info['comment'];
 @$maxPoints = $totalpoints;
 
 $now = time(); // or your date as well
@@ -59,9 +60,6 @@ if(@$link->actions!=null){
 	}
 	$allPlugins=$newarr;
 }
-// var_dump(@$link->actions);
-// var_dump($allPlugins);
-// die();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -177,6 +175,8 @@ if(@$link->actions!=null){
 
 <style>
 
+/**************************************** BODY ****************************************/
+
 a {
 	color: #666;
 }
@@ -226,6 +226,77 @@ a {
 	overflow: visible;
 	font-size: 18px;
 }
+
+/**************************************** BANNER ****************************************/ 
+
+.top {
+  margin: 0;
+  opacity: 1;
+  text-align: center;
+}
+
+  .jumbotron-facebook {
+	background: #5b8dcd;
+	background: -moz-radial-gradient(center, ellipse cover,  #5b8dcd 0%, #3c5b9b 100%);
+	background: -webkit-radial-gradient(center, ellipse cover,  #5b8dcd 0%,#3c5b9b 100%);
+	background: radial-gradient(ellipse at center,  #5b8dcd 0%,#3c5b9b 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5b8dcd', endColorstr='#3c5b9b',GradientType=1 );
+    color:#fff;	
+  }
+  
+  .jumbotron-instagram {
+	background: #61b9d4;
+	background: -moz-radial-gradient(center, ellipse cover,  #61b9d4 0%, #3d739c 100%);
+	background: -webkit-radial-gradient(center, ellipse cover,  #61b9d4 0%,#3d739c 100%);
+	background: radial-gradient(ellipse at center,  #61b9d4 0%,#3d739c 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#61b9d4', endColorstr='#3d739c',GradientType=1 );
+    color:#fff;	
+  }  
+  
+  .jumbotron-linkedin {
+	background: #00a5d5;
+	background: -moz-radial-gradient(center, ellipse cover,  #00a5d5 0%, #006699 100%);
+	background: -webkit-radial-gradient(center, ellipse cover,  #00a5d5 0%,#006699 100%);
+	background: radial-gradient(ellipse at center,  #00a5d5 0%,#006699 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00a5d5', endColorstr='#006699',GradientType=1 );
+    color:#fff;	
+  } 
+
+  .jumbotron-pinterest {
+	background: #ea333d;
+	background: -moz-radial-gradient(center, ellipse cover,  #ea333d 0%, #cb2027 100%);
+	background: -webkit-radial-gradient(center, ellipse cover,  #ea333d 0%,#cb2027 100%);
+	background: radial-gradient(ellipse at center,  #ea333d 0%,#cb2027 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ea333d', endColorstr='#cb2027',GradientType=1 );
+    color:#fff;		
+  } 
+  
+  .jumbotron-twitter {
+	background: #52d6f7;
+	background: -moz-radial-gradient(center, ellipse cover,  #52d6f7 0%, #359bed 100%);
+	background: -webkit-radial-gradient(center, ellipse cover,  #52d6f7 0%,#359bed 100%);
+	background: radial-gradient(ellipse at center,  #52d6f7 0%,#359bed 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#52d6f7', endColorstr='#359bed',GradientType=1 );
+    color:#fff;	
+  } 
+
+  .jumbotron-whatsapp {
+	background: #00e024;
+	background: -moz-radial-gradient(center, ellipse cover,  #00e024 0%, #00a416 100%);
+	background: -webkit-radial-gradient(center, ellipse cover,  #00e024 0%,#00a416 100%);
+	background: radial-gradient(ellipse at center,  #00e024 0%,#00a416 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00e024', endColorstr='#00a416',GradientType=1 );
+    color:#fff;	
+  }   
+  
+  .jumbotron-wordpress {
+	background: #757370;
+	background: -moz-radial-gradient(center, ellipse cover,  #757370 0%, #454442 100%);
+	background: -webkit-radial-gradient(center, ellipse cover,  #757370 0%,#454442 100%);
+	background: radial-gradient(ellipse at center,  #757370 0%,#454442 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#757370', endColorstr='#454442',GradientType=1 );
+    color:#fff;		
+  }   
 
 /**************************************** MEDIA SCREENS ****************************************/
 
@@ -292,6 +363,19 @@ a {
 	padding-right: auto;
 }
 
+.select2-container .select2-selection--single {
+    height: 50px;
+    font-size: 30px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 50px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 35px;
+}
+
 #divB { display : none; }
 
 /**************************************** Millery ****************************************/
@@ -301,6 +385,14 @@ a {
 }
 
 .millery-theme-1 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node .millery-node-more {
+    color: #fff;
+}
+
+.millery-theme-1 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node.millery-node-active {
+    color: #fff;
+}
+
+.millery-theme-1 .millery-container .millery-bottom .millery-columns .millery-column .millery-column-content .millery-node.millery-node-active .millery-node-more {
     color: #fff;
 }
 
@@ -324,7 +416,6 @@ a {
 		height: calc(100vh - 100px);
 	}
 }
-
 
 /**************************************** SCRATCH CARD ****************************************/
 
@@ -403,7 +494,6 @@ a {
 }
 
 /**************************************** CLIENT FORM ****************************************/
-
 
 .entry:not(:first-of-type)
 {
@@ -635,10 +725,14 @@ label{
 <!-- Main content -->
 <section class="content">
 <div class="container-fluid">
-	<div id="linkbanner" class="text-center">
-		<?= @$link ->banner?>
-	</div>	
-	<div class="alert alert-default alert-dismissible">
+
+	<div id="linkbanner" class="text-center top">
+		<?php if($referralId!=null)
+		 echo @$link ->banner;
+		?>
+	</div>
+	
+	<div id="create" class="alert alert-default alert-dismissible">
 		<h6>Test out the promotion tool with all features! When your ready to create a live promotion, click the sign-up button for only £9.99!</h6>
 	</div>
 
@@ -732,7 +826,7 @@ label{
 						<div class="form-group">
                           <label>Comments</label>
 						  <h6 class="text-muted"><small>Check tools > Comments for embed code </small></h6>						  
-                          <textarea class="form-control" rows="3" placeholder="Enter embed code"></textarea>
+                          <textarea class="form-control" rows="3" placeholder="Enter embed code" name="comment"></textarea>
                         </div>
 
 						<h6 class="text-muted"><small>Options</small></h6>
@@ -1556,8 +1650,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 
 	<!--======================================== / LOGIN ========================================-->
 
-	<div id="comments" class="collapse">
-		No comments yet
+	<div id="comments" class="collapse text-center" style="padding:10px;">
+		<?php if($comment): ?>
+			<iframe id="iframe_comment" width="630" height="445" src="<?=$comment?>" frameborder="0" allowfullscreen></iframe>
+		<?php else: ?>
+			No comments yet
+		<?php endif;?>
 	</div>
 
 
@@ -1597,15 +1695,9 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				
 				<section id="action-list" style="min-height: 0px!important;">
 				<?php
-
-				//                        print_r($data);
-				//                            print_r($allSocials);die;				
+			
 				if ($allSocials && count($allSocials) > 0) {
 					foreach($allSocials as $socialKey => $clientData):
-//                                    print_r($clientData);die;
-//                                $socialData = $this->data;
-
-//                                @$pluginData = $clientData['data'];
 						@$url = $clientData['url'];
 						@$numpoint = $clientData['numpoint'];
 						@$content = (array)$clientData['content'];
@@ -1630,9 +1722,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 						$delayTime = $socialData['delayTime'];
 						$type =  $socialData['type'];
 						$filename =  $socialData['filename'];
-						$actionName =  $socialData['actionName'];
-
-						
+						$actionName =  $socialData['actionName'];						
 
 						$visitLink = $url;
 
@@ -1776,7 +1866,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 									<!-------------------- REVEAL -------------------->
 									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
 									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
-										<i class="fa fa-reply"></i>&nbsp;Continue
+										Continue&nbsp;<i class="fas fa-arrow-right"></i>
 									</a>
 									<div id="share-and-submit-<?php echo "$socialKey-$network"?>" style="display:none">
 										<a id="action5"
@@ -1887,7 +1977,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 									<!-------------------- REVEAL -------------------->
 									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
 									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
-										<i class="fa fa-reply"></i>&nbsp;Continue
+										Continue&nbsp;<i class="fas fa-arrow-right"></i>
 									</a>
 									<a id="action-<?php echo "$socialKey-$network";?>" href="javascript:void(0);"
 									   style="display:none;color: #fff; -webkit-transition: width , height;transition: width , height;-webkit-transition-delay: <?php echo $delayTime?>s;transition-delay: <?php echo $delayTime?>s;"
@@ -2005,7 +2095,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 									<!-------------------- REVEAL -------------------->
 									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
 									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
-										<i class="fa fa-reply"></i>&nbsp;Continue
+										Continue&nbsp;<i class="fas fa-arrow-right"></i>
 									</a>
 									<a id="sharebtn_<?=$filename?>" href="javascript:void(0);" style="display:none;color: #fff; " class="btn btn-block btn-social btn-facebook sharefb<?php echo $socialKey?>">
 										<i class="fab fa-facebook fa-2x"></i> <?php echo $shareAction;?></a>
@@ -2330,7 +2420,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 								var url = 'client_add_visitor.php';
 								var fd = new FormData();
 								var postData = {
-									referralId: <?php echo $referralId;?>,
+									referralId: '<?php echo $referralId;?>',
 									limitCount: <?php echo $count;?>
 								}
 
@@ -2885,6 +2975,8 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 								</div>
 							</div>
 						</div>
+						<!-- GAME -->
+						<script src="<?php echo PATH_ROOT ?>/src/js/async-iframe.js"></script>
 						<script>
 							// Super Wheel Script
 							$(document).on('click', '.codegena_iframe<?php echo $socialKey;?>', function() {
@@ -3544,14 +3636,14 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 			placeholder="enter number of point">
 	</div>
 	<div class="form-group">
-		<label for="visitAction">Visit action</label>
+		<label for="visitAction">Visit action - <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-visit"><u>VIEW IDEAS</u></a></label>
 		<input type="text"
 			class="form-control" name="visitAction" id="visitAction"
 			aria-describedby="helpIdVisitAction"
 			placeholder="enter action name">
 	</div>
 	<div class="form-group">
-		<label for="shareAction">Share action</label>
+		<label for="shareAction">Share action - <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-share"><u>VIEW IDEAS</u></a></label>
 		<input type="text"
 			class="form-control" name="shareAction" id="shareAction"
 			aria-describedby="helpIdShareAction"
@@ -3774,6 +3866,215 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 </div>
 <!-- ./wrapper -->
 
+     <!--------------------------------------------------- VISIT IDEAS --------------------------------------------------->
+
+      <div class="modal fade" id="modal-visit">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content bg-danger">
+            <div class="modal-header">
+              <h4 class="modal-title">VISIT ACTION IDEAS</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+			
+			<p>
+                <div class="form-group">
+                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                    <option>Apply for the job</option>
+                    <option>Attend our event</option>
+                    <option>Chat on our site</option>
+                    <option>Check out our auction 
+                    <option>Check out our blog</option>
+                    <option>Check out our deal</option>
+                    <option>Check out our fundraiser</option>
+                    <option>Check out our gallery</option>
+                    <option>Check out our games</option>
+                    <option>Check out our gaming video</option>
+                    <option>Check out our group</option>
+                    <option>Check out our job vancancy</option>
+                    <option>Check out our jobs</option>
+                    <option>Check out our live video</option>
+                    <option>Check out our marketplace</option>
+                    <option>Check out our offer</option>
+                    <option>Check out our page</option>
+                    <option>Check out our portfolio</option>
+                    <option>Check out our post</option>
+                    <option>Check out our profile</option>
+                    <option>Check out our shop</option>
+                    <option>Check out our website</option>
+                    <option>Check-in at our business</option>
+                    <option>Comment on our post</option>
+                    <option>Download our app</option>
+                    <option>Download our software</option>
+                    <option>Enter our auction</option>
+                    <option>Enter our contest</option>
+                    <option>Follow our account</option>
+                    <option>Follow our page</option>
+                    <option>Follow our profile</option>
+                    <option>Join our event</option>
+                    <option>Join our group</option>
+                    <option>Like our page</option>
+                    <option>Listen to audio</option>
+                    <option>Listen to our music</option>
+                    <option>Listen to our podcast</option>
+                    <option>Play our game</option>
+                    <option>Post a comment</option>
+                    <option>Post on our page</option>
+                    <option>Refer your friends</option>
+                    <option>Repin our post</option>
+                    <option>Repost our content</option>
+                    <option>Retweet our post</option>
+                    <option>See our auction </option>
+                    <option>See our blog</option>
+                    <option>See our deal</option>
+                    <option>See our fundraiser</option>
+                    <option>See our gallery</option>
+                    <option>See our games</option>
+                    <option>See our gaming video</option>
+                    <option>See our group</option>
+                    <option>See our job vancancy</option>
+                    <option>See our jobs</option>
+                    <option>See our live video</option>
+                    <option>See our marketplace</option>
+                    <option>See our offer</option>
+                    <option>See our page</option>
+                    <option>See our portfolio</option>
+                    <option>See our post</option>
+                    <option>See our profile</option>
+                    <option>See our shop</option>
+                    <option>See our website</option>
+                    <option>Send your feedback</option>
+                    <option>Sign Up to our newsletter</option>
+                    <option>Subscribe to our newsletter</option>
+                    <option>Tell your friends</option>
+                    <option>View our auction </option>
+                    <option>View our blog</option>
+                    <option>View our deal</option>
+                    <option>View our fundraiser</option>
+                    <option>View our gallery</option>
+                    <option>View our games</option>
+                    <option>View our gaming video</option>
+                    <option>View our group</option>
+                    <option>View our job vancancy</option>
+                    <option>View our jobs</option>
+                    <option>View our live video</option>
+                    <option>View our marketplace</option>
+                    <option>View our offer</option>
+                    <option>View our page</option>
+                    <option>View our portfolio</option>
+                    <option>View our post</option>
+                    <option>View our profile</option>
+                    <option>View our shop</option>
+                    <option>View our website</option>
+                    <option>Visit our auction </option>
+                    <option>Visit our blog</option>
+                    <option>Visit our deal</option>
+                    <option>Visit our fundraiser</option>
+                    <option>Visit our gallery</option>
+                    <option>Visit our games</option>
+                    <option>Visit our gaming video</option>
+                    <option>Visit our group</option>
+                    <option>Visit our job vancancy</option>
+                    <option>Visit our jobs</option>
+                    <option>Visit our live video</option>
+                    <option>Visit our marketplace</option>
+                    <option>Visit our offer</option>
+                    <option>Visit our page</option>
+                    <option>Visit our portfolio</option>
+                    <option>Visit our post</option>
+                    <option>Visit our profile</option>
+                    <option>Visit our shop</option>
+                    <option selected="selected">Visit our website</option>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+			</p>
+
+<p>Copy text below to paste for visit action</p>
+<input style="font-size: 30px; padding: 2px 20px;" type="text" id="copy-visit">
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light text-dark" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+	  
+     <!--------------------------------------------------- SHARE IDEAS --------------------------------------------------->
+
+      <div class="modal fade" id="modal-share">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content bg-danger">
+            <div class="modal-header">
+              <h4 class="modal-title">SHARE ACTION IDEAS</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+			
+			<p>
+                <div class="form-group">
+                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
+                    <option>Share our account</option>
+                    <option>Share our app</option>
+                    <option>Share our auction</option>
+                    <option>Share our auction </option>
+                    <option>Share our blog</option>
+                    <option>Share our business</option>
+                    <option>Share our content</option>
+                    <option>Share our contest</option>
+                    <option>Share our deal</option>
+                    <option>Share our event</option>
+                    <option>Share our fundraiser</option>
+                    <option>Share our gallery</option>
+                    <option>Share our game</option>
+                    <option>Share our games</option>
+                    <option>Share our gaming video</option>
+                    <option>Share our group</option>
+                    <option>Share our job</option>
+                    <option>Share our job vancancy</option>
+                    <option>Share our jobs</option>
+                    <option>Share our live video</option>
+                    <option>Share our marketplace</option>
+                    <option>Share our music</option>
+                    <option>Share our offer</option>
+                    <option>Share our page</option>
+                    <option>Share our podcast</option>
+                    <option>Share our portfolio</option>
+                    <option>Share our post</option>
+                    <option>Share our profile</option>
+                    <option>Share our shop</option>
+                    <option>Share our site</option>
+                    <option>Share our software</option>
+                    <option selected="selected">Share our website</option>
+                    <option>Share with friends</option>
+                    <option>Share your feedback</option>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+			</p>
+
+<p>Copy text below to paste for share action</p>
+<input style="font-size: 30px; padding: 2px 20px;" type="text" id="copy-share">
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light text-dark" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
      <!--------------------------------------------------- GAMES --------------------------------------------------->
 
 <?php
@@ -3938,7 +4239,7 @@ fakecounter()
 
 
 <!-- jQuery UI 1.11.4 -->
-<script src="<?php echo PATH_ROOT ?>/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="<?php echo PATH_ROOT ?>/plugins/jquery-ui/jquery-ui.js"></script>
 
 <!-- Bootstrap 4 -->
 <script src="<?php echo PATH_ROOT ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -3964,9 +4265,6 @@ fakecounter()
 <!-- Text rotate -->
 <script  src="<?php echo PATH_ROOT ?>/src/js/rotate.js"></script>
 
-<!-- GAME -->
-<script src="<?php echo PATH_ROOT ?>/src/js/async-iframe.js"></script>
-
 <!-- jQuery Knob -->
 <script src="<?php echo PATH_ROOT ?>/plugins/jquery-knob/jquery.knob.min.js"></script>
 
@@ -3974,6 +4272,12 @@ fakecounter()
 <script src="<?php echo PATH_ROOT ?>/plugins/summernote/summernote-bs4.min.js"></script>
 
 <script>
+
+// BANNER
+
+$(window).scroll(function(){
+    $(".top").css("opacity", 1 - $(window).scrollTop() / 250);
+  });
 
 // TEXT EDITOR
 
@@ -4009,6 +4313,28 @@ $(function () {
 	theme: 'bootstrap4'
 	})
 });
+
+$(function(){
+  // turn the element to select2 select style
+  $('.select2').select2({
+    placeholder: "Select action"
+  }).on('change', function(e) {
+    var data = $(".select2 option:selected").text();
+    $("#copy-visit").val(data);
+  });
+});
+  
+$(function(){
+  // turn the element to select2 select style
+  $('.select2').select2({
+    placeholder: "Select action"
+  }).on('change', function(e) {
+    var data = $(".select2 option:selected").text();
+    $("#copy-share").val(data);
+  });
+  
+});
+
 </script>
 
 <script type="text/javascript">
