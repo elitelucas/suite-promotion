@@ -1277,7 +1277,8 @@ label{
         											$("#tooliframemodal").modal("show");
 													return false;
 												}else if(tools[x]['method']=='Popup'){
-													window.open(tools[x]['link'], "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=500,height=500");
+													// window.open(tools[x]['link'], "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=500,height=500");
+													popupApps(tools[x]['link']);
 													return false;
 												}else if(tools[x]['method']=='HTML'){													
 													instance.setPanelData(tools[x]['description']);
@@ -1286,8 +1287,20 @@ label{
 											}
 										}									
 										return true;
-									}
+									}									
 								});
+								function popupApps(links) {
+									var popup = window.open(links, "popup", "fullscreen");
+									if (popup.outerWidth < screen.availWidth || popup.outerHeight < screen.availHeight) {
+										popup.moveTo(0, 0);
+										popup.resizeTo(screen.availWidth, screen.availHeight);
+									}
+									if (navigator.userAgent.match(/Edge\/\d+/g)) {
+										return window.open(links, "popup", "width=" + screen.width + ",height=" + screen.height);
+									}
+								}
+
+
 							</script>
 							<div class="modal" id="tooliframemodal">
 								<div class="modal-dialog modal-lg">
