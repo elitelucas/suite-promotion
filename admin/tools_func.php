@@ -24,7 +24,7 @@ if ($type == 'get') {
 }
 
 if ($type == 'set') {
-     //make folder
+    //make folder
     if (!file_exists($dirPath)) {
         mkdir($dirPath);
     }
@@ -42,21 +42,31 @@ if ($type == 'set') {
     echo 'tools file saved';
 }
 
-function getLink($id)
+function getTools()
 {
-    $dirPath = DIR_ROOT .  '/plugins/widget_settings/tools.json';
-    if (file_exists($dirPath)) {
-        $toolsjson = file_get_contents($dirPath);
-        $tools = json_decode($toolsjson);
-        foreach ($tools as $link) {
-            if ($link->id == $id) return $link;
+    $dirPath = DIR_ROOT .  '/tools';
+    $result = [];
+    try {
+        $subs = scandir($dirPath);
+        foreach ($subs as $value) {
+            $filePath = $dirPath . '/' . $value;
+            if (is_file($filePath)) {
+                $content = file_get_contents($filePath);
+                array_push($result, json_decode($content));
+            }
         }
+    } catch (Exception $ex) {
+        // log error here
     }
-    return (object) [
-        'id' => '',
-        'banner' => '',
-        'imageURL' => '',
-        'networks' => [],
-        'actions' => []
-    ];
+    return $result;
+}
+
+function getCategories()
+{
+    $tools = getTools();
+    $categories = [];
+    foreach ($tools as $obj)
+        array_push($categories, $obj->category);
+    $categories = array_unique($categories);
+    return $categories;
 }

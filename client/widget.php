@@ -1,6 +1,7 @@
 <?php
 require_once '../initial.php';
 require_once '../admin/links_func.php';
+require_once '../admin/tools_func.php';
 require_once '../db/Plugin.php';
 require_once '../db/Social.php';
 require_once '../networkicons.php'; //networkicons
@@ -60,6 +61,10 @@ if(@$link->actions!=null){
 	}
 	$allPlugins=$newarr;
 }
+
+//Tool
+$tools = getTools();
+$toolCategories = getCategories();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1040,7 +1045,7 @@ label{
 										
 <!---================================================== NEW FORM ==================================================--->		
 
-						<ul id="millery-example" data-title='Networks'>
+						<ul id="millery-actions-data" data-title='Networks'>
 						
 						<!---------- NETWORK ---------->
 							<?php
@@ -1075,10 +1080,10 @@ label{
 						<!---------- ./NETWORK  ---------->						
 							
 						</ul>
-						<div id="millery-1" class="millery millery-theme-1"></div>
+						<div id="millery-actions" class="millery millery-theme-1"></div>
 						<script type="text/javascript">
-							$(".millery").millery({
-								source: $("#millery-example"),
+							$("#millery-actions").millery({
+								source: $("#millery-actions-data"),
 								debug: true,
 								panelType: "overlay",
 								visibleColumns: 1,
@@ -1176,13 +1181,13 @@ label{
 							var needPluginIcon=true;
 							setInterval(() => {								
 								if(needPluginIcon){
-									if($(".millery-column[data-index='1'] .millery-column-content .millery-node").length){
+									if($("#millery-actions .millery-column[data-index='1'] .millery-column-content .millery-node").length){
 										needPluginIcon=false;
 										console.log('here code')
-										var network=$(".millery-column[data-index='1'] .millery-column-header").text();
-										$(".millery-column[data-index='1'] .millery-column-content .millery-node").each(function(index){
+										var network=$("#millery-actions .millery-column[data-index='1'] .millery-column-header").text();
+										$("#millery-actions .millery-column[data-index='1'] .millery-column-content .millery-node").each(function(index){
 																					
-											var originLi=$(`#millery-example li[network='${network}'] ul li:nth-child(${index+1})`);										
+											var originLi=$(`#millery-actions #millery-actions-data li[network='${network}'] ul li:nth-child(${index+1})`);										
 											var originhtml=originLi.find(".content").attr("actionname");
 											var colorid=originLi.find(".content").attr("colorid");
 											var iconid=originLi.find(".content").attr("iconid");
@@ -1235,105 +1240,62 @@ label{
 
 						<!-------------------- FORM -------------------->
 
-    <ul id="millery-2">
-	
-	<!-- TOOL -->
-	
-        <li>Forms
-            <ul>
-                <li>Form Builder</li>
-				<li>Form Generator</li>
-            </ul>
-        </li>
-		
-	<!-- TOOL -->
-	
-        <li>Music Player
-            <ul>
-                <li>Plugin 1</li>
-                <li>Plugin 2</li>
-            </ul>
-        </li>
-		
-	<!-- TOOL -->
-	
-        <li>Social Stream
-            <ul>
-                <li>Plugin 1</li>
-                <li>Plugin 2</li>
-            </ul>
-        </li>
-		
-	<!-- TOOL -->
-	
-        <li>Daily Deal
-            <ul>
-                <li>Plugin 1</li>
-                <li>Plugin 2</li>
-            </ul>
-        </li>
-		
-	<!-- TOOL -->
-	
-        <li>Birthday Deal
-            <ul>
-                <li>Plugin 1</li>
-                <li>Plugin 2</li>
-            </ul>
-        </li>
-		
-	<!-- NETWORK -->
-	
-        <li>Weather Deal
-            <ul>
-                <li>Plugin 1</li>
-                <li>Plugin 2</li>
-            </ul>
-        </li>
-		
-	<!-- TOOL -->
-	
-        <li>Video Quiz
-            <ul>
-                <li>Plugin 1</li>
-                <li>Plugin 2</li>
-            </ul>
-        </li>
-		
-	<!-- TOOL -->
-	
-        <li>Games
-            <ul>
-                <li>Plugin 1</li>
-                <li>Plugin 2</li>
-            </ul>
-        </li>
-		
-	<!-- TOOL -->
-	
-        <li>Postcards
-            <ul>
-                <li>Plugin 1</li>
-                <li>Plugin 2</li>
-            </ul>
-        </li>
-		
-    </ul>
-    <div id="millery-2" class="millery millery-theme-2"></div>
-    <script type="text/javascript">
-        $(".millery").millery({
-            source: $("#millery-2"),			
-			debug: true,
-			panelType: "overlay",
-			visibleColumns: 1,
-			keepState: false,
-			searchable: true,
-            onnodeclick: function (instance, node, data) {
-                instance.setPanelData(JSON.stringify(data));
-                return true;
-            }
-        });
-    </script>
+							<ul id="millery-tools-data">
+								<?php foreach($toolCategories as $toolcategory):	?>						
+								<li><?=$toolcategory?>
+									<ul>
+										<?php foreach($tools as $tool):	
+											if ($tool->category==$toolcategory) {
+										?>	
+										<li><?=$tool->toolname?></li>	
+										<?php
+											}
+										 endforeach;?>										
+									</ul>
+								</li>
+								<?php endforeach;?>														
+							</ul>
+							<div id="millery-tools" class="millery millery-theme-2"></div>
+							<script type="text/javascript">
+								var tools=<?=json_encode($tools)?>;
+								$("#millery-tools").millery({
+									source: $("#millery-tools-data"),											
+									panelType: "overlay",
+									// panelType: "modal",
+									visibleColumns: 1,
+									onnodeclick: function (instance, node, data) {									
+										// instance.setPanelData(JSON.stringify(data));
+										var contentNode = $(node.data("original")); //find div in selected Li
+										var toolname=node.text();
+										for(var x in tools){
+											if(tools[x]['toolname']==toolname){
+												if(tools[x]['method']=='New Tab'){
+													window.open(tools[x]['link'], "_blank"); 
+													return false;
+												}else if(tools[x]['method']=='Iframe'){
+													$("#tooliframemodal .modal-body iframe").attr("src",tools[x]['link']);
+        											$("#tooliframemodal").modal("show");
+													return false;
+												}else if(tools[x]['method']=='HTML'){													
+													instance.setPanelData(tools[x]['description']);
+													return true;													
+												}
+											}
+										}									
+										return true;
+									}
+								});
+							</script>
+							<div class="modal" id="tooliframemodal">
+								<div class="modal-dialog modal-lg">
+									<div class="modal-content">
+									<!-- Modal body -->
+									<div class="modal-body">
+										<iframe width="100%" height="445" src="" frameborder="0" allowfullscreen></iframe>
+									</div>
+									</div>
+								</div>
+							</div>
 
 
 						<!-------------------- / FORM -------------------->
