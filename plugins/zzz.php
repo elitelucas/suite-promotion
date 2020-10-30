@@ -1,2 +1,0 @@
-<?php 
-$configSocial = '{"type":"select-and-share","network":"twitter","id":"twitter","iconid":"fab fa-facebook","title":null,"actionName":"Twitter->Facebook","visitLink":null,"shareLink":"SHORTCODE","shareTitle":null,"delayTime":"20","filename":"zzz","game":[]}';

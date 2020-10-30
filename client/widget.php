@@ -1276,6 +1276,9 @@ label{
 													$("#tooliframemodal .modal-body iframe").attr("src",tools[x]['link']);
         											$("#tooliframemodal").modal("show");
 													return false;
+												}else if(tools[x]['method']=='Popup'){
+													window.open(tools[x]['link'], "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=500,width=500,height=500");
+													return false;
 												}else if(tools[x]['method']=='HTML'){													
 													instance.setPanelData(tools[x]['description']);
 													return true;													
@@ -1974,6 +1977,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							<div id="collapse<?php echo $socialKey?>" class="panel-collapse collapse">
 								<div class="card-body">
 									<!-------------------- REVEAL -------------------->
+									<?php if($embedcode!=''): ?>
 									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
 									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
 										Continue&nbsp;<i class="fas fa-arrow-right"></i>
@@ -1988,6 +1992,18 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 											<?php echo $shareAction; ?>
 										</a>
 									</div>
+									<?php else: ?>								
+									<div id="share-and-submit-<?php echo "$socialKey-$network"?>">
+										<a id="action5"
+										   href="javascript:void(0);"
+										   style="color: #fff; -webkit-transition-delay: 3s;transition-delay: 3s;"
+										   class="btn btn-block btn-social btn-<?php echo $id?> sharefb<?php echo "$socialKey-$network";?>"
+										   data-toggle="collapse" aria-expanded="false" aria-controls="FBLike">
+											<i class="fab fa-<?php echo $id?> fa-2x"></i>
+											<?php echo $shareAction; ?>
+										</a>
+									</div>
+									<?php endif;?>
 									<div id="action-submit-<?php echo "$socialKey-$network"?>" class="form-group text-center" style="display: none">
 										<label>We'd love to know about what type of campaign you'd like to run on Facebook, just let us know & we can see if we can help out.</label>
 										<textarea class="form-control" rows="3" placeholder="Enter comment"></textarea>
@@ -2085,6 +2101,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 							<div id="collapse<?php echo $socialKey?>" class="panel-collapse collapse in">
 								<div class="card-body">
 									<!-------------------- REVEAL -------------------->
+									<?php if($embedcode!=''): ?>
 									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
 									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
 										Continue&nbsp;<i class="fas fa-arrow-right"></i>
@@ -2093,7 +2110,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 									   style="display:none;color: #fff; -webkit-transition: width , height;transition: width , height;-webkit-transition-delay: <?php echo $delayTime?>s;transition-delay: <?php echo $delayTime?>s;"
 									   class="btn btn-block btn-social btn-<?php echo $id?>" data-toggle="collapse" aria-expanded="false" aria-controls="FBLike<?php echo $socialKey?>">
 										<i class="fab fa-<?php echo $id?> fa-2x"></i> <?php echo $shareAction?></a>
-
+									<?php else: ?>
+									<a id="action-<?php echo "$socialKey-$network";?>" href="javascript:void(0);"
+									   style="color: #fff; -webkit-transition: width , height;transition: width , height;-webkit-transition-delay: <?php echo $delayTime?>s;transition-delay: <?php echo $delayTime?>s;"
+									   class="btn btn-block btn-social btn-<?php echo $id?>" data-toggle="collapse" aria-expanded="false" aria-controls="FBLike<?php echo $socialKey?>">
+										<i class="fab fa-<?php echo $id?> fa-2x"></i> <?php echo $shareAction?></a>
+									<?php endif;?>
 									<div style="display: none" class="collapse text-center" id="action-content-<?php echo "$socialKey-$network";?>">
 
 										<p id="message-description-<?php echo $socialKey?>"><i class="fas fa-check"></i> Thanks for visiting, share to add points!</p>
@@ -2203,13 +2225,17 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 								<div class="card-body">
 
 									<!-------------------- REVEAL -------------------->
+									<?php if($embedcode!=''): ?>
 									<iframe id="iframe_<?=$filename?>" width="630" height="445" src="<?=$embedcode?>" frameborder="0" allowfullscreen></iframe>
 									<a class="btn btn-block btn-primary continueembed" href="javascript:void(0);" filename="<?=$filename?>">
 										Continue&nbsp;<i class="fas fa-arrow-right"></i>
 									</a>
 									<a id="sharebtn_<?=$filename?>" href="javascript:void(0);" style="display:none;color: #fff; " class="btn btn-block btn-social btn-facebook sharefb<?php echo $socialKey?>">
 										<i class="fab fa-facebook fa-2x"></i> <?php echo $shareAction;?></a>
-
+									<?php else: ?>
+									<a id="sharebtn_<?=$filename?>" href="javascript:void(0);" style="color: #fff; " class="btn btn-block btn-social btn-facebook sharefb<?php echo $socialKey?>">
+										<i class="fab fa-facebook fa-2x"></i> <?php echo $shareAction;?></a>	
+									<?php endif;?>
 									<div id="FBLike<?php echo $socialKey?>" style="display:none;-webkit-transition: width , height;transition: width , height;-webkit-transition-delay: <?php echo $delayTime?>s;transition-delay: <?php echo $delayTime?>s;" class="collapse text-center" >
 
 										<p id="message-description-<?php echo $socialKey?>"><i class="fas fa-check"></i> Thanks for sharing, visit our page to add points!</p>

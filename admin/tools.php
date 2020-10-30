@@ -67,6 +67,7 @@
                   <select class="form-control" style="width: 100%;" v-model="currentTool.method">
                     <option value="New Tab">New Tab</option>
                     <option value="Iframe">Iframe</option>
+                    <option value="Popup">Popup</option>
                     <option value="HTML">HTML</option>
                   </select>
                 </div>
@@ -82,7 +83,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="FileName">File Name</label>
+                  <label for="FileName">File Name(.php)</label>
                   <input type="text" class="form-control" id="InputFileName" placeholder="Enter File Name" v-model="currentTool.filename">
                 </div>
 
@@ -147,7 +148,7 @@
                     <td>{{tool.category}}</td>
                     <td>{{tool.method}}</td>
                     <td><a target="_blank" :href="tool.link">{{tool.link}}</a>
-                    <td>{{tool.filename}}</td>
+                    <td>{{tool.filename}}.php</td>
                     </td>
                     <td>
                       <button class="btn btn-info btn-sm" @click="btnEditonRow(index)"><i class="fas fa-pencil-alt"></i>

@@ -17,7 +17,7 @@ var app = new Vue({
   },
   computed: {
     showLink: function () {
-      if (this.currentTool.method == "New Tab" || this.currentTool.method == "Iframe") return true;
+      if (this.currentTool.method == "New Tab" || this.currentTool.method == "Iframe" || this.currentTool.method == "Popup") return true;
       else return false;
     },
     showDescription: function () {

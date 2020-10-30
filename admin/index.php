@@ -40,6 +40,9 @@ if ($formtype == 'edit') {
     <link rel="stylesheet" href="<?php echo ASSET_ROOT ?>/css/style.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+
 </head>
 
 <body class="hold-transition layout-top-nav">
@@ -245,7 +248,7 @@ if ($formtype == 'edit') {
                                                                             <div class="form-group">
                                                                                 <label for="preview_src_<?= $idx ?>">Preview Image(You have to reset image)</label>
                                                                                 <input type="file" id="preview_src_<?= $idx ?>" name="preview_src_<?= $idx ?>" class="input-file" accept=".jpg,.jpeg,.png,.gif,.bmp" value="<?= $obj->image ?>">
-                                                                            </div>                                                                           
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -360,11 +363,14 @@ if ($formtype == 'edit') {
                                     }
 
                                     ?>
+                                    <br>
                                     <a href="<?php echo PATH_ROOT ?>/admin" class="btn btn-primary">Add</a>
-
-                                    <table id="example1" class="table table-bordered table-striped">
+                                    <button class="btn btn-danger" onclick="mutipleDelete()">Delete Selected</button>
+                                    <hr>
+                                    <table id="mydatatable" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
+                                                <th>Select</th>
                                                 <th>Filename</th>
                                                 <th>Type</th>
                                                 <th>network</th>
@@ -374,7 +380,7 @@ if ($formtype == 'edit') {
                                                 <th>visitLink</th>
                                                 <th>shareLink</th>
                                                 <th>delayTime</th>
-                                                <th></th>
+                                                <th style="width:15%">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -383,6 +389,7 @@ if ($formtype == 'edit') {
                                                 foreach ($allData as $key => $data) {
                                             ?>
                                                     <tr>
+                                                        <td><input type="checkbox" class="delcheck" filename="<?= $data['filename'] ?>" /></td>
                                                         <td><?php echo htmlspecialchars($data['filename']); ?>.php</td>
                                                         <td><?php echo htmlspecialchars($data['type']); ?></td>
                                                         <td><?php echo htmlspecialchars($data['network']); ?></td>
@@ -394,7 +401,7 @@ if ($formtype == 'edit') {
                                                         <td><?php echo htmlspecialchars($data['delayTime']); ?></td>
                                                         <td>
                                                             <a href="?file=<?php echo $data['filename']; ?>" class="btn btn-success">Edit</a>
-                                                            <button class="btn btn-danger" onclick="deletePlugin(this)" ; delurl="admin_delete_func.php?file=<?php echo $data['filename']; ?>&t=<?php echo time() ?>" filename="<?php echo htmlentities($data['filename']); ?>.php">
+                                                            <button class="btn btn-danger" onclick="deletePlugin(this)" ; delurl="admin_delete_func.php?file=<?php echo $data['filename']; ?>&t=<?php echo time() ?>" filename="<?php echo htmlentities($data['filename']); ?>">
                                                                 Delete
                                                             </button>
                                                         </td>
@@ -408,6 +415,7 @@ if ($formtype == 'edit') {
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <!-- ./plugin list -->
                 </div>
@@ -433,8 +441,15 @@ if ($formtype == 'edit') {
     <script src="<?php echo ASSET_ROOT ?>/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="<?php echo ASSET_ROOT ?>/js/demo.js"></script>
+    <!-- Datatable -->
+    <!-- <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script> -->
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
+        $(document).ready(function() {
+            $('#mydatatable').DataTable();
+        });
+
         //Reload content
         function reloadContent(type, filename) {
             if (type == 'create') var hash = '';
@@ -458,6 +473,7 @@ if ($formtype == 'edit') {
             }).done(function(data) {
                 var newList = $(data).find("#list-container");
                 $("#list-container").html(newList.html());
+                $('#mydatatable').DataTable();
             });
         }
 
@@ -588,22 +604,46 @@ if ($formtype == 'edit') {
         }
         //delete plugin button - plugin list
         function deletePlugin(button) {
-            var name = $(button).attr('filename');
+            var filename = $(button).attr('filename');
             var delurl = $(button).attr('delurl');
-            if (confirm('Do you want to delete ' + name + '?')) {
+            if (confirm('Do you want to delete ' + filename + '?')) {
                 $.ajax({
                     type: "POST",
-                    dataType: "json",
-                    url: delurl,
+                    url: 'admin_delete_func.php',
+                    data: {
+                        type: "one",
+                        filename: filename,
+                    },
                     success: function(data) {
+                        console.log(data);
                         loadAllPlugins();
-                        var success = data.success;
-                        var message = data.message;
-                        alert(message); // show response from the php script.
                     }
                 });
             }
         };
+
+        //Delete selected
+        function mutipleDelete() {
+            var delfiles = [];
+            $("input.delcheck:checked").each(function() {
+                var filename = $(this).attr('filename');
+                delfiles.push(filename);
+            });
+            if (confirm('Do you want to delete selected ' + delfiles.length + 'files?')) {
+                $.ajax({
+                    type: "POST",
+                    url: 'admin_delete_func.php',
+                    data: {
+                        type: "multiple",
+                        filename: delfiles,
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        loadAllPlugins();
+                    }
+                });
+            }
+        }
     </script>
 
 </body>
