@@ -1187,7 +1187,7 @@ label{
 										var network=$("#millery-actions .millery-column[data-index='1'] .millery-column-header").text();
 										$("#millery-actions .millery-column[data-index='1'] .millery-column-content .millery-node").each(function(index){
 																					
-											var originLi=$(`#millery-actions #millery-actions-data li[network='${network}'] ul li:nth-child(${index+1})`);										
+											var originLi=$(`#millery-actions-data li[network='${network}'] ul li:nth-child(${index+1})`);										
 											var originhtml=originLi.find(".content").attr("actionname");
 											var colorid=originLi.find(".content").attr("colorid");
 											var iconid=originLi.find(".content").attr("iconid");
