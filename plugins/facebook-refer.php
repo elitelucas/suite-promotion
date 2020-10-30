@@ -1,0 +1,2 @@
+<?php 
+$configSocial = '{"type":"share-and-refer","network":"facebook","id":"facebook","iconid":"fab fa-facebook","title":null,"actionName":"Facebook refer and share ","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=<URL>&quote=<TITLE>","shareTitle":null,"delayTime":"15","filename":"facebook-refer","game":[]}';

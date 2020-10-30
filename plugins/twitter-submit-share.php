@@ -1,0 +1,2 @@
+<?php 
+$configSocial = '{"type":"submit-then-share","network":"twitter","id":"twitter","iconid":"fab fa-twitter","title":null,"actionName":"Twitter submit then share","visitLink":null,"shareLink":"https:\/\/twitter.com\/intent\/tweet?text=<TITLE>&url=<URL>","shareTitle":null,"delayTime":"15","filename":"twitter-submit-share","game":[]}';

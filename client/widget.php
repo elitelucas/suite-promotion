@@ -3807,17 +3807,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 <div class="col-md-12">
 
               <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#create" data-toggle="tab">Promotions</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#users" data-toggle="tab">Users</a></li>
-                </ul>
+
               </div><!-- /.card-header -->
-                <div class="tab-content">
-                  <div class="active tab-pane" id="create">
 
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Campaigns</h3>
+                <h3 class="text-center">Campaigns</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -3827,6 +3822,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<th>Pic</th>
 					<th>Name</th>
 					<th>Settings</th>
+					<th>Actions</th>
 					<th>Days</th>
 					<th>Users</th>
 					<th>Status</th>
@@ -3844,9 +3840,16 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				   <b>Expiry:</b> 14/05/21<br>
 				   <b>Actions:</b> 10
 				   </td>
+				   <td>
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-invite"><u>Facebook invite and share</u></a><br>				   
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-record"><u>Facebook record and share</u></a><br>
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-refer"><u>Facebook refer and share</u></a><br>
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-select"><u>Facebook select and share</u></a><br>
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-submit"><u>Facebook submit then share</u></a><br>
+				   </td>				   
 				   <td>10</td>
 				   <td>100<br>
-				   <button type="button" class="btn btn-success btn-sm"><i class="fas fa-users"></i> View Users</button>
+				   <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-users"><i class="fas fa-users"></i> View Users</button>
 				   </td>
 				   <td><span style="padding: .25em .4em;font-size: 75%;font-weight: 700;line-height: 1;border-radius: .25rem;" class="badge badge-success">Active</span></td>
 				   <td>
@@ -3865,6 +3868,13 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				   <b>Expiry:</b> 14/05/21<br>
 				   <b>Actions:</b> 10
 				   </td>
+				   <td>
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-invite"><u>Facebook invite and share</u></a><br>				   
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-record"><u>Facebook record and share</u></a><br>
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-refer"><u>Facebook refer and share</u></a><br>
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-select"><u>Facebook select and share</u></a><br>
+				   <i class="fas fa-share-alt text-muted"></i> <a href="javascipt:void(0);" data-toggle="modal" data-target="#modal-submit"><u>Facebook submit then share</u></a><br>
+				   </td>				   
 				   <td>10</td>
 				   <td>100<br>
 				   <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-users"></i> UPGRADE</button>
@@ -3882,6 +3892,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<th>Pic</th>
 					<th>Name</th>
 					<th>Settings</th>
+					<th>Actions</th>
 					<th>Days</th>
 					<th>Users</th>
 					<th>Status</th>
@@ -3893,18 +3904,53 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
-				
-                  </div>
-                  <!-- /.tab-pane -->
-				  
-                  <div class="tab-pane" id="users">
 
+          </div>
+		</div>
+		<!-- /.row -->
+
+<!--================================================== /PROJECTS ==================================================-->
+  
+     </div><!--/.container-fluid-->
+	 
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+	
+    <footer class="main-footer">
+        <div class="float-right d-none d-sm-block">
+            <b>Version</b> 3.0
+        </div>
+        <strong>Copyright &copy; 2020 <a href="https://suite.social">Social Suite</a>.</strong> All rights reserved.
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!---====================================================================== MODALS ======================================================================-->
+
+     <!--------------------------------------------------- USERS --------------------------------------------------->
+
+      <div class="modal fade" id="modal-users">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Promotion Name: Users</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+			
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Campaigns</h3>
-              </div>
-              <!-- /.card-header -->
               <div class="card-body">
+			  
                 <table id="example2" class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -3975,46 +4021,356 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                   </tr>
                   </tfoot>
                 </table>
+				
               </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
-					
-                  </div>
-                  <!-- /.tab-pane -->
 
-                </div>
-                <!-- /.tab-content -->
-
-            <!-- /.nav-tabs-custom -->
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light text-dark" data-dismiss="modal">Close</button>
+            </div>
           </div>
-		</div>
-		<!-- /.row -->
-
-<!--================================================== /PROJECTS ==================================================-->
-  
-     </div><!--/.container-fluid-->
-	 
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-	
-    <footer class="main-footer">
-        <div class="float-right d-none d-sm-block">
-            <b>Version</b> 3.0
+          <!-- /.modal-content -->
         </div>
-        <strong>Copyright &copy; 2020 <a href="https://suite.social">Social Suite</a>.</strong> All rights reserved.
-    </footer>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+	  
+     <!--------------------------------------------------- INVITE SHARE --------------------------------------------------->
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
+      <div class="modal fade" id="modal-invite">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Facebook invite and share</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+			
+                <table id="example3" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Provider</th>
+					<th>Email</th>					
+					<th>Invites</th>
+					<th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Gmail</td>
+				   <td>username@gmail.com</td>
+				   <td>10</td>				   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Mailchimp</td>
+				   <td>name@domain.com</td>
+				   <td>10</td>					   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Provider</th>
+					<th>Email</th>					
+					<th>Invites</th>
+					<th>Action</th>
+                  </tr>
+                  </tfoot>
+                </table>
 
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light text-dark" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->	
+	  
+     <!--------------------------------------------------- RECORD AND SHARE --------------------------------------------------->
+
+      <div class="modal fade" id="modal-record">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Facebook record and share</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+                <table id="example4" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Type</th>
+					<th>Media</th>
+					<th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Image</td>
+				   <td><u>Embed or link to file</u></td>				   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Video</td>
+				   <td><u>Embed or link to file</u></td>				   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Type</th>
+					<th>Media</th>
+					<th>Action</th>
+                  </tr>
+                  </tfoot>
+                </table>			
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light text-dark" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+	  
+     <!--------------------------------------------------- REFER AND SHARE --------------------------------------------------->
+
+      <div class="modal fade" id="modal-refer">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Facebook refer and share</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+			
+                <table id="example5" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Referrals</th>
+					<th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>10</td>				   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>10</td>					   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Referrals</th>
+					<th>Action</th>
+                  </tr>
+                  </tfoot>
+                </table>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light text-dark" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->	
+	  
+     <!--------------------------------------------------- SELECT AND SHARE --------------------------------------------------->
+
+      <div class="modal fade" id="modal-select">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Facebook select and share</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+                <table id="example6" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Type</th>
+					<th>Data</th>
+					<th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Image</td>
+				   <td>1)<br>Embeded image</td>				   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Checkbox</td>
+				   <td>1) Name</td>				   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Type</th>
+					<th>Data</th>
+					<th>Action</th>
+                  </tr>
+                  </tfoot>
+                </table>			
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light text-dark" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
+     <!--------------------------------------------------- SUBMIT AND SHARE --------------------------------------------------->
+
+      <div class="modal fade" id="modal-submit">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Facebook submit and share</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+			
+            <div class="card">
+              <div class="card-body">
+			  
+                <table id="example7" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Type</th>
+					<th>Data</th>
+					<th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Text</td>
+				   <td>Some content here</td>				   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+				<tr>
+				   <td><img width="100px" src="<?php echo PATH_ROOT ?>/images/default.jpg" alt="Pic"></td>
+				   <td>Full Name</td>
+				   <td>United Kingdom, London</td>				   
+				   <td>Coupon</td>
+				   <td>1234567890</td>				   
+				   <td><a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a></td>
+			    </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+					<th>Pic</th>
+					<th>Name</th>
+					<th>Location</th>
+					<th>Type</th>
+					<th>Data</th>
+					<th>Action</th>
+                  </tr>
+                  </tfoot>
+                </table>
+				
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light text-dark" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->	  
+	  
      <!--------------------------------------------------- VISIT IDEAS --------------------------------------------------->
 
       <div class="modal fade" id="modal-visit">
@@ -4452,6 +4808,26 @@ $(window).scroll(function(){
 	  "autoWidth": false,
 	});
 	$('#example2').DataTable({
+	  "responsive": true,
+	  "autoWidth": false,
+	});
+	$('#example3').DataTable({
+	  "responsive": true,
+	  "autoWidth": false,
+	});
+	$('#example4').DataTable({
+	  "responsive": true,
+	  "autoWidth": false,
+	});
+	$('#example5').DataTable({
+	  "responsive": true,
+	  "autoWidth": false,
+	});
+	$('#example6').DataTable({
+	  "responsive": true,
+	  "autoWidth": false,
+	});
+	$('#example7').DataTable({
 	  "responsive": true,
 	  "autoWidth": false,
 	});

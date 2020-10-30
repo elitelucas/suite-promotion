@@ -1,0 +1,2 @@
+<?php 
+$configSocial = '{"type":"share-and-refer","network":"twitter","id":"twitter","iconid":"fab fa-twitter","title":null,"actionName":"Twitter refer and share ","visitLink":null,"shareLink":"https:\/\/twitter.com\/intent\/tweet?text=<TITLE>&url=<URL>","shareTitle":null,"delayTime":"15","filename":"twitter-refer","game":[]}';

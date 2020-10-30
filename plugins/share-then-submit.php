@@ -1,2 +1,0 @@
-<?php 
-$configSocial = '{"type":"share-then-submit","network":"facebook","id":"facebook","title":null,"actionName":"Share then Submit Facebook","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=<URL>&quote=<TITLE>","shareTitle":null,"delayTime":"10","filename":"share-then-submit","game":[]}';

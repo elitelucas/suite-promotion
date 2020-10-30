@@ -1,2 +1,0 @@
-<?php 
-$configSocial = '{"type":"spin-and-share","network":"facebook","id":"facebook","iconid":"fab fa-instagram","title":null,"actionName":"Spin and Share Facebook","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=<URL>&quote=<TITLE>","shareTitle":null,"delayTime":"10","filename":"spin-and-share","game":[]}';

@@ -1,0 +1,2 @@
+<?php 
+$configSocial = '{"type":"select-and-share","network":"facebook","id":"facebook","iconid":"fab fa-facebook","title":null,"actionName":"Facebook select and share","visitLink":null,"shareLink":"https:\/\/www.facebook.com\/sharer.php?u=<URL>&quote=<TITLE>","shareTitle":null,"delayTime":"15","filename":"facebook-select","game":[]}';

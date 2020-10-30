@@ -1,0 +1,2 @@
+<?php 
+$configSocial = '{"type":"record-and-share","network":"twitter","id":"twitter","iconid":"fab fa-twitter","title":null,"actionName":"Twitter record and share","visitLink":null,"shareLink":"https:\/\/twitter.com\/intent\/tweet?text=<TITLE>&url=<URL>","shareTitle":null,"delayTime":"30","filename":"twitter-record","game":[]}';
