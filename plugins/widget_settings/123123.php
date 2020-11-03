@@ -1,0 +1,2 @@
+<?php 
+$configClientData = '{"info":{"title":"123123","caption":"","description":"","promotioncontent":"","totalpoints":"10","expiry":"","dayLeft":-18566,"offersleft":"1","type":"","network":null,"media":{"mode":"","url":""},"background_image":"","comment":""},"data":{"facebook-visit-share":{"numpoint":"10","url":"","embedcode":"","visitAction":"visit our page","shareAction":"share our page"}}}';

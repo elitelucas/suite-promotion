@@ -6,9 +6,24 @@ require_once '../db/Plugin.php';
 require_once '../db/Social.php';
 require_once '../networkicons.php'; //networkicons
 
+$pluginsclass = new Plugins();
+$promotions=$pluginsclass->getPromotions();
+
+@$promotionID = $_GET['promotionID'];
+if($promotionID){
+	$pageType = 'edit';
+	$promotionfilename = $promotionID;
+}else{
+	$pageType = 'create';
+	$promotionfilename  = time();
+}
+
+
 $plugin = new Plugin();
-$data = $plugin->load();
+$data = $pluginsclass->loadone($promotionID);
+
 $uniqueId = $plugin->getUniqueId();
+
 $spin_limit = 3;
 
 @$referralId = $_GET['id'];
@@ -705,9 +720,9 @@ label{
 <script src="<?php echo PATH_ROOT;?>/plugins/record/js/videojs.wavesurfer.min.js"></script>
 
 </head>
-<body class="hold-transition layout-top-nav">
+<body class="hold-transition layout-top-nav" >
 <!-- Site wrapper -->
-<div class="wrapper">
+<div class="wrapper" id="vueApp">
 
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
@@ -1195,14 +1210,17 @@ label{
 							var networkicons=<?php echo json_encode(NETICONS)?>;
 
 							function addIconColor(){
-								var nodes= $(".millery-column-wrapper .millery-column-content .millery-node");								
+								var nodes= $("#millery-actions .millery-column-wrapper .millery-column-content .millery-node");								
 								nodes.each(function(index){
 									if($(this).hasClass('millery-node-parent')){ //Network
-										var network=$.trim($(this).text()).toLowerCase();									
+										var network=$.trim($(this).text()).toLowerCase();	
+																
 										$(this).attr('id',network);	
 										var networkiconclass=networkicons[network];
 										if(networkiconclass==null) networkiconclass=`fab fa-${network}`;
-										$(this).html($(this).html().replace(network, `<i class='${networkiconclass}' style='font-size:20px'></i>&nbsp;&nbsp;`+network));								
+										console.log("###icons", network, networkiconclass)		
+										// $(this).html($(this).html().replace(network, `<i class='${networkiconclass}' style='font-size:20px'></i>&nbsp;&nbsp;`+network));								
+										$(this).html(`<i class='${networkiconclass}' style='font-size:20px'></i>&nbsp;&nbsp;`+network);								
 									}
 								})
 							}
@@ -3831,7 +3849,6 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 </div>
 
 <!--================================================== PROJECTS ==================================================-->
-
 <div class="row">
 <div class="col-md-12">
 
@@ -3859,9 +3876,14 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                   </tr>
                   </thead>
                   <tbody>
+				<?php foreach($promotions as $xfilename=>$promotion){ 
+						@$xinfo = (array)$promotion['info'];
+						@$xbackgroundImage = $xinfo['background_image'];
+						@$xpluginTitle = $xinfo['title'];					
+				?>  
 				<tr>
 				   <td><img width="150px" src="<?php echo PATH_ROOT ?>/images/banner.jpg" alt="Pic"></td>
-				   <td>Promo Name</td>
+				   <td><?=@$xpluginTitle?></td>
 				   <td>
 				   <b>Type:</b> Points<br>
 				   <b>Total Points/Entries:</b> 100<br>
@@ -3883,13 +3905,15 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				   <td><span style="padding: .25em .4em;font-size: 75%;font-weight: 700;line-height: 1;border-radius: .25rem;" class="badge badge-success">Active</span></td>
 				   <td>
 					   <a class="btn btn-primary btn-sm" href="#"><i class="fas fa-link"></i> View</a>
-					   <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-xl"><i class="fas fa-pencil-alt"></i> Edit</button>
+					   <a class="btn btn-info btn-sm" href="?promotionID=<?=$xfilename?>"><i class="fas fa-pencil-alt"></i> Edit</button>
 					   <a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash"></i> Delete</a>
 				   </td>
 			    </tr>
+				<?php } ?>		
+				
 				<tr>
 				   <td><img width="150px" src="<?php echo PATH_ROOT ?>/images/banner.jpg" alt="Pic"></td>
-				   <td>Promo Name</td>
+				   <td>template_delete this</td>
 				   <td>
 				   <b>Type:</b> Points<br>
 				   <b>Total Points/Entries:</b> 100<br>
@@ -3906,9 +3930,9 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 				   </td>				   
 				   <td>10</td>
 				   <td>100<br>
-				   <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-users"></i> UPGRADE</button>
+				   <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-users"><i class="fas fa-users"></i> View Users</button>
 				   </td>
-				   <td><span style="padding: .25em .4em;font-size: 75%;font-weight: 700;line-height: 1;border-radius: .25rem;" class="badge badge-danger">Expired</span></td>
+				   <td><span style="padding: .25em .4em;font-size: 75%;font-weight: 700;line-height: 1;border-radius: .25rem;" class="badge badge-success">Active</span></td>
 				   <td>
 					   <a class="btn btn-primary btn-sm" href="#"><i class="fas fa-link"></i> View</a>
 					   <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-xl"><i class="fas fa-pencil-alt"></i> Edit</button>
@@ -4454,11 +4478,11 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 	  
      <!--------------------------------------------------- VISIT IDEAS --------------------------------------------------->
 
-      <div class="modal fade" id="modal-visit">
+	 <div class="modal fade" id="modal-visit">
         <div class="modal-dialog modal-lg">
           <div class="modal-content bg-danger">
             <div class="modal-header">
-              <h4 class="modal-title">VISIT ACTION IDEAS</h4>
+              <h4 class="modal-title">VISIT AND EMBED ACTION IDEAS</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -4468,7 +4492,9 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 			<p>
                 <div class="form-group">
                   <select id="select-copy" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%;">
-                    <option>Apply for the job</option>
+                    <option>Add to calendar</option>
+					<option>Answer a question</option>
+					<option>Apply for the job</option>
                     <option>Attend our event</option>
                     <option>Chat on our site</option>
                     <option>Check out our auction 
@@ -4492,21 +4518,31 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
 					<option>Check out our store</option>
                     <option>Check out our website</option>
                     <option>Check-in at our business</option>
-                    <option>Comment on our post</option>
+                    <option>Comment on this article</option>
+					<option>Comment on our post</option>
                     <option>Download our app</option>
                     <option>Download our software</option>
+					<option>Enter coupon</option>
                     <option>Enter our auction</option>
                     <option>Enter our contest</option>
-                    <option>Follow our account</option>
+					<option>Enter your feedback</option>
+                    <option>Enter secret code</option>
+					<option>Follow our account</option>
                     <option>Follow our page</option>
                     <option>Follow our profile</option>
                     <option>Join our event</option>
                     <option>Join our group</option>
-                    <option>Like our page</option>
+					<option>Join exclusive pre-lauch waiting list</option>
+                    <option>Learn more about our product</option>
+					<option>Like our page</option>
                     <option>Listen to audio</option>
                     <option>Listen to our music</option>
                     <option>Listen to our podcast</option>
+					<option>Make a booking</option>
+					<option>Make an order (enter order id)</option>
+					<option>Pick your favourite photo</option>
                     <option>Play our game</option>
+					<option>Purchase a product (enter invoice number)</option>
                     <option>Post a comment</option>
                     <option>Post on our page</option>
                     <option>Refer your friends</option>
@@ -4533,10 +4569,19 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                     <option>See our shop</option>
 					<option>See our store</option>
                     <option>See our website</option>
+					<option>Select a Photo/Video</option>
+					<option>Schedule appointment</option>
                     <option>Send your feedback</option>
-                    <option>Sign Up to our newsletter</option>
-                    <option>Subscribe to our newsletter</option>
+                    <option>Sign up to our newsletter</option>
+					<option>Subscribe to our mailing list</option>					
+                    <option>Subscribe to our newsletter</option>	
+                    <option>Subscribe to our podcast</option>					
+					<option>Submit a comment</option>
+					<option>Submit a Photo/Video</option>
+					<option>Submit a pin</option>
+					<option>Submit a post</option>
                     <option>Tell your friends</option>
+					<option>Tell us about your idea</option>
                     <option>View our auction </option>
                     <option>View our blog</option>
                     <option>View our deal</option>
@@ -4546,8 +4591,7 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                     <option>View our gaming video</option>
                     <option>View our group</option>
                     <option>View our job vancancy</option>
-                    <option>View our jobs</option>
-                    <option>View our live video</option>
+                    <option>View our jobs</option>                   
                     <option>View our marketplace</option>
                     <option>View our offer</option>
                     <option>View our page</option>
@@ -4556,9 +4600,11 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                     <option>View our profile</option>
                     <option>View our shop</option>
 					<option>View our store</option>
+					<option>View our video</option>
                     <option>View our website</option>
                     <option>Visit our auction </option>
                     <option>Visit our blog</option>
+					<option>Visit daily</option>
                     <option>Visit our deal</option>
                     <option>Visit our fundraiser</option>
                     <option>Visit our gallery</option>
@@ -4576,7 +4622,12 @@ $currentDay = round($datediff / (60 * 60 * 24));*/
                     <option>Visit our profile</option>
                     <option>Visit our shop</option>
 					<option>Visit our store</option>
-                    <option selected="selected">Visit our website</option>
+					<option selected="selected">Visit our website</option>
+					<option>Vote on our product</option>
+					<option>Watch a video</option>
+					<option>Write a comment</option>
+					<option>Write feedback</option>
+					<option>Write a post</option>                   
                   </select>
                 </div>
                 <!-- /.form-group -->
@@ -4861,6 +4912,9 @@ fakecounter()
 <!-- Summernote -->
 <script src="<?php echo PATH_ROOT ?>/plugins/summernote/summernote-bs4.min.js"></script>
 
+  <!-- Vue.js -->
+<script src="<?php echo PATH_ROOT ?>/src/js/vue.js"></script>
+
 <script>
 
 // BANNER
@@ -4957,8 +5011,8 @@ $("#create-client-plugin").submit(function(e, silence) {
 
 	var form = $(this);
 	var url = 'client_add_func.php';
-	var fd = new FormData(this);
-	console.log(fd)
+	var fd = new FormData(this);	
+	fd.set('promotionfilename','<?=$promotionfilename?>');
 	$.ajax({
 		type: "POST",
 		// dataType: "json",
@@ -5631,10 +5685,10 @@ $("#divA").delay(20000).fadeOut(function() {
 
     // Branding Form Scripts
     $(function () {
-        $('.headlineinput').keyup(function (event) {
-            newText = event.target.value;
-            $('.headlinebox').text(newText);
-        });
+        // $('.headlineinput').keyup(function (event) {
+        //     newText = event.target.value;
+        //     $('.headlinebox').text(newText);
+        // });
         $('.captioninput').keyup(function (event) {
             newText = event.target.value;
             $('.captionbox').text(newText);
@@ -5950,11 +6004,10 @@ $("#divA").delay(20000).fadeOut(function() {
         })
 	}
 	
-
 	function showPreview(){
 		$.ajax({
 			type: "GET",
-			url: "widget.php",              
+			url: window.location.href,  			      
 			success: function(data)
 			{
 				var newPreview=$(data).find("#previewSection");

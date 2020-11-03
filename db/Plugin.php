@@ -1,22 +1,46 @@
 <?php
-//require_once '../initial.php';
+require_once '../initial.php';
 require_once DIR_ROOT . '/db/Social.php';
 
+class Plugins {
+    public function getPromotions(){
+        $filepatharr = $this->getPHPFileArray();
+        $promotions=[];
+        foreach($filepatharr as $obj){
+            $filename = pathinfo($obj)['filename'];
+            $promotions[$filename]= $this->loadone($filename);            
+        }
+        return $promotions;
+    }
 
-class Plugin {
+    public function getPHPFileArray(){
+        $dirPath = DIR_ROOT .  '/plugins/widget_settings/';
+        $result = [];
+        try {
+            if (file_exists($dirPath)) {
+                $subs = scandir($dirPath);
+                foreach ($subs as $value) {
+                    $filePath = $dirPath . '/' . $value;
+                    if (is_file($filePath) && pathinfo($filePath)['extension'] == 'php') {
+                        array_push($result, $filePath);
+                    }
+                }
+            }
+        } catch (Exception $ex) {
+            // log error here
+        }
+        return $result;
+    }
 
-    public function load() {
-
-        $filename = 'setting';
-        $newFileName = $filename . '.php';
-
-        $filePath = DIR_ROOT .  '/plugins/widget_settings/' . $newFileName;
+    public function loadone($fileName){        
+        $dirPath = DIR_ROOT .  '/plugins/widget_settings/';
+        $filePath = $dirPath . '/' . $fileName.  '.php';
         // load old data
         $configClientData = null;
         try {
             if (is_file($filePath)) {
                 // load this file and update $configClientData
-                include_once $filePath;
+                include $filePath;
             }
             if ($configClientData) {
                 $configClientData = json_decode($configClientData);
@@ -35,7 +59,62 @@ class Plugin {
                     $filename = $socialKey . '.php';
                     $filePath = DIR_ROOT .  '/plugins/' . $filename;
                     $currentData = $social->load($filePath);
-//                    $currentData = $social->load($filePath);
+                    $allData[$socialKey] = (array)$allData[$socialKey];
+                    $allData[$socialKey]['social'] = array(
+                        'type' => $currentData->getType(),
+                        'network' => $currentData->getNetwork(),
+                        'id' => $currentData->getID(),
+                        'iconid' => $currentData->getIconID(),
+                        'title' => $currentData->getTitle(),
+                        'actionName' => $currentData->getActionName(),
+                        'visitLink' => $currentData->getvisitLink(),
+                        'shareLink' => $currentData->getShareLink(),
+                        'shareTitle' => $currentData->getShareTitle(),
+                        'delayTime' => $currentData->getDelayTime(),
+                        'filename' => $currentData->getFilename(),
+                        'game' => $currentData->getGame(),
+                    );
+                endforeach;
+            }
+            $configClientData['data'] = $allData;
+        }
+
+        return $configClientData;
+    }
+}
+
+class Plugin {  
+
+    public function load() {
+
+        $filename = 'setting';
+        $newFileName = $filename . '.php';
+
+        $filePath = DIR_ROOT .  '/plugins/widget_settings/' . $newFileName;
+        // load old data
+        $configClientData = null;
+        try {
+            if (is_file($filePath)) {
+                // load this file and update $configClientData
+                include $filePath;
+            }
+            if ($configClientData) {
+                $configClientData = json_decode($configClientData);
+                $configClientData = (array)$configClientData;
+            }
+
+        } catch(Exception $ex) {
+            // log error here
+        };
+
+        if ($configClientData) {
+            $allData = (array)$configClientData['data'];
+            if ($allData && count($allData)>0) {
+                foreach($allData as $socialKey => $dataInfo):
+                    $social = new Social();
+                    $filename = $socialKey . '.php';
+                    $filePath = DIR_ROOT .  '/plugins/' . $filename;
+                    $currentData = $social->load($filePath);
                     $allData[$socialKey] = (array)$allData[$socialKey];
                     $allData[$socialKey]['social'] = array(
                         'type' => $currentData->getType(),

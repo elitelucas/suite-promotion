@@ -1,0 +1,2 @@
+<?php 
+$configSocial = '{"type":"share-then-submit","network":"Android","id":"facebook","iconid":"fab fa-facebook","title":null,"actionName":"Playandshareaction","visitLink":null,"shareLink":"SHORTCODE","shareTitle":null,"delayTime":"10","filename":"ddddd","game":[]}';

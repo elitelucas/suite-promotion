@@ -1,1 +1,0 @@
-<?php $tool='{"toolname":"POPUP","category":"POP","method":"Popup","link":"https:\/\/www.google.com\/webhp","description":"","filename":"poppper"}'?>

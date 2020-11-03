@@ -4,6 +4,11 @@ require_once '../initial.php';
 $message = null;
 
 $dataPost = $_POST;
+@$xtype = $dataPost['xtype'];
+@$promotionfilename = $dataPost['promotionfilename'];
+
+@$caption = $dataPost['caption'];
+
 $result = array(
     'success' => false
 );
@@ -191,7 +196,7 @@ if (isset($dataPost)) {
 
 
     try {
-        $filename = 'setting';
+        $filename = $promotionfilename;
         $newFileName = $filename . '.php';
 
         $filePath = DIR_ROOT .  '/plugins/widget_settings/' . $newFileName;

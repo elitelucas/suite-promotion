@@ -1,1 +1,0 @@
-<?php $tool='{"category":"Form","toolname":"Form Builder","method":"Iframe","link":"https:\/\/translate.google.com\/","description":"","filename":"FormBuilder"}'?>

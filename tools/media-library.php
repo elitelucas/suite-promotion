@@ -1,1 +1,0 @@
-<?php $tool='{"toolname":"Media Library","category":"Media","method":"New Tab","link":"http:\/\/test.test","description":"","filename":"media-library"}'?>
